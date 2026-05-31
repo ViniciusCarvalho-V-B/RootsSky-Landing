@@ -4,7 +4,7 @@ import React, { useState, useCallback } from "react";
 
 export default function ServerIP() {
   const [copied, setCopied] = useState(false);
-  const ip = "play.rootssky.com";
+  const ip = "play.rootssky.com.br";
 
   const handleCopy = useCallback(async () => {
     try {
@@ -12,7 +12,6 @@ export default function ServerIP() {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      // Fallback for older browsers
       const textArea = document.createElement("textarea");
       textArea.value = ip;
       document.body.appendChild(textArea);
@@ -27,25 +26,25 @@ export default function ServerIP() {
   return (
     <button
       onClick={handleCopy}
-      className="group inline-flex items-center gap-3 px-5 py-3 rounded-xl border border-slate-border bg-obsidian/80 hover:border-emerald transition-all duration-300 cursor-pointer"
-      title="Click to copy server IP"
+      className="group inline-flex items-center gap-3 px-5 py-3 rounded-xl border border-gold/25 bg-wood/80 hover:border-gold/50 transition-all duration-300 cursor-pointer"
+      title="Clique para copiar o IP do servidor"
       id="server-ip-widget"
     >
       {/* Status dot */}
       <span className="relative flex h-2.5 w-2.5">
-        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald opacity-75" />
-        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald" />
+        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-leaf-light opacity-75" />
+        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-leaf-light" />
       </span>
 
       {/* IP text */}
-      <span className="font-jetbrains text-sm sm:text-base text-emerald-light tracking-wider">
+      <span className="font-jetbrains text-sm sm:text-base text-gold tracking-wider">
         {ip}
       </span>
 
       {/* Copy icon / Copied state */}
-      <span className="text-xs text-slate-400 group-hover:text-emerald transition-colors">
+      <span className="text-xs text-warm-dim group-hover:text-gold transition-colors">
         {copied ? (
-          <span className="text-emerald animate-fade-in">✓ Copied!</span>
+          <span className="text-leaf-light animate-fade-in">✓ Copiado!</span>
         ) : (
           <svg
             xmlns="http://www.w3.org/2000/svg"

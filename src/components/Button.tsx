@@ -2,7 +2,7 @@
 
 import React from "react";
 
-type ButtonVariant = "primary" | "premium" | "outline";
+type ButtonVariant = "primary" | "premium" | "outline" | "ghost" | "medieval";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
@@ -14,6 +14,8 @@ const variantClasses: Record<ButtonVariant, string> = {
   primary: "btn-primary font-outfit",
   premium: "btn-premium font-outfit",
   outline: "btn-outline font-inter",
+  ghost: "btn-ghost font-inter",
+  medieval: "medieval-btn font-cinzel",
 };
 
 export default function Button({

@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 
 interface CardProps {
   children: React.ReactNode;
@@ -14,7 +15,7 @@ export default function Card({
   return (
     <div
       className={`
-        bg-obsidian border border-slate-border rounded-xl p-6
+        bg-wood border border-gold/15 rounded-xl p-6
         ${hoverable ? "glass-card" : ""}
         ${className}
       `.trim()}
@@ -24,20 +25,28 @@ export default function Card({
   );
 }
 
-/* Sub-components for structured cards */
-
 interface CardImageProps {
   src: string;
   alt: string;
+  width?: number;
+  height?: number;
   className?: string;
 }
 
-export function CardImage({ src, alt, className = "" }: CardImageProps) {
+export function CardImage({
+  src,
+  alt,
+  width = 640,
+  height = 384,
+  className = "",
+}: CardImageProps) {
   return (
     <div className={`relative overflow-hidden rounded-lg mb-4 ${className}`}>
-      <img
+      <Image
         src={src}
         alt={alt}
+        width={width}
+        height={height}
         className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
       />
     </div>
@@ -49,11 +58,11 @@ interface CardBadgeProps {
   variant?: "emerald" | "gold" | "cyan";
 }
 
-export function CardBadge({ children, variant = "emerald" }: CardBadgeProps) {
+export function CardBadge({ children, variant = "gold" }: CardBadgeProps) {
   const colors = {
-    emerald: "bg-emerald/10 text-emerald border-emerald/20",
+    emerald: "bg-emerald/10 text-leaf-light border-emerald/20",
     gold: "bg-gold/10 text-gold border-gold/20",
-    cyan: "bg-cyan/10 text-cyan-light border-cyan/20",
+    cyan: "bg-crystal/10 text-crystal border-crystal/20",
   };
 
   return (

@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <defs>
+    <linearGradient id="coinGoldFront" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FBBF24"/>
+      <stop offset="40%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+    <linearGradient id="coinGoldMid" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#D97706"/>
+      <stop offset="100%" stop-color="#B45309"/>
+    </linearGradient>
+    <linearGradient id="coinGoldBack" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#B45309"/>
+      <stop offset="100%" stop-color="#92400E"/>
+    </linearGradient>
+    <linearGradient id="diamondGreen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#34D399"/>
+      <stop offset="100%" stop-color="#10B981"/>
+    </linearGradient>
+    <filter id="coinShadow" x="-15%" y="-15%" width="130%" height="140%">
+      <feDropShadow dx="0" dy="1.5" stdDeviation="1.2" flood-color="#000000" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <g id="coins" filter="url(#coinShadow)">
+    <!-- Back coin (bottom of stack, most offset) -->
+    <g transform="translate(-4, -5)">
+      <!-- Coin edge (3D thickness) -->
+      <ellipse cx="24" cy="30" rx="12" ry="4" fill="#92400E"/>
+      <rect x="12" y="27" width="24" height="3" fill="#92400E"/>
+      <!-- Coin face -->
+      <ellipse cx="24" cy="27" rx="12" ry="4" fill="url(#coinGoldBack)"/>
+      <ellipse cx="24" cy="27" rx="9" ry="3" fill="none" stroke="#A16207" stroke-width="0.5" opacity="0.5"/>
+    </g>
+
+    <!-- Middle coin -->
+    <g transform="translate(-1, -2)">
+      <!-- Coin edge (3D thickness) -->
+      <ellipse cx="24" cy="30" rx="12" ry="4" fill="#A16207"/>
+      <rect x="12" y="27" width="24" height="3" fill="#A16207"/>
+      <!-- Coin face -->
+      <ellipse cx="24" cy="27" rx="12" ry="4" fill="url(#coinGoldMid)"/>
+      <ellipse cx="24" cy="27" rx="9" ry="3" fill="none" stroke="#B45309" stroke-width="0.5" opacity="0.6"/>
+      <!-- Shine -->
+      <ellipse cx="19" cy="25.5" rx="3" ry="1" fill="white" opacity="0.15" transform="rotate(-15, 19, 25.5)"/>
+    </g>
+
+    <!-- Front coin (top of stack) -->
+    <g transform="translate(2, 1)">
+      <!-- Coin edge (3D thickness) -->
+      <ellipse cx="24" cy="30" rx="12" ry="4" fill="#B45309"/>
+      <rect x="12" y="27" width="24" height="3" fill="#B45309"/>
+      <!-- Coin face -->
+      <ellipse cx="24" cy="27" rx="12" ry="4" fill="url(#coinGoldFront)"/>
+
+      <!-- Inner circle detail -->
+      <ellipse cx="24" cy="27" rx="9" ry="3" fill="none" stroke="#D97706" stroke-width="0.7"/>
+      <ellipse cx="24" cy="27" rx="9.5" ry="3.2" fill="none" stroke="#FBBF24" stroke-width="0.3" opacity="0.4"/>
+
+      <!-- Diamond/gem symbol (emerald) -->
+      <g transform="translate(24, 27) scale(1, 0.35)">
+        <path d="M 0 -7 L 4.5 0 L 0 7 L -4.5 0 Z" fill="url(#diamondGreen)"/>
+        <path d="M 0 -7 L 4.5 0 L 0 0 Z" fill="#34D399" opacity="0.4"/>
+        <path d="M 0 -7 L -4.5 0 L 0 0 Z" fill="#047857" opacity="0.3"/>
+      </g>
+
+      <!-- Shine highlight -->
+      <ellipse cx="19" cy="25" rx="4" ry="1.2" fill="white" opacity="0.4" transform="rotate(-20, 19, 25)"/>
+
+      <!-- Secondary subtle shine -->
+      <ellipse cx="28" cy="28.5" rx="2" ry="0.6" fill="white" opacity="0.15" transform="rotate(10, 28, 28.5)"/>
+    </g>
+  </g>
+</svg>

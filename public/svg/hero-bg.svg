@@ -1,0 +1,273 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice" width="1920" height="1080">
+  <defs>
+    <!-- Sky gradient -->
+    <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#070A13"/>
+      <stop offset="40%" stop-color="#0A1628"/>
+      <stop offset="60%" stop-color="#0D2137"/>
+      <stop offset="100%" stop-color="#0E1322"/>
+    </linearGradient>
+
+    <!-- Aurora blur filter -->
+    <filter id="auroraBlur" x="-20%" y="-40%" width="140%" height="180%">
+      <feGaussianBlur stdDeviation="50" />
+    </filter>
+    <filter id="auroraBlur2" x="-20%" y="-40%" width="140%" height="180%">
+      <feGaussianBlur stdDeviation="60" />
+    </filter>
+    <filter id="auroraBlurLight" x="-20%" y="-40%" width="140%" height="180%">
+      <feGaussianBlur stdDeviation="45" />
+    </filter>
+
+    <!-- Star glow filter -->
+    <filter id="starGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="2" result="glow"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Firefly/particle glow -->
+    <filter id="fireflyGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="4" result="glow"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="fireflyGlowSmall" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="3" result="glow"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Crystal gradients -->
+    <linearGradient id="crystalGrad" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#047857"/>
+      <stop offset="100%" stop-color="#10B981"/>
+    </linearGradient>
+    <linearGradient id="crystalGrad2" x1="0" y1="1" x2="0.3" y2="0">
+      <stop offset="0%" stop-color="#047857"/>
+      <stop offset="100%" stop-color="#34D399"/>
+    </linearGradient>
+
+    <!-- Bottom fade gradient -->
+    <linearGradient id="bottomFade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#070A13" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#070A13" stop-opacity="1"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Sky background -->
+  <rect width="1920" height="1080" fill="url(#skyGrad)"/>
+
+  <!-- Aurora Borealis -->
+  <g id="aurora">
+    <!-- Path 1: Large sweeping emerald aurora -->
+    <path d="
+      M -100 180
+      C 200 80, 500 220, 780 150
+      C 1060 80, 1300 200, 1500 130
+      C 1700 60, 1850 160, 2020 120
+      L 2020 320
+      C 1850 360, 1700 260, 1500 330
+      C 1300 400, 1060 280, 780 350
+      C 500 420, 200 280, -100 380
+      Z
+    " fill="#10B981" opacity="0.08" filter="url(#auroraBlur)"/>
+
+    <!-- Path 2: Lighter emerald, offset -->
+    <path d="
+      M -50 220
+      C 250 130, 480 280, 720 190
+      C 960 100, 1200 250, 1440 170
+      C 1680 90, 1830 200, 2000 160
+      L 2000 340
+      C 1830 380, 1680 270, 1440 350
+      C 1200 430, 960 280, 720 370
+      C 480 460, 250 310, -50 400
+      Z
+    " fill="#34D399" opacity="0.06" filter="url(#auroraBlur2)"/>
+
+    <!-- Path 3: Cyan aurora -->
+    <path d="
+      M 100 260
+      C 350 170, 600 310, 900 230
+      C 1200 150, 1400 280, 1600 210
+      C 1800 140, 1920 230, 2050 200
+      L 2050 360
+      C 1920 390, 1800 300, 1600 370
+      C 1400 440, 1200 310, 900 390
+      C 600 470, 350 330, 100 420
+      Z
+    " fill="#06B6D4" opacity="0.05" filter="url(#auroraBlurLight)"/>
+
+    <!-- Path 4: Light cyan accent -->
+    <path d="
+      M 300 240
+      C 520 160, 740 290, 980 210
+      C 1220 130, 1460 260, 1700 190
+      L 1700 330
+      C 1460 400, 1220 270, 980 350
+      C 740 430, 520 300, 300 380
+      Z
+    " fill="#22D3EE" opacity="0.04" filter="url(#auroraBlur2)"/>
+  </g>
+
+  <!-- Stars -->
+  <g id="stars">
+    <!-- Regular small stars (white) -->
+    <circle cx="120" cy="45" r="1" fill="#FFFFFF" opacity="0.6"/>
+    <circle cx="285" cy="92" r="1.2" fill="#FFFFFF" opacity="0.5"/>
+    <circle cx="410" cy="30" r="0.8" fill="#FFFFFF" opacity="0.7"/>
+    <circle cx="530" cy="118" r="1" fill="#FFFFFF" opacity="0.4"/>
+    <circle cx="650" cy="55" r="1.5" fill="#FFFFFF" opacity="0.3"/>
+    <circle cx="780" cy="140" r="1" fill="#FFFFFF" opacity="0.6"/>
+    <circle cx="890" cy="38" r="0.8" fill="#FFFFFF" opacity="0.8"/>
+    <circle cx="1020" cy="85" r="1.2" fill="#FFFFFF" opacity="0.5"/>
+    <circle cx="1150" cy="22" r="1" fill="#FFFFFF" opacity="0.7"/>
+    <circle cx="1280" cy="110" r="0.8" fill="#FFFFFF" opacity="0.4"/>
+    <circle cx="1390" cy="48" r="1.3" fill="#FFFFFF" opacity="0.6"/>
+    <circle cx="1510" cy="130" r="1" fill="#FFFFFF" opacity="0.5"/>
+    <circle cx="1630" cy="35" r="1.2" fill="#FFFFFF" opacity="0.7"/>
+    <circle cx="1750" cy="95" r="0.8" fill="#FFFFFF" opacity="0.3"/>
+    <circle cx="1860" cy="60" r="1" fill="#FFFFFF" opacity="0.6"/>
+
+    <circle cx="95" cy="195" r="1" fill="#FFFFFF" opacity="0.5"/>
+    <circle cx="210" cy="240" r="1.5" fill="#FFFFFF" opacity="0.3"/>
+    <circle cx="340" cy="180" r="0.8" fill="#FFFFFF" opacity="0.6"/>
+    <circle cx="465" cy="260" r="1" fill="#FFFFFF" opacity="0.4"/>
+    <circle cx="590" cy="210" r="1.2" fill="#FFFFFF" opacity="0.7"/>
+    <circle cx="720" cy="285" r="0.8" fill="#FFFFFF" opacity="0.5"/>
+    <circle cx="845" cy="195" r="1" fill="#FFFFFF" opacity="0.6"/>
+    <circle cx="970" cy="260" r="1.5" fill="#FFFFFF" opacity="0.3"/>
+    <circle cx="1100" cy="220" r="0.8" fill="#FFFFFF" opacity="0.8"/>
+    <circle cx="1230" cy="290" r="1" fill="#FFFFFF" opacity="0.4"/>
+    <circle cx="1350" cy="200" r="1.2" fill="#FFFFFF" opacity="0.6"/>
+    <circle cx="1480" cy="270" r="0.8" fill="#FFFFFF" opacity="0.5"/>
+    <circle cx="1610" cy="230" r="1" fill="#FFFFFF" opacity="0.7"/>
+    <circle cx="1740" cy="300" r="1.2" fill="#FFFFFF" opacity="0.3"/>
+    <circle cx="1870" cy="215" r="0.8" fill="#FFFFFF" opacity="0.5"/>
+
+    <circle cx="160" cy="350" r="1" fill="#FFFFFF" opacity="0.4"/>
+    <circle cx="310" cy="395" r="0.8" fill="#FFFFFF" opacity="0.6"/>
+    <circle cx="440" cy="340" r="1.2" fill="#FFFFFF" opacity="0.5"/>
+    <circle cx="560" cy="420" r="1" fill="#FFFFFF" opacity="0.3"/>
+    <circle cx="700" cy="370" r="0.8" fill="#FFFFFF" opacity="0.7"/>
+    <circle cx="830" cy="440" r="1" fill="#FFFFFF" opacity="0.5"/>
+    <circle cx="960" cy="360" r="1.5" fill="#FFFFFF" opacity="0.2"/>
+    <circle cx="1090" cy="430" r="0.8" fill="#FFFFFF" opacity="0.6"/>
+    <circle cx="1220" cy="380" r="1" fill="#FFFFFF" opacity="0.4"/>
+    <circle cx="1370" cy="445" r="1.2" fill="#FFFFFF" opacity="0.3"/>
+    <circle cx="1500" cy="355" r="0.8" fill="#FFFFFF" opacity="0.7"/>
+    <circle cx="1640" cy="410" r="1" fill="#FFFFFF" opacity="0.5"/>
+    <circle cx="1780" cy="375" r="1.2" fill="#FFFFFF" opacity="0.4"/>
+    <circle cx="1900" cy="430" r="0.8" fill="#FFFFFF" opacity="0.6"/>
+
+    <circle cx="75" cy="500" r="1" fill="#FFFFFF" opacity="0.5"/>
+    <circle cx="250" cy="530" r="0.8" fill="#FFFFFF" opacity="0.3"/>
+    <circle cx="380" cy="480" r="1" fill="#FFFFFF" opacity="0.6"/>
+    <circle cx="520" cy="555" r="1.2" fill="#FFFFFF" opacity="0.4"/>
+    <circle cx="670" cy="510" r="0.8" fill="#FFFFFF" opacity="0.7"/>
+    <circle cx="810" cy="560" r="1" fill="#FFFFFF" opacity="0.3"/>
+    <circle cx="1130" cy="540" r="0.8" fill="#FFFFFF" opacity="0.5"/>
+    <circle cx="1300" cy="500" r="1" fill="#FFFFFF" opacity="0.4"/>
+    <circle cx="1450" cy="530" r="0.8" fill="#FFFFFF" opacity="0.6"/>
+    <circle cx="1580" cy="490" r="1" fill="#FFFFFF" opacity="0.3"/>
+    <circle cx="1720" cy="550" r="1.2" fill="#FFFFFF" opacity="0.5"/>
+    <circle cx="1850" cy="505" r="0.8" fill="#FFFFFF" opacity="0.4"/>
+
+    <!-- Larger glowing stars -->
+    <g filter="url(#starGlow)">
+      <circle cx="350" cy="65" r="2" fill="#FFFFFF" opacity="0.7"/>
+      <circle cx="950" cy="150" r="2.5" fill="#FFFFFF" opacity="0.6"/>
+      <circle cx="1560" cy="80" r="2" fill="#FFFFFF" opacity="0.8"/>
+      <circle cx="680" cy="300" r="2.2" fill="#FFFFFF" opacity="0.5"/>
+      <circle cx="1800" cy="260" r="2" fill="#FFFFFF" opacity="0.6"/>
+    </g>
+
+    <!-- Tinted stars (emerald/cyan) -->
+    <circle cx="480" cy="75" r="1.5" fill="#10B981" opacity="0.5"/>
+    <circle cx="1100" cy="50" r="1.2" fill="#22D3EE" opacity="0.4"/>
+    <circle cx="1680" cy="140" r="1.5" fill="#10B981" opacity="0.4"/>
+    <circle cx="300" cy="310" r="1.2" fill="#06B6D4" opacity="0.35"/>
+    <circle cx="1420" cy="340" r="1" fill="#34D399" opacity="0.4"/>
+    <circle cx="840" cy="85" r="1.3" fill="#22D3EE" opacity="0.35"/>
+    <circle cx="200" cy="160" r="1" fill="#10B981" opacity="0.3"/>
+    <circle cx="1250" cy="175" r="1.2" fill="#06B6D4" opacity="0.4"/>
+  </g>
+
+  <!-- Emerald particles / fireflies (lower area) -->
+  <g id="fireflies">
+    <g filter="url(#fireflyGlow)">
+      <!-- Emerald fireflies -->
+      <circle cx="180" cy="620" r="2.5" fill="#10B981" opacity="0.45"/>
+      <circle cx="420" cy="700" r="3" fill="#10B981" opacity="0.35"/>
+      <circle cx="650" cy="650" r="2" fill="#10B981" opacity="0.5"/>
+      <circle cx="880" cy="730" r="3.5" fill="#10B981" opacity="0.3"/>
+      <circle cx="1100" cy="670" r="2.5" fill="#10B981" opacity="0.4"/>
+      <circle cx="1340" cy="750" r="2" fill="#10B981" opacity="0.45"/>
+      <circle cx="1550" cy="690" r="3" fill="#10B981" opacity="0.35"/>
+      <circle cx="1780" cy="640" r="2.5" fill="#10B981" opacity="0.5"/>
+      <circle cx="300" cy="780" r="2" fill="#10B981" opacity="0.4"/>
+      <circle cx="1000" cy="800" r="2.5" fill="#10B981" opacity="0.35"/>
+    </g>
+    <g filter="url(#fireflyGlowSmall)">
+      <!-- Gold fireflies -->
+      <circle cx="250" cy="680" r="2" fill="#F59E0B" opacity="0.4"/>
+      <circle cx="540" cy="760" r="2.5" fill="#F59E0B" opacity="0.35"/>
+      <circle cx="760" cy="690" r="3" fill="#F59E0B" opacity="0.3"/>
+      <circle cx="990" cy="740" r="2" fill="#F59E0B" opacity="0.45"/>
+      <circle cx="1220" cy="680" r="2.5" fill="#F59E0B" opacity="0.35"/>
+      <circle cx="1460" cy="770" r="2" fill="#F59E0B" opacity="0.4"/>
+      <circle cx="1680" cy="720" r="3" fill="#F59E0B" opacity="0.3"/>
+      <circle cx="1850" cy="690" r="2" fill="#F59E0B" opacity="0.5"/>
+      <circle cx="130" cy="750" r="2.5" fill="#F59E0B" opacity="0.35"/>
+      <circle cx="1900" cy="780" r="2" fill="#F59E0B" opacity="0.4"/>
+    </g>
+  </g>
+
+  <!-- Crystal formations -->
+  <g id="crystals">
+    <!-- Bottom-left crystal group -->
+    <g opacity="0.25">
+      <polygon points="0,1080 30,930 60,1080" fill="url(#crystalGrad)"/>
+      <polygon points="40,1080 75,950 110,1080" fill="url(#crystalGrad2)" opacity="0.7"/>
+      <polygon points="20,1080 55,980 90,1080" fill="url(#crystalGrad)" opacity="0.5"/>
+      <!-- Taller crystal -->
+      <polygon points="80,1080 110,900 140,1080" fill="url(#crystalGrad2)" opacity="0.6"/>
+      <polygon points="120,1080 145,960 170,1080" fill="url(#crystalGrad)" opacity="0.4"/>
+      <!-- Small accent crystal -->
+      <polygon points="150,1080 165,1000 180,1080" fill="url(#crystalGrad2)" opacity="0.3"/>
+      <!-- Crystal highlights -->
+      <polygon points="30,930 45,980 30,980" fill="#34D399" opacity="0.2"/>
+      <polygon points="110,900 122,960 110,960" fill="#34D399" opacity="0.15"/>
+    </g>
+
+    <!-- Bottom-right crystal group -->
+    <g opacity="0.2">
+      <polygon points="1920,1080 1890,940 1860,1080" fill="url(#crystalGrad)"/>
+      <polygon points="1880,1080 1845,960 1810,1080" fill="url(#crystalGrad2)" opacity="0.7"/>
+      <polygon points="1850,1080 1820,985 1790,1080" fill="url(#crystalGrad)" opacity="0.5"/>
+      <polygon points="1810,1080 1785,920 1760,1080" fill="url(#crystalGrad2)" opacity="0.6"/>
+      <polygon points="1770,1080 1750,970 1730,1080" fill="url(#crystalGrad)" opacity="0.4"/>
+      <polygon points="1740,1080 1728,1010 1716,1080" fill="url(#crystalGrad2)" opacity="0.3"/>
+      <!-- Crystal highlights -->
+      <polygon points="1890,940 1878,990 1890,990" fill="#34D399" opacity="0.2"/>
+      <polygon points="1785,920 1775,975 1785,975" fill="#34D399" opacity="0.15"/>
+    </g>
+
+    <!-- Small center-bottom crystal cluster -->
+    <g opacity="0.15">
+      <polygon points="900,1080 920,1010 940,1080" fill="url(#crystalGrad)"/>
+      <polygon points="930,1080 950,1030 970,1080" fill="url(#crystalGrad2)" opacity="0.6"/>
+      <polygon points="960,1080 975,1040 990,1080" fill="url(#crystalGrad)" opacity="0.4"/>
+    </g>
+  </g>
+
+  <!-- Bottom fade to #070A13 -->
+  <rect x="0" y="880" width="1920" height="200" fill="url(#bottomFade)"/>
+</svg>

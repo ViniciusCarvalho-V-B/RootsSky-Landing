@@ -1,0 +1,341 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 180" width="400" height="180">
+  <defs>
+    <!-- Gold gradient for "Roots" text (warm, left-leaning) -->
+    <linearGradient id="gold-roots" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FCD34D"/>
+      <stop offset="40%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+
+    <!-- Gold gradient for "Sky" text (cooler, sky-tinted) -->
+    <linearGradient id="gold-sky" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FDE68A"/>
+      <stop offset="35%" stop-color="#F59E0B"/>
+      <stop offset="80%" stop-color="#D97706"/>
+      <stop offset="100%" stop-color="#B45309"/>
+    </linearGradient>
+
+    <!-- Crown gold gradient -->
+    <linearGradient id="crown-gold" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FCD34D"/>
+      <stop offset="50%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+
+    <!-- Crown jewel emerald gradient -->
+    <radialGradient id="jewel-emerald" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#34D399"/>
+      <stop offset="60%" stop-color="#10B981"/>
+      <stop offset="100%" stop-color="#047857"/>
+    </radialGradient>
+
+    <!-- Leaf/vine green gradient -->
+    <linearGradient id="vine-green" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2E7D32"/>
+      <stop offset="100%" stop-color="#10B981"/>
+    </linearGradient>
+
+    <!-- Leaf green gradient (reversed for variety) -->
+    <linearGradient id="leaf-green" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#34D399"/>
+      <stop offset="50%" stop-color="#10B981"/>
+      <stop offset="100%" stop-color="#2E7D32"/>
+    </linearGradient>
+
+    <!-- Root brown gradient -->
+    <linearGradient id="root-brown" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#5D4037"/>
+      <stop offset="100%" stop-color="#8D6E63"/>
+    </linearGradient>
+
+    <!-- Root brown gradient darker variant -->
+    <linearGradient id="root-brown-dark" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#3E2723"/>
+      <stop offset="100%" stop-color="#5D4037"/>
+    </linearGradient>
+
+    <!-- Golden glow filter -->
+    <filter id="logo-glow-gold" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur"/>
+      <feFlood flood-color="#F59E0B" flood-opacity="0.5" result="color"/>
+      <feComposite in="color" in2="blur" operator="in" result="glow"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Emerald glow filter -->
+    <filter id="logo-glow-emerald" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"/>
+      <feFlood flood-color="#10B981" flood-opacity="0.45" result="color"/>
+      <feComposite in="color" in2="blur" operator="in" result="glow"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Soft ambient glow for sparkles -->
+    <filter id="sparkle-glow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Crown inner shadow -->
+    <filter id="crown-shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#070A13" flood-opacity="0.5"/>
+    </filter>
+
+    <!-- Text drop shadow -->
+    <filter id="text-shadow" x="-5%" y="-5%" width="110%" height="120%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#070A13" flood-opacity="0.7"/>
+    </filter>
+
+    <!-- Crown band decorative gradient -->
+    <linearGradient id="crown-band" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#D97706"/>
+      <stop offset="50%" stop-color="#FCD34D"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+  </defs>
+
+  <!-- ========== DECORATIVE VINES (LEFT SIDE) ========== -->
+  <g id="vines-left" filter="url(#logo-glow-emerald)">
+    <!-- Main left vine curling from crown area -->
+    <path d="M118,48 Q105,40 95,50 Q82,62 75,52 Q68,42 58,50"
+          fill="none" stroke="url(#vine-green)" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+    <!-- Secondary vine -->
+    <path d="M115,52 Q108,58 100,55 Q90,52 82,60"
+          fill="none" stroke="url(#vine-green)" stroke-width="1.8" stroke-linecap="round" opacity="0.75"/>
+    <!-- Leaf 1 - left outer -->
+    <path d="M58,50 Q52,42 48,48 Q52,55 58,50 Z"
+          fill="url(#leaf-green)" opacity="0.85"/>
+    <!-- Leaf 2 -->
+    <path d="M75,52 Q69,44 65,50 Q69,57 75,52 Z"
+          fill="url(#leaf-green)" opacity="0.8"/>
+    <!-- Leaf 3 - small -->
+    <path d="M82,60 Q77,54 74,59 Q77,65 82,60 Z"
+          fill="url(#leaf-green)" opacity="0.75"/>
+    <!-- Tiny leaf bud -->
+    <circle cx="56" cy="48" r="1.2" fill="#34D399" opacity="0.7"/>
+  </g>
+
+  <!-- ========== DECORATIVE VINES (RIGHT SIDE) ========== -->
+  <g id="vines-right" filter="url(#logo-glow-emerald)">
+    <!-- Main right vine -->
+    <path d="M282,48 Q295,40 305,50 Q318,62 325,52 Q332,42 342,50"
+          fill="none" stroke="url(#vine-green)" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+    <!-- Secondary vine -->
+    <path d="M285,52 Q292,58 300,55 Q310,52 318,60"
+          fill="none" stroke="url(#vine-green)" stroke-width="1.8" stroke-linecap="round" opacity="0.75"/>
+    <!-- Leaf 1 - right outer -->
+    <path d="M342,50 Q348,42 352,48 Q348,55 342,50 Z"
+          fill="url(#leaf-green)" opacity="0.85" transform="scale(-1,1) translate(-694,0)"/>
+    <path d="M342,50 Q348,42 352,48 Q348,55 342,50 Z"
+          fill="url(#leaf-green)" opacity="0.85"/>
+    <!-- Leaf 2 -->
+    <path d="M325,52 Q331,44 335,50 Q331,57 325,52 Z"
+          fill="url(#leaf-green)" opacity="0.8"/>
+    <!-- Leaf 3 -->
+    <path d="M318,60 Q323,54 326,59 Q323,65 318,60 Z"
+          fill="url(#leaf-green)" opacity="0.75"/>
+    <!-- Tiny leaf bud -->
+    <circle cx="344" cy="48" r="1.2" fill="#34D399" opacity="0.7"/>
+  </g>
+
+  <!-- ========== ORNATE CROWN ========== -->
+  <g id="crown" filter="url(#crown-shadow)">
+    <!-- Crown base shape - 5-pointed ornate -->
+    <path d="
+      M160,55
+      L162,30
+      L170,42
+      L178,15
+      L186,42
+      L200,8
+      L214,42
+      L222,15
+      L230,42
+      L238,30
+      L240,55
+      Q230,50 220,52
+      Q210,54 200,52
+      Q190,54 180,52
+      Q170,50 160,55
+      Z"
+      fill="url(#crown-gold)" stroke="#D97706" stroke-width="0.8"/>
+
+    <!-- Crown base band (bottom rim) -->
+    <path d="M160,55 Q180,48 200,50 Q220,48 240,55 Q220,58 200,57 Q180,58 160,55 Z"
+          fill="url(#crown-band)" stroke="#B45309" stroke-width="0.5"/>
+
+    <!-- Crown inner arch details -->
+    <path d="M170,48 Q175,40 180,48" fill="none" stroke="#FDE68A" stroke-width="0.6" opacity="0.6"/>
+    <path d="M190,46 Q195,38 200,46" fill="none" stroke="#FDE68A" stroke-width="0.6" opacity="0.6"/>
+    <path d="M210,46 Q215,38 220,46" fill="none" stroke="#FDE68A" stroke-width="0.6" opacity="0.6"/>
+
+    <!-- Crown filigree lines -->
+    <path d="M175,50 Q178,44 182,50" fill="none" stroke="#FDE68A" stroke-width="0.4" opacity="0.4"/>
+    <path d="M218,50 Q222,44 225,50" fill="none" stroke="#FDE68A" stroke-width="0.4" opacity="0.4"/>
+
+    <!-- Jewel at center crown point (largest) -->
+    <circle cx="200" cy="12" r="3.5" fill="url(#jewel-emerald)" stroke="#047857" stroke-width="0.6"/>
+    <circle cx="200" cy="11" r="1.2" fill="#6EE7B7" opacity="0.7"/>
+
+    <!-- Jewel at left-center point -->
+    <circle cx="178" cy="19" r="2.5" fill="url(#jewel-emerald)" stroke="#047857" stroke-width="0.5"/>
+    <circle cx="178" cy="18.2" r="0.9" fill="#6EE7B7" opacity="0.6"/>
+
+    <!-- Jewel at right-center point -->
+    <circle cx="222" cy="19" r="2.5" fill="url(#jewel-emerald)" stroke="#047857" stroke-width="0.5"/>
+    <circle cx="222" cy="18.2" r="0.9" fill="#6EE7B7" opacity="0.6"/>
+
+    <!-- Jewel at far left point -->
+    <circle cx="162" cy="33" r="2" fill="url(#jewel-emerald)" stroke="#047857" stroke-width="0.4"/>
+    <circle cx="162" cy="32.3" r="0.7" fill="#6EE7B7" opacity="0.5"/>
+
+    <!-- Jewel at far right point -->
+    <circle cx="238" cy="33" r="2" fill="url(#jewel-emerald)" stroke="#047857" stroke-width="0.4"/>
+    <circle cx="238" cy="32.3" r="0.7" fill="#6EE7B7" opacity="0.5"/>
+
+    <!-- Small decorative dots on crown band -->
+    <circle cx="185" cy="53" r="1" fill="#FDE68A" opacity="0.5"/>
+    <circle cx="200" cy="52" r="1" fill="#FDE68A" opacity="0.5"/>
+    <circle cx="215" cy="53" r="1" fill="#FDE68A" opacity="0.5"/>
+  </g>
+
+  <!-- ========== TEXT: "RootsSky" ========== -->
+  <g id="logo-text" filter="url(#text-shadow)">
+    <!-- Layer 1: Deepest dark outline -->
+    <text x="200" y="110" text-anchor="middle"
+          font-family="Georgia, 'Times New Roman', serif" font-weight="bold"
+          font-size="52px" letter-spacing="3"
+          fill="none" stroke="#070A13" stroke-width="6" stroke-linejoin="round">
+      RootsSky
+    </text>
+
+    <!-- Layer 2: Dark brown mid-outline -->
+    <text x="200" y="110" text-anchor="middle"
+          font-family="Georgia, 'Times New Roman', serif" font-weight="bold"
+          font-size="52px" letter-spacing="3"
+          fill="none" stroke="#3D2B1F" stroke-width="3" stroke-linejoin="round">
+      RootsSky
+    </text>
+
+    <!-- Layer 3: Gold gradient fill - "Roots" portion -->
+    <!-- Using a clipPath approach: full text with gradient, then overlay -->
+    <text x="200" y="110" text-anchor="middle"
+          font-family="Georgia, 'Times New Roman', serif" font-weight="bold"
+          font-size="52px" letter-spacing="3"
+          fill="url(#gold-roots)">
+      Roots<tspan fill="url(#gold-sky)">Sky</tspan>
+    </text>
+
+    <!-- Layer 4: Inner highlight stroke for dimension -->
+    <text x="200" y="110" text-anchor="middle"
+          font-family="Georgia, 'Times New Roman', serif" font-weight="bold"
+          font-size="52px" letter-spacing="3"
+          fill="none" stroke="#FCD34D" stroke-width="0.5" stroke-linejoin="round" opacity="0.4">
+      RootsSky
+    </text>
+  </g>
+
+  <!-- Gold glow layer behind text (rendered behind, uses same text) -->
+  <g id="text-glow" opacity="0.35">
+    <text x="200" y="110" text-anchor="middle"
+          font-family="Georgia, 'Times New Roman', serif" font-weight="bold"
+          font-size="52px" letter-spacing="3"
+          fill="#F59E0B" filter="url(#logo-glow-gold)">
+      RootsSky
+    </text>
+  </g>
+
+  <!-- ========== ROOTS BELOW TEXT ========== -->
+  <g id="roots">
+    <!-- Root tendril 1 - center-left, longest -->
+    <path d="M155,118 Q150,128 148,135 Q146,142 150,148"
+          fill="none" stroke="url(#root-brown)" stroke-width="2.5" stroke-linecap="round" opacity="0.85"/>
+    <path d="M150,148 Q152,152 148,155"
+          fill="none" stroke="url(#root-brown)" stroke-width="1.2" stroke-linecap="round" opacity="0.65"/>
+
+    <!-- Root tendril 2 - center -->
+    <path d="M195,120 Q198,130 195,138 Q192,145 196,150"
+          fill="none" stroke="url(#root-brown)" stroke-width="2.2" stroke-linecap="round" opacity="0.8"/>
+    <path d="M196,150 Q200,153 197,156"
+          fill="none" stroke="url(#root-brown)" stroke-width="1" stroke-linecap="round" opacity="0.55"/>
+
+    <!-- Root tendril 3 - center-right -->
+    <path d="M230,118 Q235,128 238,135 Q240,140 237,146"
+          fill="none" stroke="url(#root-brown)" stroke-width="2" stroke-linecap="round" opacity="0.75"/>
+    <path d="M237,146 Q234,150 238,152"
+          fill="none" stroke="url(#root-brown)" stroke-width="0.9" stroke-linecap="round" opacity="0.5"/>
+
+    <!-- Root tendril 4 - far right, thinner -->
+    <path d="M260,116 Q265,124 268,132 Q270,138 266,142"
+          fill="none" stroke="url(#root-brown-dark)" stroke-width="1.6" stroke-linecap="round" opacity="0.65"/>
+
+    <!-- Root sub-branch from tendril 1 -->
+    <path d="M148,135 Q142,138 138,136"
+          fill="none" stroke="url(#root-brown)" stroke-width="1" stroke-linecap="round" opacity="0.5"/>
+
+    <!-- Root sub-branch from tendril 3 -->
+    <path d="M238,135 Q244,137 248,134"
+          fill="none" stroke="url(#root-brown)" stroke-width="1" stroke-linecap="round" opacity="0.5"/>
+
+    <!-- Tiny root tip dots -->
+    <circle cx="148" cy="155" r="0.8" fill="#8D6E63" opacity="0.5"/>
+    <circle cx="197" cy="156" r="0.8" fill="#8D6E63" opacity="0.5"/>
+    <circle cx="238" cy="152" r="0.7" fill="#8D6E63" opacity="0.45"/>
+  </g>
+
+  <!-- ========== SPARKLE STARS ========== -->
+  <g id="sparkles" filter="url(#sparkle-glow)">
+    <!-- Sparkle 1 - top left -->
+    <g transform="translate(90,30)" opacity="0.7">
+      <line x1="0" y1="-3.5" x2="0" y2="3.5" stroke="#F59E0B" stroke-width="1" stroke-linecap="round"/>
+      <line x1="-3.5" y1="0" x2="3.5" y2="0" stroke="#F59E0B" stroke-width="1" stroke-linecap="round"/>
+      <line x1="-2" y1="-2" x2="2" y2="2" stroke="#F59E0B" stroke-width="0.5" stroke-linecap="round"/>
+      <line x1="2" y1="-2" x2="-2" y2="2" stroke="#F59E0B" stroke-width="0.5" stroke-linecap="round"/>
+    </g>
+
+    <!-- Sparkle 2 - top right -->
+    <g transform="translate(320,25)" opacity="0.6">
+      <line x1="0" y1="-2.5" x2="0" y2="2.5" stroke="#FCD34D" stroke-width="0.8" stroke-linecap="round"/>
+      <line x1="-2.5" y1="0" x2="2.5" y2="0" stroke="#FCD34D" stroke-width="0.8" stroke-linecap="round"/>
+      <line x1="-1.5" y1="-1.5" x2="1.5" y2="1.5" stroke="#FCD34D" stroke-width="0.4" stroke-linecap="round"/>
+      <line x1="1.5" y1="-1.5" x2="-1.5" y2="1.5" stroke="#FCD34D" stroke-width="0.4" stroke-linecap="round"/>
+    </g>
+
+    <!-- Sparkle 3 - right side -->
+    <g transform="translate(355,70)" opacity="0.65">
+      <line x1="0" y1="-4" x2="0" y2="4" stroke="#F59E0B" stroke-width="0.9" stroke-linecap="round"/>
+      <line x1="-4" y1="0" x2="4" y2="0" stroke="#F59E0B" stroke-width="0.9" stroke-linecap="round"/>
+      <line x1="-2.2" y1="-2.2" x2="2.2" y2="2.2" stroke="#F59E0B" stroke-width="0.4" stroke-linecap="round"/>
+      <line x1="2.2" y1="-2.2" x2="-2.2" y2="2.2" stroke="#F59E0B" stroke-width="0.4" stroke-linecap="round"/>
+    </g>
+
+    <!-- Sparkle 4 - bottom left (tiny) -->
+    <g transform="translate(55,95)" opacity="0.5">
+      <line x1="0" y1="-2" x2="0" y2="2" stroke="#FCD34D" stroke-width="0.7" stroke-linecap="round"/>
+      <line x1="-2" y1="0" x2="2" y2="0" stroke="#FCD34D" stroke-width="0.7" stroke-linecap="round"/>
+    </g>
+
+    <!-- Extra tiny sparkle dots -->
+    <circle cx="130" cy="18" r="1" fill="#F59E0B" opacity="0.45"/>
+    <circle cx="275" cy="22" r="0.8" fill="#FCD34D" opacity="0.4"/>
+    <circle cx="370" cy="105" r="0.9" fill="#F59E0B" opacity="0.35"/>
+    <circle cx="30" cy="70" r="0.7" fill="#FCD34D" opacity="0.3"/>
+  </g>
+
+  <!-- ========== SUBTLE DECORATIVE UNDERLINE ========== -->
+  <g id="underline-decoration" opacity="0.5">
+    <line x1="120" y1="122" x2="280" y2="122" stroke="url(#crown-band)" stroke-width="0.8" stroke-linecap="round"/>
+    <!-- Small diamond at center of underline -->
+    <polygon points="200,119 203,122 200,125 197,122" fill="#F59E0B" opacity="0.6"/>
+  </g>
+</svg>

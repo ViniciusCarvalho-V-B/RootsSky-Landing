@@ -9,32 +9,57 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        void: "#070A13",
-        obsidian: "#0E1322",
-        "slate-border": "#1E293B",
-        emerald: {
-          DEFAULT: "#10B981",
-          dark: "#047857",
-          light: "#34D399",
-        },
-        cyan: {
-          DEFAULT: "#06B6D4",
-          dark: "#1D4ED8",
-          light: "#22D3EE",
-        },
+        // Backgrounds — warm blacks & deep browns
+        "dark-wood": "#0D0A07",
+        wood: "#1A120E",
+        "wood-light": "#2A1810",
+        "wood-medium": "#3D261A",
+
+        // Browns — earth identity
+        bark: "#5D4037",
+        "bark-light": "#795548",
+
+        // Golds — primary accent
         gold: {
-          DEFAULT: "#F59E0B",
-          dark: "#D97706",
+          DEFAULT: "#C4A265",
+          dark: "#8B6914",
+          light: "#D4AF37",
         },
+        "gold-shine": "#F5D380",
+
+        // Greens — nature/status & Roots identity
+        leaf: "#2D5A27",
+        "leaf-light": "#4CAF50",
+        emerald: "#1B8A5A",
+        "forest-deep": "#0A3D1F",
+        "forest-glow": "#1B5E3B",
+        "roots-green": "#2E7D32",
+
+        // Crystal accent
+        crystal: "#4DD0E1",
+
+        // Text colors — warm palette
+        warm: "#F5E6D3",
+        "warm-muted": "#C4B59B",
+        "warm-dim": "#8B7D6B",
+
+        // Legacy aliases for compat with store/battlepass pages
+        void: "#0D0A07",
+        obsidian: "#1A120E",
+        "slate-border": "#3D261A",
+        earth: "#5D4037",
+        forest: "#2E7D32",
       },
       fontFamily: {
-        outfit: ["var(--font-outfit)", "sans-serif"],
-        inter: ["var(--font-inter)", "sans-serif"],
-        jetbrains: ["var(--font-jetbrains)", "monospace"],
+        cinzel: ['var(--font-cinzel)', 'serif'],
+        outfit: ['var(--font-outfit)', 'sans-serif'],
+        inter: ['var(--font-inter)', 'sans-serif'],
+        jetbrains: ['var(--font-jetbrains)', 'monospace'],
       },
       animation: {
         "fade-in": "fadeIn 0.6s ease-out forwards",
         "slide-up": "slideUp 0.6s ease-out forwards",
+        "glow-pulse": "glowPulse 3s ease-in-out infinite",
       },
       keyframes: {
         fadeIn: {
@@ -44,6 +69,10 @@ const config: Config = {
         slideUp: {
           "0%": { opacity: "0", transform: "translateY(20px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        glowPulse: {
+          "0%, 100%": { boxShadow: "0 0 15px rgba(196,162,101,0.1)" },
+          "50%": { boxShadow: "0 0 25px rgba(196,162,101,0.25)" },
         },
       },
       borderRadius: {

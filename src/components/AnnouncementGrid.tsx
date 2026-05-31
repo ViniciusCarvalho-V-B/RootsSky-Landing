@@ -5,50 +5,50 @@ import Button from "./Button";
 const announcements = [
   {
     id: 1,
-    date: "May 28, 2026",
-    category: "Update",
-    title: "Season 1 Launch — New Islands & Economy Reset",
+    date: "28 Mai, 2026",
+    category: "Atualização",
+    title: "Lançamento da Season 1 — Novas Ilhas & Reset de Economia",
     excerpt:
-      "The wait is over! Season 1 brings 15 new island templates, a fresh economy, and exciting new challenges for all players.",
+      "A espera acabou! A Season 1 traz 15 novos modelos de ilha, uma economia renovada e desafios empolgantes para todos os jogadores.",
   },
   {
     id: 2,
-    date: "May 25, 2026",
-    category: "Event",
-    title: "Weekend PvP Tournament — 50K Prize Pool",
+    date: "25 Mai, 2026",
+    category: "Evento",
+    title: "Torneio PvP de Fim de Semana — 50K de Prêmio",
     excerpt:
-      "Compete in our first-ever PvP arena tournament this weekend. Top 3 players win exclusive ranks and in-game currency.",
+      "Participe do nosso primeiro torneio de arena PvP neste fim de semana. Top 3 jogadores ganham ranks exclusivos e moedas.",
   },
   {
     id: 3,
-    date: "May 22, 2026",
-    category: "Store",
-    title: "New Premium Ranks Available",
+    date: "22 Mai, 2026",
+    category: "Loja",
+    title: "Novos Ranks Premium Disponíveis",
     excerpt:
-      "Introducing the Celestial and Void Master ranks with exclusive perks, custom trails, and priority queue access.",
+      "Apresentamos os ranks Celestial e Void Master com vantagens exclusivas, trilhas personalizadas e fila prioritária.",
   },
   {
     id: 4,
-    date: "May 18, 2026",
-    category: "Community",
-    title: "Island Building Contest Winners",
+    date: "18 Mai, 2026",
+    category: "Comunidade",
+    title: "Vencedores do Concurso de Construção",
     excerpt:
-      "Congratulations to our top 10 builders! Check out the stunning island creations that won this month's contest.",
+      "Parabéns aos nossos top 10 construtores! Confira as incríveis criações de ilhas que venceram o concurso deste mês.",
   },
 ];
 
 const categoryColors: Record<string, "emerald" | "gold" | "cyan"> = {
-  Update: "emerald",
-  Event: "cyan",
-  Store: "gold",
-  Community: "emerald",
+  Atualização: "emerald",
+  Evento: "cyan",
+  Loja: "gold",
+  Comunidade: "emerald",
 };
 
 export default function AnnouncementGrid() {
   return (
     <section id="announcements">
       <h2 className="font-outfit font-bold text-2xl text-white mb-6">
-        Latest News
+        Últimas Notícias
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {announcements.map((post) => (
@@ -68,7 +68,7 @@ export default function AnnouncementGrid() {
               {post.excerpt}
             </p>
             <Button variant="outline" className="text-sm px-4 py-2">
-              Read More →
+              Ler Mais →
             </Button>
           </Card>
         ))}

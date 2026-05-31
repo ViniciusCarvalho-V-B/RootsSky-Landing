@@ -1,201 +1,326 @@
 "use client";
 
 import React, { useState } from "react";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import Card, { CardBadge } from "@/components/Card";
+import Link from "next/link";
+import StoreSidebar from "@/components/StoreSidebar";
+import { CardBadge } from "@/components/Card";
 import Button from "@/components/Button";
 
 type Category = "ranks" | "coins" | "bundles";
 
-const categories: { key: Category; label: string; emoji: string }[] = [
-  { key: "ranks", label: "Ranks", emoji: "👑" },
-  { key: "coins", label: "Coins", emoji: "💎" },
-  { key: "bundles", label: "Bundles", emoji: "📦" },
-];
-
-const storeItems: Record<Category, {
-  id: number;
-  name: string;
-  price: string;
-  originalPrice?: string;
-  description: string;
-  badge?: string;
-  badgeVariant?: "emerald" | "gold" | "cyan";
-  perks?: string[];
-  popular?: boolean;
-}[]> = {
+const storeItems: Record<
+  Category,
+  {
+    id: number;
+    name: string;
+    price: string;
+    originalPrice?: string;
+    description: string;
+    badge?: string;
+    badgeVariant?: "emerald" | "gold" | "cyan";
+    perks?: string[];
+    popular?: boolean;
+  }[]
+> = {
   ranks: [
     {
       id: 1,
-      name: "Celestial",
-      price: "R$ 29,90",
-      description: "Ascend to the skies with exclusive celestial perks.",
-      badge: "Popular",
-      badgeVariant: "cyan",
-      popular: true,
-      perks: ["Custom prefix & tag", "/fly on your island", "3 /sethome", "Priority queue", "Celestial trail"],
+      name: "Semente",
+      price: "R$ 14,90",
+      description:
+        "Tudo começa com uma semente. Plante suas raízes no RootsSky.",
+      badge: "Iniciante",
+      badgeVariant: "emerald",
+      perks: [
+        "Prefixo [🌱] exclusivo",
+        "2 /sethome",
+        "/fly na sua ilha",
+        "Chat colorido",
+        "Trilha de folhas",
+      ],
     },
     {
       id: 2,
-      name: "Void Master",
-      price: "R$ 59,90",
-      description: "Master the void with the ultimate rank.",
-      badge: "Best Value",
+      name: "Raiz Viva",
+      price: "R$ 29,90",
+      description: "As raízes que sustentam os céus. Poder e presença.",
+      badge: "Popular",
       badgeVariant: "gold",
-      popular: false,
-      perks: ["All Celestial perks", "/fly everywhere", "7 /sethome", "Custom join message", "Void Master aura", "Exclusive kit"],
+      popular: true,
+      perks: [
+        "Todas as vantagens Semente",
+        "Prefixo [🌿] exclusivo",
+        "5 /sethome",
+        "/fly em todo lugar",
+        "Fila prioritária",
+        "Kit semanal",
+        "Aura de raízes",
+      ],
     },
     {
       id: 3,
-      name: "Ethereal",
-      price: "R$ 14,90",
-      description: "Begin your premium journey with ethereal powers.",
-      badge: "Starter",
-      badgeVariant: "emerald",
-      perks: ["Custom prefix", "2 /sethome", "Ethereal trail", "Colored chat"],
+      name: "Yggdrasil",
+      price: "R$ 59,90",
+      description: "A Árvore do Mundo. O rank lendário definitivo.",
+      badge: "Lendário",
+      badgeVariant: "cyan",
+      perks: [
+        "Todas as vantagens Raiz Viva",
+        "Prefixo [🌳] exclusivo",
+        "10 /sethome",
+        "Mensagem de entrada",
+        'Pet "Sprite da Floresta"',
+        "Aura Yggdrasil",
+        "Kit lendário",
+      ],
     },
   ],
   coins: [
     {
       id: 4,
-      name: "1,000 Coins",
+      name: "1.000 Moedas",
       price: "R$ 9,90",
-      description: "A boost of in-game currency for your island.",
-      perks: ["Instant delivery", "Use in /shop"],
+      description: "Um impulso de moedas para sua ilha.",
+      perks: ["Entrega instantânea", "Use na /shop"],
     },
     {
       id: 5,
-      name: "5,000 Coins",
+      name: "5.000 Moedas",
       price: "R$ 39,90",
       originalPrice: "R$ 49,50",
-      description: "Best value coin pack — save 20%!",
+      description: "Melhor custo-benefício — economize 20%!",
       badge: "20% OFF",
       badgeVariant: "gold",
       popular: true,
-      perks: ["Instant delivery", "Use in /shop", "Bonus 20% value"],
+      perks: [
+        "Entrega instantânea",
+        "Use na /shop",
+        "Bônus de 20% no valor",
+      ],
     },
     {
       id: 6,
-      name: "10,000 Coins",
+      name: "10.000 Moedas",
       price: "R$ 69,90",
       originalPrice: "R$ 99,00",
-      description: "The ultimate coin hoard — save 30%!",
+      description: "O pacote definitivo — economize 30%!",
       badge: "30% OFF",
       badgeVariant: "cyan",
-      perks: ["Instant delivery", "Use in /shop", "Bonus 30% value"],
+      perks: [
+        "Entrega instantânea",
+        "Use na /shop",
+        "Bônus de 30% no valor",
+      ],
     },
   ],
   bundles: [
     {
       id: 7,
-      name: "Skyblock Starter",
+      name: "Pacote Semente",
       price: "R$ 24,90",
       originalPrice: "R$ 34,80",
-      description: "Everything you need to start strong.",
-      badge: "Save 28%",
+      description: "Tudo que você precisa para começar forte.",
+      badge: "Economize 28%",
       badgeVariant: "emerald",
-      perks: ["Ethereal Rank", "1,000 Coins", "Starter Kit", "Island Expansion"],
+      perks: [
+        "Rank Semente",
+        "1.000 Moedas",
+        "Kit Iniciante",
+        "Expansão de Ilha",
+      ],
     },
     {
       id: 8,
-      name: "Celestial Pack",
+      name: "Pacote Raiz Viva",
       price: "R$ 54,90",
       originalPrice: "R$ 79,80",
-      description: "The most popular bundle for serious players.",
-      badge: "Most Popular",
+      description: "O pacote mais popular para jogadores dedicados.",
+      badge: "Mais Popular",
       badgeVariant: "gold",
       popular: true,
-      perks: ["Celestial Rank", "5,000 Coins", "Premium Kit", "2x Island Expansion", "Exclusive Pet"],
+      perks: [
+        "Rank Raiz Viva",
+        "5.000 Moedas",
+        "Kit Premium",
+        "2x Expansão de Ilha",
+        "Pet Exclusivo",
+      ],
     },
     {
       id: 9,
-      name: "Void Master Bundle",
+      name: "Pacote Yggdrasil",
       price: "R$ 99,90",
       originalPrice: "R$ 158,80",
-      description: "The ultimate all-in-one package. Save 37%!",
-      badge: "Best Deal",
+      description: "O pacote completo definitivo. Economize 37%!",
+      badge: "Melhor Oferta",
       badgeVariant: "cyan",
-      perks: ["Void Master Rank", "10,000 Coins", "All Kits", "5x Island Expansion", "3 Exclusive Pets", "Custom Aura"],
+      perks: [
+        "Rank Yggdrasil",
+        "10.000 Moedas",
+        "Todos os Kits",
+        "5x Expansão de Ilha",
+        "3 Pets Exclusivos",
+        "Aura Personalizada",
+      ],
     },
   ],
 };
 
 export default function StorePage() {
   const [active, setActive] = useState<Category>("ranks");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const items = storeItems[active];
 
   return (
-    <>
-      <Header />
+    <div className="flex min-h-screen bg-dark-wood">
+      {/* ═══ SIDEBAR (desktop) ═══ */}
+      <aside className="hidden lg:flex lg:w-72 xl:w-80 fixed inset-y-0 left-0 z-30 flex-col store-sidebar-container">
+        <StoreSidebar
+          activeCategory={active}
+          onCategoryChange={(cat) => setActive(cat as Category)}
+        />
+      </aside>
 
-      <main className="min-h-screen stars-bg pt-24 pb-16">
-        <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 30% 0%, rgba(245, 158, 11, 0.08) 0%, transparent 60%), radial-gradient(ellipse at 70% 50%, rgba(6, 182, 212, 0.06) 0%, transparent 50%)" }} />
+      {/* Mobile overlay */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/60 z-40 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12 animate-fade-in">
-            <h1 className="font-outfit font-extrabold text-4xl sm:text-5xl mb-4">
-              <span className="text-gradient-gold">Premium</span>{" "}
-              <span className="text-white">Store</span>
+      {/* Mobile sidebar drawer */}
+      <div
+        className={`fixed inset-y-0 left-0 w-72 z-50 transform transition-transform duration-300 lg:hidden store-sidebar-container ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <StoreSidebar
+          activeCategory={active}
+          onCategoryChange={(cat) => setActive(cat as Category)}
+          onClose={() => setSidebarOpen(false)}
+        />
+      </div>
+
+      {/* ═══ MAIN CONTENT ═══ */}
+      <main className="flex-1 lg:ml-72 xl:ml-80 min-h-screen stars-bg relative">
+        {/* Green ambient glow */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse at 20% 0%, rgba(27,94,59,0.08) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(196,162,101,0.05) 0%, transparent 50%)",
+          }}
+        />
+
+        {/* Mobile top bar */}
+        <div className="sticky top-0 z-20 lg:hidden glass-header px-4 py-3">
+          <div className="flex items-center justify-between">
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="flex flex-col gap-1 p-2"
+              aria-label="Abrir menu"
+            >
+              <span className="block w-5 h-0.5 bg-warm-muted" />
+              <span className="block w-5 h-0.5 bg-warm-muted" />
+              <span className="block w-5 h-0.5 bg-warm-muted" />
+            </button>
+            <Link href="/">
+              <img
+                src="/svg/logo-rootssky.svg"
+                alt="RootsSky"
+                className="h-8 w-auto"
+              />
+            </Link>
+            <div className="w-9" />
+          </div>
+        </div>
+
+        {/* Store content */}
+        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+          {/* Header */}
+          <div className="text-center mb-10 animate-fade-in">
+            <h1 className="font-cinzel font-black text-3xl sm:text-4xl lg:text-5xl mb-4 uppercase tracking-wide">
+              <span className="text-gradient-gold">Loja</span>{" "}
+              <span className="text-warm">Premium</span>
             </h1>
-            <p className="text-slate-400 font-inter max-w-xl mx-auto">
-              Enhance your Skyblock experience with exclusive ranks, coins, and bundles. All purchases support the server.
+            <p className="text-warm-muted font-inter max-w-xl mx-auto text-sm sm:text-base">
+              Melhore sua experiência Skyblock com ranks exclusivos, moedas e
+              pacotes. Todas as compras apoiam o servidor.
             </p>
           </div>
 
-          <div className="divider-glow mb-10" />
+          <div className="gold-divider mb-8" />
 
           {/* Category Tabs */}
-          <div className="flex justify-center gap-3 mb-10 animate-slide-up" style={{ animationDelay: "0.15s" }}>
-            {categories.map((cat) => (
+          <div
+            className="flex justify-center gap-3 mb-10 animate-slide-up"
+            style={{ animationDelay: "0.15s" }}
+          >
+            {([
+              { key: "ranks" as Category, label: "🌿 Ranks" },
+              { key: "coins" as Category, label: "💰 Moedas" },
+              { key: "bundles" as Category, label: "📦 Pacotes" },
+            ]).map((cat) => (
               <button
                 key={cat.key}
                 onClick={() => setActive(cat.key)}
-                className={`px-6 py-2.5 rounded-full font-outfit font-bold text-sm transition-all duration-300 ${
+                className={`px-5 sm:px-6 py-2.5 rounded-lg font-cinzel font-bold text-xs sm:text-sm transition-all duration-300 ${
                   active === cat.key
-                    ? cat.key === "ranks"
-                      ? "bg-gradient-to-r from-emerald to-cyan text-white shadow-lg shadow-emerald/20"
-                      : cat.key === "coins"
-                      ? "bg-gradient-to-r from-cyan to-blue-500 text-white shadow-lg shadow-cyan/20"
-                      : "bg-gradient-to-r from-gold to-gold-dark text-white shadow-lg shadow-gold/20"
-                    : "bg-obsidian border border-slate-border text-slate-400 hover:text-white hover:border-slate-500"
+                    ? "bg-gradient-to-r from-forest-glow to-roots-green text-warm border border-leaf-light/40 shadow-lg shadow-roots-green/20"
+                    : "bg-wood border border-gold/20 text-warm-muted hover:text-gold hover:border-gold/40"
                 }`}
               >
-                {cat.emoji} {cat.label}
+                {cat.label}
               </button>
             ))}
           </div>
 
           {/* Product Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {items.map((item) => (
-              <Card key={item.id} className={`group flex flex-col ${item.popular ? "ring-1 ring-gold/40" : ""}`}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {items.map((item, index) => (
+              <div
+                key={item.id}
+                className={`medieval-panel p-5 sm:p-6 flex flex-col group animate-slide-up ${
+                  item.popular ? "ring-1 ring-gold/30" : ""
+                }`}
+                style={{ animationDelay: `${0.1 + index * 0.1}s` }}
+              >
                 {/* Badge row */}
-                <div className="flex items-center justify-between mb-4">
+                <div className="relative z-10 flex items-center justify-between mb-4">
                   {item.badge ? (
-                    <CardBadge variant={item.badgeVariant || "emerald"}>{item.badge}</CardBadge>
+                    <CardBadge variant={item.badgeVariant || "emerald"}>
+                      {item.badge}
+                    </CardBadge>
                   ) : (
                     <span />
                   )}
                   {item.popular && (
-                    <span className="text-xs font-outfit font-bold text-gold uppercase tracking-wider">★ Popular</span>
+                    <span className="text-[10px] font-cinzel font-bold text-gold uppercase tracking-wider">
+                      ★ Popular
+                    </span>
                   )}
                 </div>
 
                 {/* Name & Description */}
-                <h3 className="font-outfit font-bold text-xl text-white mb-1 group-hover:text-emerald-light transition-colors">
+                <h3 className="relative z-10 font-cinzel font-bold text-xl text-gold-shine mb-1 group-hover:text-gold-light transition-colors uppercase tracking-wide">
                   {item.name}
                 </h3>
-                <p className="text-sm text-slate-400 font-inter mb-4 flex-grow">
+                <p className="relative z-10 text-sm text-warm-muted font-inter mb-4 flex-grow leading-relaxed">
                   {item.description}
                 </p>
 
                 {/* Perks */}
                 {item.perks && (
-                  <ul className="space-y-2 mb-6">
+                  <ul className="relative z-10 space-y-2 mb-6">
                     {item.perks.map((perk) => (
-                      <li key={perk} className="flex items-center gap-2 text-sm text-slate-300 font-inter">
-                        <span className="text-emerald text-xs">✓</span>
+                      <li
+                        key={perk}
+                        className="flex items-start gap-2 text-sm text-warm/80 font-inter"
+                      >
+                        <span className="text-leaf-light text-xs mt-0.5 flex-shrink-0">
+                          ✓
+                        </span>
                         {perk}
                       </li>
                     ))}
@@ -203,35 +328,37 @@ export default function StorePage() {
                 )}
 
                 {/* Price & CTA */}
-                <div className="mt-auto">
+                <div className="relative z-10 mt-auto">
                   <div className="flex items-baseline gap-2 mb-4">
-                    <span className={`font-outfit font-extrabold text-2xl ${item.popular ? "text-gradient-gold" : "text-gradient-primary"}`}>
+                    <span className="font-cinzel font-black text-2xl text-gradient-gold">
                       {item.price}
                     </span>
                     {item.originalPrice && (
-                      <span className="text-sm text-slate-500 line-through font-inter">
+                      <span className="text-sm text-warm-dim line-through font-inter">
                         {item.originalPrice}
                       </span>
                     )}
                   </div>
-                  <Button variant={item.popular ? "premium" : "primary"} className="w-full text-center">
-                    Purchase Now
+                  <Button
+                    variant={item.popular ? "premium" : "primary"}
+                    className="w-full text-center justify-center"
+                  >
+                    Comprar Agora
                   </Button>
                 </div>
-              </Card>
+              </div>
             ))}
           </div>
 
           {/* Disclaimer */}
           <div className="mt-12 text-center">
-            <p className="text-xs text-slate-500 font-inter">
-              All purchases are final. By purchasing you agree to our Terms of Service. Payments are processed securely.
+            <p className="text-xs text-warm-dim/60 font-inter">
+              Todas as compras são finais. Ao comprar, você concorda com nossos
+              Termos de Serviço. Pagamentos processados com segurança.
             </p>
           </div>
         </div>
       </main>
-
-      <Footer />
-    </>
+    </div>
   );
 }

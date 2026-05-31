@@ -1,0 +1,149 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 60" preserveAspectRatio="none" width="1200" height="60">
+  <defs>
+    <!-- Main line gradient: emerald → cyan -->
+    <linearGradient id="divider-line-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10B981" stop-opacity="0"/>
+      <stop offset="15%" stop-color="#10B981" stop-opacity="0.8"/>
+      <stop offset="35%" stop-color="#10B981"/>
+      <stop offset="50%" stop-color="#22D3EE"/>
+      <stop offset="65%" stop-color="#06B6D4"/>
+      <stop offset="85%" stop-color="#10B981" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#10B981" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Root brown gradient -->
+    <linearGradient id="div-root-brown" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#5D4037"/>
+      <stop offset="100%" stop-color="#8D6E63"/>
+    </linearGradient>
+
+    <!-- Leaf green gradient -->
+    <linearGradient id="div-leaf-green" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2E7D32"/>
+      <stop offset="100%" stop-color="#10B981"/>
+    </linearGradient>
+
+    <!-- Emerald glow for main line -->
+    <filter id="divider-glow" x="-5%" y="-100%" width="110%" height="300%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
+      <feFlood flood-color="#10B981" flood-opacity="0.4" result="color"/>
+      <feComposite in="color" in2="blur" operator="in" result="glow"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Subtle glow for leaf endpoints -->
+    <filter id="leaf-glow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="1.5"/>
+    </filter>
+
+    <!-- Cyan highlight glow for center -->
+    <filter id="cyan-glow" x="-5%" y="-150%" width="110%" height="400%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"/>
+      <feFlood flood-color="#06B6D4" flood-opacity="0.3" result="color"/>
+      <feComposite in="color" in2="blur" operator="in" result="glow"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- ========== GLOW LAYER (behind everything) ========== -->
+  <path d="M100,30 Q300,26 450,28 Q550,30 600,27 Q650,24 750,28 Q900,32 1100,30"
+        fill="none" stroke="#10B981" stroke-width="6" stroke-linecap="round"
+        opacity="0.15" filter="url(#cyan-glow)"/>
+
+  <!-- ========== ROOT BRANCHES ========== -->
+  <g id="root-branches">
+    <!-- Branch 1 - left area, downward -->
+    <path d="M250,29 Q245,34 240,40 Q237,45 240,48"
+          fill="none" stroke="url(#div-root-brown)" stroke-width="1.8" stroke-linecap="round" opacity="0.7"/>
+    <path d="M240,40 Q235,42 232,40"
+          fill="none" stroke="#5D4037" stroke-width="0.8" stroke-linecap="round" opacity="0.5"/>
+
+    <!-- Branch 2 - left-center, upward -->
+    <path d="M400,28 Q398,22 395,16 Q393,12 396,10"
+          fill="none" stroke="url(#div-root-brown)" stroke-width="1.6" stroke-linecap="round" opacity="0.65"/>
+    <path d="M395,16 Q400,14 403,16"
+          fill="none" stroke="#5D4037" stroke-width="0.7" stroke-linecap="round" opacity="0.45"/>
+
+    <!-- Branch 3 - center, downward -->
+    <path d="M600,27 Q605,33 610,40 Q612,45 608,48"
+          fill="none" stroke="url(#div-root-brown)" stroke-width="1.8" stroke-linecap="round" opacity="0.7"/>
+    <path d="M610,40 Q615,43 618,41"
+          fill="none" stroke="#5D4037" stroke-width="0.8" stroke-linecap="round" opacity="0.5"/>
+
+    <!-- Branch 4 - right-center, upward -->
+    <path d="M780,28 Q775,22 772,15 Q770,11 774,8"
+          fill="none" stroke="url(#div-root-brown)" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+
+    <!-- Branch 5 - right area, downward -->
+    <path d="M920,30 Q925,36 930,42 Q932,46 928,49"
+          fill="none" stroke="url(#div-root-brown)" stroke-width="1.6" stroke-linecap="round" opacity="0.65"/>
+    <path d="M930,42 Q934,44 937,42"
+          fill="none" stroke="#5D4037" stroke-width="0.7" stroke-linecap="round" opacity="0.45"/>
+
+    <!-- Branch 6 - far left, small upward -->
+    <path d="M180,29 Q176,24 174,18 Q173,15 176,13"
+          fill="none" stroke="url(#div-root-brown)" stroke-width="1.3" stroke-linecap="round" opacity="0.55"/>
+  </g>
+
+  <!-- ========== LEAF SHAPES AT BRANCH ENDPOINTS ========== -->
+  <g id="leaf-endpoints">
+    <!-- Leaf at branch 1 endpoint -->
+    <path d="M240,48 Q236,44 233,48 Q236,52 240,48 Z"
+          fill="url(#div-leaf-green)" opacity="0.8"/>
+    <circle cx="239" cy="48" r="1.5" fill="#34D399" opacity="0.3" filter="url(#leaf-glow)"/>
+
+    <!-- Leaf at branch 2 endpoint (upward) -->
+    <path d="M396,10 Q392,7 395,4 Q399,7 396,10 Z"
+          fill="url(#div-leaf-green)" opacity="0.75"/>
+    <circle cx="396" cy="8" r="1.5" fill="#34D399" opacity="0.3" filter="url(#leaf-glow)"/>
+
+    <!-- Leaf at branch 3 endpoint -->
+    <path d="M608,48 Q604,44 601,48 Q604,52 608,48 Z"
+          fill="url(#div-leaf-green)" opacity="0.8"/>
+    <circle cx="607" cy="48" r="1.5" fill="#34D399" opacity="0.3" filter="url(#leaf-glow)"/>
+
+    <!-- Leaf at branch 4 endpoint (upward) -->
+    <path d="M774,8 Q770,5 773,2 Q777,5 774,8 Z"
+          fill="url(#div-leaf-green)" opacity="0.7"/>
+    <circle cx="774" cy="6" r="1.2" fill="#34D399" opacity="0.25" filter="url(#leaf-glow)"/>
+
+    <!-- Leaf at branch 5 endpoint -->
+    <path d="M928,49 Q924,45 921,49 Q924,53 928,49 Z"
+          fill="url(#div-leaf-green)" opacity="0.75"/>
+    <circle cx="927" cy="49" r="1.5" fill="#34D399" opacity="0.3" filter="url(#leaf-glow)"/>
+
+    <!-- Leaf at branch 6 endpoint (upward) -->
+    <path d="M176,13 Q172,10 175,7 Q179,10 176,13 Z"
+          fill="url(#div-leaf-green)" opacity="0.65"/>
+    <circle cx="176" cy="11" r="1" fill="#34D399" opacity="0.2" filter="url(#leaf-glow)"/>
+
+    <!-- Extra decorative leaf dots along main line -->
+    <circle cx="330" cy="27" r="2" fill="#2E7D32" opacity="0.4"/>
+    <circle cx="520" cy="29" r="1.8" fill="#2E7D32" opacity="0.35"/>
+    <circle cx="700" cy="27" r="1.8" fill="#2E7D32" opacity="0.35"/>
+    <circle cx="850" cy="29" r="2" fill="#2E7D32" opacity="0.3"/>
+  </g>
+
+  <!-- ========== MAIN WAVY LINE ========== -->
+  <g id="main-line" filter="url(#divider-glow)">
+    <path d="M50,30 Q150,26 250,29 Q350,32 450,28 Q500,26 550,27 Q600,28 650,25 Q700,22 750,28 Q850,34 950,30 Q1050,26 1150,30"
+          fill="none" stroke="url(#divider-line-grad)" stroke-width="2" stroke-linecap="round"/>
+  </g>
+
+  <!-- ========== THIN SECONDARY ACCENT LINE ========== -->
+  <path d="M100,32 Q250,28 400,31 Q550,34 600,30 Q650,26 800,31 Q950,35 1100,32"
+        fill="none" stroke="url(#divider-line-grad)" stroke-width="0.6" stroke-linecap="round" opacity="0.35"/>
+
+  <!-- ========== CENTER DIAMOND ORNAMENT ========== -->
+  <g id="center-ornament" opacity="0.7">
+    <polygon points="600,23 604,27 600,31 596,27" fill="#22D3EE" opacity="0.5"/>
+    <polygon points="600,24.5 602.5,27 600,29.5 597.5,27" fill="#06B6D4" opacity="0.7"/>
+  </g>
+</svg>

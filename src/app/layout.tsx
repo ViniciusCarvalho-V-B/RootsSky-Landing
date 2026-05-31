@@ -1,6 +1,14 @@
 import type { Metadata } from "next";
-import { Outfit, Inter, JetBrains_Mono } from "next/font/google";
+import { Cinzel, Inter, JetBrains_Mono, Outfit } from "next/font/google";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 import "./globals.css";
+
+const cinzel = Cinzel({
+  subsets: ["latin"],
+  weight: ["700", "900"],
+  variable: "--font-cinzel",
+  display: "swap",
+});
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -24,15 +32,16 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "RootsSky — Premium Minecraft Skyblock Server",
+  title: "RootsSky — Servidor Premium de Minecraft Skyblock",
   description:
-    "Join RootsSky, the ultimate Premium Minecraft Skyblock experience. Custom islands, PvP arenas, dynamic economy, clans, quests, and more. Play now!",
+    "Entre no RootsSky, a melhor experiência Premium de Minecraft Skyblock do Brasil. Ilhas personalizadas, arenas PvP, economia dinâmica, clãs, missões e muito mais. Jogue agora!",
   keywords: [
     "Minecraft",
     "Skyblock",
     "RootsSky",
-    "Minecraft Server",
-    "Premium Skyblock",
+    "Servidor Minecraft",
+    "Skyblock Premium",
+    "Minecraft Brasil",
   ],
 };
 
@@ -43,11 +52,11 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
-      className={`${outfit.variable} ${inter.variable} ${jetbrainsMono.variable}`}
+      lang="pt-BR"
+      className={`${cinzel.variable} ${outfit.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
-      <body className="bg-void text-white font-inter antialiased">
-        {children}
+      <body className="bg-dark-wood text-warm font-inter antialiased">
+        <LanguageProvider>{children}</LanguageProvider>
       </body>
     </html>
   );

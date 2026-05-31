@@ -8,32 +8,38 @@ import Button from "@/components/Button";
 
 const features = [
   {
-    icon: "⚔️",
+    icon: "/svg/icon-battlepass.svg",
+    isSvg: true,
     title: "Seasonal Tiers",
     description: "50+ tiers per season with exclusive rewards that never return. Grind your way through unique challenges each month.",
   },
   {
     icon: "🏆",
+    isSvg: false,
     title: "Exclusive Cosmetics",
     description: "Unlock trails, hats, particles, and island decorations only available through the BattlePass.",
   },
   {
     icon: "📈",
+    isSvg: false,
     title: "XP Multiplier",
     description: "Premium BattlePass holders earn 2x XP from all sources — level up faster and claim rewards sooner.",
   },
   {
     icon: "🔄",
+    isSvg: false,
     title: "Season Reset",
     description: "Each season introduces fresh rewards, new challenges, and a reset leaderboard. Stay competitive year-round.",
   },
   {
     icon: "🎁",
+    isSvg: false,
     title: "Free Tier Rewards",
     description: "Even without the premium pass, earn free coins, cosmetic crates, and bonus items every 5 tiers.",
   },
   {
     icon: "🛡️",
+    isSvg: false,
     title: "Server Integration",
     description: "Seamless in-game UI, automatic reward claiming, and progress tracking directly on your HUD.",
   },
@@ -106,7 +112,11 @@ export default function BattlePassPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {features.map((feature) => (
                 <Card key={feature.title} className="group text-center">
-                  <span className="text-3xl mb-4 block">{feature.icon}</span>
+                  {feature.isSvg ? (
+                    <img src={feature.icon} alt={feature.title} className="w-10 h-10 mx-auto mb-4 icon-glow" />
+                  ) : (
+                    <span className="text-3xl mb-4 block">{feature.icon}</span>
+                  )}
                   <h3 className="font-outfit font-bold text-lg text-white mb-2 group-hover:text-emerald-light transition-colors">
                     {feature.title}
                   </h3>

@@ -4,8 +4,8 @@ import Button from "./Button";
 
 const quickLinks = [
   { label: "📢 Discord", href: "#", color: "text-cyan-light" },
-  { label: "🗳️ Vote", href: "#", color: "text-emerald-light" },
-  { label: "📜 Rules", href: "#", color: "text-slate-300" },
+  { label: "🗳️ Votar", href: "#", color: "text-emerald-light" },
+  { label: "📜 Regras", href: "#", color: "text-slate-300" },
   { label: "📖 Wiki", href: "#", color: "text-slate-300" },
 ];
 
@@ -21,26 +21,26 @@ export default function Sidebar() {
   return (
     <aside className="space-y-6" id="sidebar">
       {/* Server Status */}
-      <Card hoverable={false} className="!p-4">
+      <Card hoverable={false} className="!p-4 earth-accent-border">
         <div className="flex items-center gap-3 mb-3">
           <span className="relative flex h-3 w-3">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald opacity-75" />
             <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald" />
           </span>
           <span className="font-outfit font-bold text-emerald text-sm">
-            Server Online
+            Servidor Online
           </span>
         </div>
         <p className="text-xs text-slate-400 font-inter">
-          <span className="text-white font-medium">1,247</span> players online
-          right now
+          <span className="text-white font-medium">1.247</span> jogadores online
+          agora
         </p>
       </Card>
 
       {/* Quick Links */}
-      <Card hoverable={false}>
+      <Card hoverable={false} className="earth-accent-border">
         <h3 className="font-outfit font-bold text-base text-white mb-4">
-          Quick Links
+          Links Rápidos
         </h3>
         <div className="space-y-2">
           {quickLinks.map((link) => (
@@ -56,9 +56,9 @@ export default function Sidebar() {
       </Card>
 
       {/* Top Players */}
-      <Card hoverable={false}>
+      <Card hoverable={false} className="earth-accent-border">
         <h3 className="font-outfit font-bold text-base text-white mb-4">
-          🏆 Top Players
+          🏆 Top Jogadores
         </h3>
         <div className="space-y-3">
           {topPlayers.map((player) => (
@@ -84,7 +84,7 @@ export default function Sidebar() {
         </div>
         <div className="mt-4">
           <Button variant="outline" className="w-full text-xs py-2">
-            View Full Leaderboard
+            Ver Ranking Completo
           </Button>
         </div>
       </Card>
