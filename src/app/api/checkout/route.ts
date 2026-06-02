@@ -5,6 +5,8 @@ import { prisma } from "@/lib/prisma";
 import { CATALOG } from "@/lib/catalog";
 import { sendDiscordPurchaseNotification } from "@/lib/discord";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
