@@ -1,10 +1,15 @@
 "use client";
 
 import React, { useState, useCallback } from "react";
+import Image from "next/image";
+import { useServerStatus } from "@/hooks/useServerStatus";
+import { useDiscordStatus } from "@/hooks/useDiscordStatus";
 
 export default function HeroSection() {
   const [copied, setCopied] = useState(false);
-  const ip = "play.rootssky.com.br";
+  const ip = "rootssky.haskhosting.com.br";
+  const { players, online, loading } = useServerStatus();
+  const { online: discordOnline, loading: discordLoading } = useDiscordStatus();
 
   const handleCopy = useCallback(async () => {
     try {
@@ -136,20 +141,22 @@ export default function HeroSection() {
             {/* Online badge */}
             <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-leaf/20 border border-leaf-light/30 ml-1 sm:ml-2">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-leaf-light opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-leaf-light" />
+                {online && <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-leaf-light opacity-75" />}
+                <span className={`relative inline-flex rounded-full h-2 w-2 ${online ? "bg-leaf-light" : "bg-red-500"}`} />
               </span>
-              <span className="text-leaf-light font-bold text-[10px] uppercase tracking-wider whitespace-nowrap">
-                247 ONLINE
+              <span className={`font-bold text-[10px] uppercase tracking-wider whitespace-nowrap ${online ? "text-leaf-light" : "text-red-500"}`}>
+                {loading ? "..." : (online ? `${players} ONLINE` : "OFFLINE")}
               </span>
             </div>
           </button>
 
           {/* Logo */}
           <div className="flex-shrink-0 order-1 lg:order-2">
-            <img
+            <Image
               src="/svg/logo-rootssky.svg"
               alt="RootsSky"
+              width={300}
+              height={100}
               className="h-16 sm:h-20 md:h-24 lg:h-28 w-auto logo-hover drop-shadow-2xl"
             />
           </div>
@@ -164,8 +171,12 @@ export default function HeroSection() {
           >
             {/* Members badge */}
             <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#5865F2]/15 border border-[#5865F2]/25 mr-1 sm:mr-2">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#7289DA] opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#7289DA]" />
+              </span>
               <span className="text-[#7289DA] font-bold text-[10px] uppercase tracking-wider whitespace-nowrap">
-                3,795 MEMBERS
+                {discordLoading ? "..." : `${discordOnline} ONLINE`}
               </span>
             </div>
             <div className="text-right">

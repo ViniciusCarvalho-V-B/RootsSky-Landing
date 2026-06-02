@@ -1,183 +1,121 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import StoreSidebar from "@/components/StoreSidebar";
 import { CardBadge } from "@/components/Card";
 import Button from "@/components/Button";
+import PlayerModal from "@/components/PlayerModal";
+import StoreStats from "@/components/StoreStats";
 
-type Category = "ranks" | "coins" | "bundles";
+import { Category, storeItems } from "@/lib/catalog";
 
-const storeItems: Record<
-  Category,
-  {
-    id: number;
-    name: string;
-    price: string;
-    originalPrice?: string;
-    description: string;
-    badge?: string;
-    badgeVariant?: "emerald" | "gold" | "cyan";
-    perks?: string[];
-    popular?: boolean;
-  }[]
-> = {
-  ranks: [
-    {
-      id: 1,
-      name: "Semente",
-      price: "R$ 14,90",
-      description:
-        "Tudo começa com uma semente. Plante suas raízes no RootsSky.",
-      badge: "Iniciante",
-      badgeVariant: "emerald",
-      perks: [
-        "Prefixo [🌱] exclusivo",
-        "2 /sethome",
-        "/fly na sua ilha",
-        "Chat colorido",
-        "Trilha de folhas",
-      ],
-    },
-    {
-      id: 2,
-      name: "Raiz Viva",
-      price: "R$ 29,90",
-      description: "As raízes que sustentam os céus. Poder e presença.",
-      badge: "Popular",
-      badgeVariant: "gold",
-      popular: true,
-      perks: [
-        "Todas as vantagens Semente",
-        "Prefixo [🌿] exclusivo",
-        "5 /sethome",
-        "/fly em todo lugar",
-        "Fila prioritária",
-        "Kit semanal",
-        "Aura de raízes",
-      ],
-    },
-    {
-      id: 3,
-      name: "Yggdrasil",
-      price: "R$ 59,90",
-      description: "A Árvore do Mundo. O rank lendário definitivo.",
-      badge: "Lendário",
-      badgeVariant: "cyan",
-      perks: [
-        "Todas as vantagens Raiz Viva",
-        "Prefixo [🌳] exclusivo",
-        "10 /sethome",
-        "Mensagem de entrada",
-        'Pet "Sprite da Floresta"',
-        "Aura Yggdrasil",
-        "Kit lendário",
-      ],
-    },
-  ],
-  coins: [
-    {
-      id: 4,
-      name: "1.000 Moedas",
-      price: "R$ 9,90",
-      description: "Um impulso de moedas para sua ilha.",
-      perks: ["Entrega instantânea", "Use na /shop"],
-    },
-    {
-      id: 5,
-      name: "5.000 Moedas",
-      price: "R$ 39,90",
-      originalPrice: "R$ 49,50",
-      description: "Melhor custo-benefício — economize 20%!",
-      badge: "20% OFF",
-      badgeVariant: "gold",
-      popular: true,
-      perks: [
-        "Entrega instantânea",
-        "Use na /shop",
-        "Bônus de 20% no valor",
-      ],
-    },
-    {
-      id: 6,
-      name: "10.000 Moedas",
-      price: "R$ 69,90",
-      originalPrice: "R$ 99,00",
-      description: "O pacote definitivo — economize 30%!",
-      badge: "30% OFF",
-      badgeVariant: "cyan",
-      perks: [
-        "Entrega instantânea",
-        "Use na /shop",
-        "Bônus de 30% no valor",
-      ],
-    },
-  ],
-  bundles: [
-    {
-      id: 7,
-      name: "Pacote Semente",
-      price: "R$ 24,90",
-      originalPrice: "R$ 34,80",
-      description: "Tudo que você precisa para começar forte.",
-      badge: "Economize 28%",
-      badgeVariant: "emerald",
-      perks: [
-        "Rank Semente",
-        "1.000 Moedas",
-        "Kit Iniciante",
-        "Expansão de Ilha",
-      ],
-    },
-    {
-      id: 8,
-      name: "Pacote Raiz Viva",
-      price: "R$ 54,90",
-      originalPrice: "R$ 79,80",
-      description: "O pacote mais popular para jogadores dedicados.",
-      badge: "Mais Popular",
-      badgeVariant: "gold",
-      popular: true,
-      perks: [
-        "Rank Raiz Viva",
-        "5.000 Moedas",
-        "Kit Premium",
-        "2x Expansão de Ilha",
-        "Pet Exclusivo",
-      ],
-    },
-    {
-      id: 9,
-      name: "Pacote Yggdrasil",
-      price: "R$ 99,90",
-      originalPrice: "R$ 158,80",
-      description: "O pacote completo definitivo. Economize 37%!",
-      badge: "Melhor Oferta",
-      badgeVariant: "cyan",
-      perks: [
-        "Rank Yggdrasil",
-        "10.000 Moedas",
-        "Todos os Kits",
-        "5x Expansão de Ilha",
-        "3 Pets Exclusivos",
-        "Aura Personalizada",
-      ],
-    },
-  ],
-};
-
-export default function StorePage() {
+function StorePageContent() {
+  const searchParams = useSearchParams();
   const [active, setActive] = useState<Category>("ranks");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
+
+  // Player authentication state
+  const [playerNick, setPlayerNick] = useState<string | null>(null);
+  const [playerUuid, setPlayerUuid] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [pendingProductId, setPendingProductId] = useState<string | null>(null);
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
+
   const items = storeItems[active];
 
+  // Checa se voltou do Stripe com sucesso
+  useEffect(() => {
+    if (searchParams.get("success") === "true") {
+      setShowSuccessToast(true);
+      // Opcional: remover o parametro da URL para não ficar alertando no refresh
+      window.history.replaceState(null, "", "/store");
+      setTimeout(() => setShowSuccessToast(false), 6000);
+    }
+  }, [searchParams]);
+
+  // Carrega do localStorage no client-side
+  useEffect(() => {
+    const savedNick = localStorage.getItem("rootssky_player_nick");
+    const savedUuid = localStorage.getItem("rootssky_player_uuid");
+    
+    // Limpa estado bugado se existir
+    if (savedNick === "undefined" || savedUuid === "undefined" || savedNick === "null" || savedUuid === "null") {
+      localStorage.removeItem("rootssky_player_nick");
+      localStorage.removeItem("rootssky_player_uuid");
+    } else if (savedNick && savedUuid) {
+      setPlayerNick(savedNick);
+      setPlayerUuid(savedUuid);
+    }
+  }, []);
+
+  const handlePlayerSuccess = (nick: string, uuid: string) => {
+    setPlayerNick(nick);
+    setPlayerUuid(uuid);
+    localStorage.setItem("rootssky_player_nick", nick);
+    localStorage.setItem("rootssky_player_uuid", uuid);
+    setIsModalOpen(false);
+    
+    // Se logou para comprar, continua
+    if (pendingProductId) {
+      proceedToCheckout(pendingProductId, nick, uuid);
+    }
+  };
+
+  const handlePurchaseClick = (productId: string) => {
+    if (!playerNick || !playerUuid) {
+      setPendingProductId(productId);
+      setIsModalOpen(true);
+    } else {
+      proceedToCheckout(productId, playerNick, playerUuid);
+    }
+  };
+
+  const proceedToCheckout = async (productId: string, nick: string, uuid: string) => {
+    setIsCheckingOut(true);
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          productId,
+          playerNick: nick,
+          playerUuid: uuid,
+        }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url; // Redireciona pro Stripe
+      } else {
+        alert(data.error || "Erro ao iniciar checkout.");
+        setIsCheckingOut(false);
+      }
+    } catch {
+      alert("Erro de conexão ao processar compra.");
+      setIsCheckingOut(false);
+    }
+  };
+
   return (
-    <div className="flex min-h-screen bg-dark-wood">
+    <div className="min-h-screen bg-dark-wood">
+      <PlayerModal
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          setPendingProductId(null);
+        }}
+        onSuccess={handlePlayerSuccess}
+      />
       {/* ═══ SIDEBAR (desktop) ═══ */}
       <aside className="hidden lg:flex lg:w-72 xl:w-80 fixed inset-y-0 left-0 z-30 flex-col store-sidebar-container">
         <StoreSidebar
           activeCategory={active}
           onCategoryChange={(cat) => setActive(cat as Category)}
+          playerNick={playerNick || undefined}
+          playerUuid={playerUuid || undefined}
+          onChangeNick={() => setIsModalOpen(true)}
         />
       </aside>
 
@@ -199,11 +137,34 @@ export default function StorePage() {
           activeCategory={active}
           onCategoryChange={(cat) => setActive(cat as Category)}
           onClose={() => setSidebarOpen(false)}
+          playerNick={playerNick || undefined}
+          playerUuid={playerUuid || undefined}
+          onChangeNick={() => {
+            setIsModalOpen(true);
+            setSidebarOpen(false);
+          }}
         />
       </div>
 
       {/* ═══ MAIN CONTENT ═══ */}
       <main className="flex-1 lg:ml-72 xl:ml-80 min-h-screen stars-bg relative">
+        {/* Toast Notification */}
+        <div className={`fixed top-4 left-1/2 -translate-x-1/2 lg:left-[calc(50%+9rem)] xl:left-[calc(50%+10rem)] z-50 transition-all duration-500 ease-out ${showSuccessToast ? 'translate-y-0 opacity-100' : '-translate-y-24 opacity-0 pointer-events-none'}`}>
+          <div className="bg-forest-deep/95 backdrop-blur-md border border-leaf-light/50 p-4 rounded-xl shadow-2xl shadow-roots-green/20 flex items-center gap-4 min-w-[320px] max-w-[90vw]">
+            <div className="w-10 h-10 rounded-full bg-leaf-light/20 flex items-center justify-center flex-shrink-0">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-leaf-light">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <div>
+              <h3 className="font-cinzel font-bold text-gold text-lg mb-0.5">Pagamento Aprovado!</h3>
+              <p className="text-warm-muted text-sm font-inter leading-tight">Seus itens serão entregues em instantes.</p>
+            </div>
+            <button onClick={() => setShowSuccessToast(false)} className="ml-auto text-warm-dim hover:text-warm p-1">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+          </div>
+        </div>
         {/* Green ambient glow */}
         <div
           className="absolute inset-0 pointer-events-none"
@@ -251,6 +212,9 @@ export default function StorePage() {
           </div>
 
           <div className="gold-divider mb-8" />
+
+          {/* Store Stats Widget */}
+          <StoreStats />
 
           {/* Category Tabs */}
           <div
@@ -342,8 +306,10 @@ export default function StorePage() {
                   <Button
                     variant={item.popular ? "premium" : "primary"}
                     className="w-full text-center justify-center"
+                    onClick={() => handlePurchaseClick(item.id)}
+                    disabled={isCheckingOut}
                   >
-                    Comprar Agora
+                    {isCheckingOut && pendingProductId === item.id ? "Aguarde..." : "Comprar Agora"}
                   </Button>
                 </div>
               </div>
@@ -360,5 +326,13 @@ export default function StorePage() {
         </div>
       </main>
     </div>
+  );
+}
+
+export default function StorePage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-dark-wood flex items-center justify-center text-gold font-cinzel">Carregando Loja...</div>}>
+      <StorePageContent />
+    </Suspense>
   );
 }

@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// -------------------------------------------------------------
+// Modelos da Loja e Jogadores
+// -------------------------------------------------------------
+
+// Product model removed - products are managed in src/lib/catalog.ts for MVP
+
+model Order {
+  id              String   @id @default(cuid())
+  stripeSessionId String?  @unique
+  playerNick      String   // Nick do Minecraft digitado
+  playerUuid      String   // UUID oficial da Mojang
+  totalAmount     Float
+  status          String   @default("PENDING") // PENDING, COMPLETED, REFUNDED, CANCELED
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  items           OrderItem[]
+  commandQueue    CommandQueue[]
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  productId String
+  price     Float
+  quantity  Int     @default(1)
+  
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+}
+
+model CommandQueue {
+  id         String   @id @default(cuid())
+  orderId    String
+  command    String   // Comando ja formatado com o nick correto
+  status     String   @default("PENDING") // PENDING, EXECUTED
+  createdAt  DateTime @default(now())
+  executedAt DateTime?
+  
+  order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+}

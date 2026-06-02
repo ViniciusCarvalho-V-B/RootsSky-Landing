@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 const navLinks = [
   { label: "Início", href: "/" },
@@ -20,9 +21,11 @@ export default function Header() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-18">
             <Link href="/" className="flex items-center gap-2 shrink-0">
-              <img
+              <Image
                 src="/svg/logo-rootssky.svg"
                 alt="RootsSky"
+                width={160}
+                height={40}
                 className="h-10 w-auto logo-hover"
               />
             </Link>
@@ -106,9 +109,11 @@ export default function Header() {
       >
         <div className="px-6 py-8 space-y-6">
           <Link href="/" className="block mb-6">
-            <img
+            <Image
               src="/svg/logo-rootssky.svg"
               alt="RootsSky"
+              width={192}
+              height={48}
               className="h-12 w-auto logo-hover"
             />
           </Link>

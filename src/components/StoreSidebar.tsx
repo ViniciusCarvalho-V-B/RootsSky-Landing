@@ -2,11 +2,17 @@
 
 import React, { useState, useCallback } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import { useServerStatus } from "@/hooks/useServerStatus";
+import { useDiscordStatus } from "@/hooks/useDiscordStatus";
 
 interface StoreSidebarProps {
   activeCategory: string;
   onCategoryChange: (cat: string) => void;
   onClose?: () => void;
+  playerNick?: string;
+  playerUuid?: string;
+  onChangeNick?: () => void;
 }
 
 const storeCategories = [
@@ -33,9 +39,14 @@ export default function StoreSidebar({
   activeCategory,
   onCategoryChange,
   onClose,
+  playerNick,
+  playerUuid,
+  onChangeNick,
 }: StoreSidebarProps) {
   const [copied, setCopied] = useState(false);
-  const ip = "play.rootssky.com.br";
+  const ip = "rootssky.haskhosting.com.br";
+  const { players, online, loading } = useServerStatus();
+  const { online: discordOnline, loading: discordLoading } = useDiscordStatus();
 
   const handleCopy = useCallback(async () => {
     try {
@@ -70,13 +81,59 @@ export default function StoreSidebar({
       {/* Logo */}
       <div className="px-4 py-2 flex justify-center relative z-20">
         <Link href="/">
-          <img
+          <Image
             src="/svg/logo-rootssky.svg"
             alt="RootsSky"
+            width={160}
+            height={40}
             className="h-14 w-auto logo-hover"
           />
         </Link>
       </div>
+
+      {/* Player Avatar Widget */}
+      {playerNick && playerUuid && (
+        <div className="px-4 py-2 relative z-20">
+          <div className="flex items-center justify-between gap-3 p-3 rounded-lg border border-leaf-light/30 bg-forest-deep/40 shadow-inner group">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded bg-dark-wood flex items-center justify-center overflow-hidden border border-gold/30">
+                <Image 
+                  src={`https://minotar.net/helm/${playerNick}/40.png`} 
+                  alt={`Avatar de ${playerNick}`}
+                  width={40}
+                  height={40}
+                  unoptimized // APIs externas frequentemente quebram a otimização de cache do next, melhor desligar para avatar
+                  className="w-full h-full object-cover rendering-pixelated"
+                  onError={(e) => {
+                    e.currentTarget.srcset = "https://minotar.net/helm/MHF_Steve/40.png 1x";
+                  }}
+                />
+              </div>
+              <div>
+                <div className="text-[10px] font-cinzel font-bold text-warm-dim uppercase tracking-widest">
+                  Comprando como
+                </div>
+                <div className="text-sm font-bold text-gold-shine">
+                  {playerNick}
+                </div>
+              </div>
+            </div>
+            
+            {onChangeNick && (
+              <button
+                onClick={onChangeNick}
+                className="w-8 h-8 flex items-center justify-center rounded bg-wood-light/20 hover:bg-wood-light/40 border border-gold/10 hover:border-gold/40 transition-all cursor-pointer opacity-80 hover:opacity-100"
+                title="Trocar Nick"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gold">
+                  <path d="M12 20h9"></path>
+                  <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                </svg>
+              </button>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* IP Copy Widget */}
       <div className="px-4 py-3 relative z-20">
@@ -101,13 +158,15 @@ export default function StoreSidebar({
           {/* Online badge */}
           <div className="flex items-center gap-1.5">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-leaf-light opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-leaf-light" />
+              {online && <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-leaf-light opacity-75" />}
+              <span className={`relative inline-flex rounded-full h-2 w-2 ${online ? "bg-leaf-light" : "bg-red-500"}`} />
             </span>
-            <span className="text-leaf-light font-bold text-[10px]">247</span>
+            <span className={`font-bold text-[10px] ${online ? "text-leaf-light" : "text-red-500"}`}>
+              {loading ? "..." : (online ? players : "OFF")}
+            </span>
           </div>
-          <div className="font-jetbrains font-bold text-xs text-gold-shine uppercase tracking-wider">
-            ROOTSSKY.COM.BR
+          <div className="font-jetbrains font-bold text-xs text-gold-shine uppercase tracking-wider overflow-hidden text-ellipsis whitespace-nowrap px-1 max-w-full">
+            ROOTSSKY.HASKHOSTING.COM.BR
           </div>
           <span className="text-warm-dim text-[9px] uppercase tracking-widest">
             {copied ? (
@@ -200,7 +259,7 @@ export default function StoreSidebar({
             <div className="text-xs font-bold text-warm uppercase tracking-wider">
               Discord
             </div>
-            <div className="text-[10px] text-[#7289DA]">3,795 membros</div>
+            <div className="text-[10px] text-[#7289DA]">{discordLoading ? "..." : `${discordOnline} membros`}</div>
           </div>
         </a>
       </div>

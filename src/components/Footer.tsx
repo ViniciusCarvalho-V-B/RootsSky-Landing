@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 interface FooterLink {
   label: string;
@@ -56,9 +57,11 @@ export default function Footer() {
           {/* Brand Column */}
           <div className="lg:col-span-2">
             <Link href="/" className="inline-block mb-4">
-              <img
+              <Image
                 src="/svg/logo-rootssky.svg"
                 alt="RootsSky"
+                width={160}
+                height={40}
                 className="h-10 w-auto logo-hover"
               />
             </Link>
@@ -67,7 +70,7 @@ export default function Footer() {
               troque, compita e conquiste os céus com milhares de jogadores.
             </p>
             <div className="font-jetbrains text-sm text-gold tracking-wider">
-              play.rootssky.com.br
+              rootssky.haskhosting.com.br
             </div>
           </div>
 
