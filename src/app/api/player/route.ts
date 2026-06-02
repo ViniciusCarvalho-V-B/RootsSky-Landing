@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 // Cache em memória para evitar Rate Limit na Mojang (Duração: 10 minutos)
-const playerCache = new Map<string, { data: any; expiresAt: number }>();
+const playerCache = new Map<string, { data: { name: string; uuid: string }; expiresAt: number }>();
 
 function getCachedPlayer(nick: string) {
   const item = playerCache.get(nick.toLowerCase());
@@ -9,7 +9,7 @@ function getCachedPlayer(nick: string) {
   return null;
 }
 
-function setCachedPlayer(nick: string, data: any) {
+function setCachedPlayer(nick: string, data: { name: string; uuid: string }) {
   playerCache.set(nick.toLowerCase(), { data, expiresAt: Date.now() + 10 * 60 * 1000 });
 }
 
@@ -51,7 +51,7 @@ export async function GET(request: Request) {
     }
 
     try {
-      const data: any = await mojangRes.json();
+      const data: { name?: string; id?: string } = await mojangRes.json();
       const result = {
         name: data.name || nick,
         uuid: data.id || "8667ba71b85a4004af54457a9734eed7",
