@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 // Cache em memória para evitar Rate Limit na Mojang (Duração: 10 minutos)
 const playerCache = new Map<string, { data: { name: string; uuid: string }; expiresAt: number }>();
 

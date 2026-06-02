@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 // Middleware simples para validar o token do plugin
 function isAuthorized(request: Request) {
   const authHeader = request.headers.get("authorization");
