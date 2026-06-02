@@ -25,7 +25,7 @@ export async function GET() {
     }
     
     throw new Error("Failed to fetch Discord status");
-  } catch (error) {
+  } catch {
     // Se falhar (ex: widget desativado ou ID errado), retorna fallback visual
     return NextResponse.json({ online: 80 }, { status: 200 });
   }

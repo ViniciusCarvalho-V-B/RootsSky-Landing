@@ -19,7 +19,7 @@ export async function GET() {
       players: data.players?.online || 0,
       max: data.players?.max || 0,
     });
-  } catch (error) {
+  } catch {
     // Se a API falhar, retornamos um status amigável em vez de dar erro
     const fallbackStatus = { online: true, players: 247, max: 500 };
     return NextResponse.json(fallbackStatus);

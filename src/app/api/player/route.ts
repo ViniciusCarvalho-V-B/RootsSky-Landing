@@ -51,7 +51,7 @@ export async function GET(request: Request) {
     }
 
     try {
-      const data = await mojangRes.json();
+      const data: any = await mojangRes.json();
       const result = {
         name: data.name || nick,
         uuid: data.id || "8667ba71b85a4004af54457a9734eed7",
