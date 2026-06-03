@@ -6,6 +6,8 @@ import Stripe from "stripe";
 import { sendDiscordPurchaseNotification } from "@/lib/discord";
 import { CATALOG } from "@/lib/catalog";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(request: Request) {
   const body = await request.text();
   const signature = headers().get("stripe-signature") as string;
