@@ -72,6 +72,23 @@ export const storeItems: Record<Category, Product[]> = {
       ],
       command: "pex user {name} group set yggdrasil"
     },
+    {
+      id: "passe_vip",
+      name: "Passe VIP",
+      price: "R$ 19,90",
+      rawPrice: 19.9,
+      description: "Desbloqueie a trilha Premium do Passe de Batalha.",
+      badge: "Temporada",
+      badgeVariant: "gold",
+      popular: true,
+      perks: [
+        "Acesso à trilha Premium",
+        "Recompensas exclusivas",
+        "Desafios VIP",
+        "Cosméticos raros da temporada"
+      ],
+      command: "passeadmin givevip {name}"
+    },
   ],
   coins: [
     {
