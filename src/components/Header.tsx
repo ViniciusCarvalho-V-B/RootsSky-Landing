@@ -7,8 +7,8 @@ import Image from "next/image";
 const navLinks = [
   { label: "Início", href: "/" },
   { label: "Loja", href: "/store" },
-  { label: "Votar", href: "https://minecraft-mp.com/server/332829/vote/", external: true },
-  { label: "Equipe", href: "#" },
+  { label: "Votar", href: "/vote" },
+  { label: "Equipe", href: "/team" },
 ];
 
 export default function Header() {
