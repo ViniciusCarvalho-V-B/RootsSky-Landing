@@ -19,8 +19,8 @@ export const storeItems: Record<Category, Product[]> = {
     {
       id: "raiz_ascendente",
       name: "Raiz Ascendente",
-      price: "R$ 10,99",
-      rawPrice: 10.99,
+      price: "R$ 0,01",
+      rawPrice: 0.01,
       description: "O primeiro passo em direção aos céus. Tag: [Ascendente]",
       badge: "VIP I",
       badgeVariant: "emerald",
