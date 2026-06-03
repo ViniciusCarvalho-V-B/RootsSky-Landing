@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronLeft, Plus, Trash2, LogOut, Edit2, Zap, Star } from "lucide-react";
+import { Trash2, LogOut, Plus, Star, Zap, Edit2, ImagePlus, ChevronLeft } from 'lucide-react';
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -333,14 +333,24 @@ export default function AdminPage() {
                   onChange={e => setUpdateTitle(e.target.value)}
                   className="w-full bg-black/40 border border-gold/20 rounded p-3 text-warm focus:border-gold/50 focus:outline-none font-outfit"
                 />
-                <textarea
-                  placeholder="Conteúdo..."
-                  required
-                  rows={4}
-                  value={updateContent}
-                  onChange={e => setUpdateContent(e.target.value)}
-                  className="w-full bg-black/40 border border-gold/20 rounded p-3 text-warm focus:border-gold/50 focus:outline-none font-inter resize-y"
-                />
+                <div className="relative">
+                  <textarea
+                    placeholder="Conteúdo (Aceita Markdown para negrito, vídeos, etc)..."
+                    required
+                    rows={4}
+                    value={updateContent}
+                    onChange={e => setUpdateContent(e.target.value)}
+                    className="w-full bg-black/40 border border-gold/20 rounded p-3 text-warm focus:border-gold/50 focus:outline-none font-inter resize-y pb-10"
+                  />
+                  <button 
+                    type="button"
+                    onClick={() => setUpdateContent(prev => prev + '\n\n![Sua Imagem Aqui](https://link-da-imagem.com/img.jpg)\n')}
+                    className="absolute bottom-3 left-3 text-warm-dim hover:text-gold transition-colors flex items-center gap-1 text-xs"
+                    title="Adicionar Imagem/Vídeo (Markdown)"
+                  >
+                    <ImagePlus size={14} /> Anexar Imagem (URL)
+                  </button>
+                </div>
                 <div className="flex justify-between items-center">
                   <input
                     type="text"
@@ -403,19 +413,29 @@ export default function AdminPage() {
               <form onSubmit={handleCreateSuggestion} className="space-y-4">
                 <input
                   type="text"
-                  placeholder="Título (ex: 'Novo mapa de PvP?')"
+                  placeholder="Título (ex: 'Nova Ilha de Mineração?')"
                   required
                   value={sugTitle}
                   onChange={e => setSugTitle(e.target.value)}
                   className="w-full bg-black/40 border border-gold/20 rounded p-3 text-warm focus:border-gold/50 focus:outline-none font-outfit"
                 />
-                <textarea
-                  placeholder="Descrição opcional..."
-                  rows={2}
-                  value={sugDesc}
-                  onChange={e => setSugDesc(e.target.value)}
-                  className="w-full bg-black/40 border border-gold/20 rounded p-3 text-warm focus:border-gold/50 focus:outline-none font-inter resize-y"
-                />
+                <div className="relative">
+                  <textarea
+                    placeholder="Descrição opcional (aceita imagens)..."
+                    rows={2}
+                    value={sugDesc}
+                    onChange={e => setSugDesc(e.target.value)}
+                    className="w-full bg-black/40 border border-gold/20 rounded p-3 text-warm focus:border-gold/50 focus:outline-none font-inter resize-y pb-10"
+                  />
+                  <button 
+                    type="button"
+                    onClick={() => setSugDesc(prev => prev + '\n\n![Exemplo de Sugestão](https://link-da-imagem.com/img.jpg)\n')}
+                    className="absolute bottom-3 left-3 text-warm-dim hover:text-gold transition-colors flex items-center gap-1 text-xs"
+                    title="Adicionar Imagem/Vídeo (Markdown)"
+                  >
+                    <ImagePlus size={14} /> Anexar Imagem (URL)
+                  </button>
+                </div>
                 
                 <div className="flex items-center gap-4 py-2 border-y border-white/5">
                   <label className="text-warm text-sm flex items-center gap-2">

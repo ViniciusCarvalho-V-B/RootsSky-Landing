@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { ChevronLeft, ThumbsUp, ThumbsDown } from "lucide-react";
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 type SuggestionOption = {
   id: string;
@@ -282,9 +284,11 @@ export default function SuggestionsPage() {
                   </div>
 
                   {sug.description && (
-                    <p className="text-warm/80 font-inter text-sm mb-6 whitespace-pre-wrap bg-black/20 p-4 rounded border border-white/5">
-                      {sug.description}
-                    </p>
+                    <div className="text-warm/80 font-inter text-sm mb-6 whitespace-pre-wrap bg-black/20 p-4 rounded border border-white/5 prose prose-invert prose-gold max-w-none">
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {sug.description}
+                      </ReactMarkdown>
+                    </div>
                   )}
 
                   {/* Votação Up/Down */}
