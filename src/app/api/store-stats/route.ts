@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { CATALOG } from "@/lib/catalog";
 
-export const revalidate = 60; // Cache de 60 segundos no Next.js (se usar SSR/ISR)
+export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
