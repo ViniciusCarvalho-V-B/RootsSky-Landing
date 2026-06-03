@@ -19,7 +19,7 @@ datasource db {
 
 model Order {
   id              String   @id @default(cuid())
-  stripeSessionId String?  @unique
+  paymentId       String?  @unique
   playerNick      String   // Nick do Minecraft digitado
   playerUuid      String   // UUID oficial da Mojang
   totalAmount     Float

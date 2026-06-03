@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { stripe } from "@/lib/stripe";
+import { preference } from "@/lib/mercadopago";
 import { prisma } from "@/lib/prisma";
 
 import { CATALOG } from "@/lib/catalog";
@@ -38,14 +38,14 @@ export async function POST(request: Request) {
       },
     });
 
-    // Se for a chave mock, nós bypassamos a integração do Stripe real para permitir testes do front-end
-    if (process.env.STRIPE_SECRET_KEY === "sk_test_mock_key_for_development") {
-      // Simula que o pedido foi pago e atualiza o status para COMPLETED
+    // Se for a chave mock (ambiente de teste sem mercado pago configurado corretamente)
+    if (process.env.MP_ACCESS_TOKEN === "APP_USR-mock-key") {
+      // Simula que o pedido foi pago e atualiza o status para pending_delivery
       await prisma.order.update({
         where: { id: order.id },
         data: { 
-          stripeSessionId: "mock_session_" + order.id,
-          status: "COMPLETED", 
+          paymentId: "mock_session_" + order.id,
+          status: "pending_delivery", 
         },
       });
       
@@ -67,46 +67,47 @@ export async function POST(request: Request) {
       return NextResponse.json({ url: `${process.env.NEXT_PUBLIC_APP_URL}/store?success=true` });
     }
 
-    // 2. Criar a sessão do Stripe Checkout
-    const session = await stripe.checkout.sessions.create({
-      line_items: [
-        {
-          price_data: {
-            currency: "brl",
-            product_data: {
-              name: item.name,
-              description: `Comprador: ${playerNick}`,
-            },
-            unit_amount: Math.round(item.rawPrice * 100), // Stripe usa centavos
-          },
-          quantity: 1,
+    // 2. Criar a Preference (Sessão de Checkout) do Mercado Pago
+    const prefResult = await preference.create({
+      body: {
+        items: [
+          {
+            id: item.id,
+            title: item.name,
+            description: `Comprador: ${playerNick}`,
+            quantity: 1,
+            currency_id: "BRL",
+            unit_price: item.rawPrice,
+          }
+        ],
+        external_reference: order.id, // Passa o ID do pedido para o Webhook identificar depois
+        metadata: {
+          player_nick: playerNick,
+          command_to_queue: item.command,
         },
-      ],
-      mode: "payment",
-      // Metadata importante para o Webhook saber qual pedido e quais comandos executar
-      metadata: {
-        orderId: order.id,
-        playerNick,
-        commandToQueue: item.command,
-      },
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/store?success=true`,
-      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/store?canceled=true`,
+        back_urls: {
+          success: `${process.env.NEXT_PUBLIC_APP_URL}/store?success=true`,
+          failure: `${process.env.NEXT_PUBLIC_APP_URL}/store?canceled=true`,
+          pending: `${process.env.NEXT_PUBLIC_APP_URL}/store?pending=true`,
+        },
+        auto_return: "approved",
+        notification_url: `${process.env.NEXT_PUBLIC_APP_URL}/api/webhooks/mercadopago`, // A URL do nosso novo Webhook
+      }
     });
 
-    // 3. Atualizar o pedido com o ID da sessão do Stripe
+    // 3. O Mercado Pago não usa o ID da Preference para identificar o pagamento no banco
+    // Mas podemos salvar como paymentId inicial e o webhook pode atualizar ou buscar pela external_reference.
+    // Vamos salvar a preference id por enquanto.
     await prisma.order.update({
       where: { id: order.id },
-      data: { stripeSessionId: session.id },
+      data: { paymentId: prefResult.id },
     });
 
-    // Retorna a URL segura do Stripe para redirecionar o usuario
-    return NextResponse.json({ url: session.url });
+    // Retorna a URL de redirecionamento (init_point = checkout normal)
+    // Se quiser o checkout transparente ou iframe sandbox, tem o sandbox_init_point
+    return NextResponse.json({ url: prefResult.init_point });
   } catch (error) {
-    console.error("Erro no checkout:", error);
-    return NextResponse.json({ 
-      error: "Erro interno no servidor.", 
-      details: (error as Error).message,
-      stack: (error as Error).stack 
-    }, { status: 500 });
+    console.error("Checkout Error:", error);
+    return NextResponse.json({ error: "Erro interno no checkout." }, { status: 500 });
   }
 }
