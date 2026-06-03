@@ -66,17 +66,16 @@ export async function GET() {
     });
 
     const monthlyTotal = monthlyAgg._sum.totalAmount || 0;
-    const monthlyGoal = 500; // R$ 500
-    
+    const MONTHLY_GOAL = 50.00; // Meta mensal em BRL  
     // Evitar que passe de 100% no layout (opcional)
-    const monthlyGoalPercentage = Math.min(100, Math.round((monthlyTotal / monthlyGoal) * 100));
+    const monthlyGoalPercentage = Math.min(100, Math.round((monthlyTotal / MONTHLY_GOAL) * 100));
 
     return NextResponse.json({
       recentPurchases,
       topSupporters,
       monthlyGoal: {
         current: monthlyTotal,
-        goal: monthlyGoal,
+        goal: MONTHLY_GOAL,
         percentage: monthlyGoalPercentage,
       },
     });
