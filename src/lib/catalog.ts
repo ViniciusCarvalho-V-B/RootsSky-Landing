@@ -25,13 +25,14 @@ export const storeItems: Record<Category, Product[]> = {
       badge: "Iniciante",
       badgeVariant: "emerald",
       perks: [
+        "Acesso ao Passe VIP",
         "Prefixo [🌱] exclusivo",
         "2 /sethome",
         "/fly na sua ilha",
         "Chat colorido",
         "Trilha de folhas",
       ],
-      command: "pex user {name} group set semente"
+      command: "pex user {name} group set semente; passeadmin givevip {name}"
     },
     {
       id: "raiz_viva",
@@ -43,6 +44,7 @@ export const storeItems: Record<Category, Product[]> = {
       badgeVariant: "gold",
       popular: true,
       perks: [
+        "Acesso ao Passe VIP",
         "Todas as vantagens Semente",
         "Prefixo [🌿] exclusivo",
         "5 /sethome",
@@ -51,7 +53,7 @@ export const storeItems: Record<Category, Product[]> = {
         "Kit semanal",
         "Aura de raízes",
       ],
-      command: "pex user {name} group set raiz_viva"
+      command: "pex user {name} group set raiz_viva; passeadmin givevip {name}"
     },
     {
       id: "yggdrasil",
@@ -62,6 +64,7 @@ export const storeItems: Record<Category, Product[]> = {
       badge: "Lendário",
       badgeVariant: "cyan",
       perks: [
+        "Acesso ao Passe VIP",
         "Todas as vantagens Raiz Viva",
         "Prefixo [🌳] exclusivo",
         "10 /sethome",
@@ -70,7 +73,7 @@ export const storeItems: Record<Category, Product[]> = {
         "Aura Yggdrasil",
         "Kit lendário",
       ],
-      command: "pex user {name} group set yggdrasil"
+      command: "pex user {name} group set yggdrasil; passeadmin givevip {name}"
     },
   ],
   coins: [
@@ -128,12 +131,13 @@ export const storeItems: Record<Category, Product[]> = {
       badge: "Economize 28%",
       badgeVariant: "emerald",
       perks: [
+        "Acesso ao Passe VIP",
         "Rank Semente",
         "1.000 Moedas",
         "Kit Iniciante",
         "Expansão de Ilha",
       ],
-      command: "pex user {name} group set semente; eco give {name} 1000"
+      command: "pex user {name} group set semente; eco give {name} 1000; passeadmin givevip {name}"
     },
     {
       id: "pacote_raiz_viva",
@@ -146,13 +150,14 @@ export const storeItems: Record<Category, Product[]> = {
       badgeVariant: "gold",
       popular: true,
       perks: [
+        "Acesso ao Passe VIP",
         "Rank Raiz Viva",
         "5.000 Moedas",
         "Kit Premium",
         "2x Expansão de Ilha",
         "Pet Exclusivo",
       ],
-      command: "pex user {name} group set raiz_viva; eco give {name} 5000"
+      command: "pex user {name} group set raiz_viva; eco give {name} 5000; passeadmin givevip {name}"
     },
     {
       id: "pacote_yggdrasil",
@@ -164,6 +169,7 @@ export const storeItems: Record<Category, Product[]> = {
       badge: "Melhor Oferta",
       badgeVariant: "cyan",
       perks: [
+        "Acesso ao Passe VIP",
         "Rank Yggdrasil",
         "10.000 Moedas",
         "Todos os Kits",
@@ -171,7 +177,7 @@ export const storeItems: Record<Category, Product[]> = {
         "3 Pets Exclusivos",
         "Aura Personalizada",
       ],
-      command: "pex user {name} group set yggdrasil; eco give {name} 10000"
+      command: "pex user {name} group set yggdrasil; eco give {name} 10000; passeadmin givevip {name}"
     },
   ],
 };
