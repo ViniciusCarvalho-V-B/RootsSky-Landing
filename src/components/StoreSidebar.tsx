@@ -24,8 +24,7 @@ const storeCategories = [
 const siteLinks = [
   {
     label: "Votar",
-    href: "https://minecraft-mp.com/server/332829/vote/",
-    external: true,
+    href: "/vote",
   },
   { label: "Regras", href: "#" },
 ];

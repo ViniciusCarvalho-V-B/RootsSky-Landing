@@ -216,18 +216,13 @@ export default function HeroSection() {
                 <a href="/" className="medieval-btn">
                   Início
                 </a>
-                <a
-                  href="https://minecraft-mp.com/server/332829/vote/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="medieval-btn"
-                >
+                <a href="/vote" className="medieval-btn">
                   Votar
                 </a>
                 <a href="/store" className="medieval-btn">
                   Loja
                 </a>
-                <a href="#" className="medieval-btn">
+                <a href="/team" className="medieval-btn">
                   Equipe
                 </a>
               </div>
