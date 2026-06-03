@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Cinzel, Inter, JetBrains_Mono, Outfit } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import "./globals.css";
 
@@ -57,6 +58,7 @@ export default function RootLayout({
     >
       <body className="bg-dark-wood text-warm font-inter antialiased">
         <LanguageProvider>{children}</LanguageProvider>
+        <SpeedInsights />
       </body>
     </html>
   );
