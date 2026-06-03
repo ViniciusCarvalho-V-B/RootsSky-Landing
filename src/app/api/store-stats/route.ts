@@ -81,7 +81,10 @@ export async function GET() {
       },
     });
   } catch (error) {
-    console.error("Erro ao buscar store stats:", error);
-    return NextResponse.json({ error: "Erro ao buscar estatísticas da loja" }, { status: 500 });
+    console.error("Erro na API store-stats:", error);
+    return NextResponse.json(
+      { error: "Erro ao buscar estatísticas da loja", details: (error as Error).message },
+      { status: 500 }
+    );
   }
 }

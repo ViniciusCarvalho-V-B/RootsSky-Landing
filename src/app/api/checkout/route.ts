@@ -104,6 +104,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ url: session.url });
   } catch (error) {
     console.error("Erro no checkout:", error);
-    return NextResponse.json({ error: "Erro interno no servidor." }, { status: 500 });
+    return NextResponse.json({ 
+      error: "Erro interno no servidor.", 
+      details: (error as Error).message,
+      stack: (error as Error).stack 
+    }, { status: 500 });
   }
 }
