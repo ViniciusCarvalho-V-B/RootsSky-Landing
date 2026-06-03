@@ -57,7 +57,7 @@ export default function VotePage() {
             Apoie o RootsSky
           </h1>
           <p className="text-warm/80 font-inter max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
-            Vote diariamente nos sites parceiros e receba recompensas épicas como Chaves, Moedas e itens raros! Seu voto é crucial para manter nossa comunidade crescendo no topo.
+            Vote diariamente nos sites parceiros e receba exclusivamente <strong className="text-gold">Chaves de Vote</strong> para abrir caixas no servidor! Com essas chaves, você pode ganhar itens extremamente raros. Seu voto é crucial para manter nossa comunidade no topo.
           </p>
           <div className="flex justify-center mt-6">
             <div className="gold-divider w-64" />
@@ -82,8 +82,11 @@ export default function VotePage() {
                     {link.id}
                   </span>
                 </div>
-                <div className="bg-wood-light/30 px-3 py-1 rounded text-[10px] text-warm-dim uppercase tracking-widest border border-gold/10">
-                  + Recompensas
+                <div className="bg-wood-light/30 px-3 py-1 rounded text-[10px] text-warm-dim uppercase tracking-widest border border-gold/10 flex items-center gap-1.5">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gold">
+                    <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path>
+                  </svg>
+                  + Chave de Voto
                 </div>
               </div>
               
