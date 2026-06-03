@@ -79,8 +79,37 @@ const config: Config = {
         xl: "12px",
         "2xl": "16px",
       },
+      typography: (theme: any) => ({
+        gold: {
+          css: {
+            '--tw-prose-body': theme('colors.warm.900'),
+            '--tw-prose-headings': theme('colors.gold.DEFAULT'),
+            '--tw-prose-links': theme('colors.gold.light'),
+            '--tw-prose-bold': theme('colors.gold.DEFAULT'),
+            '--tw-prose-counters': theme('colors.gold.dark'),
+            '--tw-prose-bullets': theme('colors.gold.DEFAULT'),
+            '--tw-prose-hr': theme('colors.gold.dark'),
+            '--tw-prose-quotes': theme('colors.warm.muted'),
+            '--tw-prose-quote-borders': theme('colors.gold.dark'),
+            '--tw-prose-code': theme('colors.warm.DEFAULT'),
+            '--tw-prose-pre-code': theme('colors.warm.DEFAULT'),
+            '--tw-prose-pre-bg': theme('colors.dark-wood'),
+            '--tw-prose-invert-body': theme('colors.warm.DEFAULT'),
+            '--tw-prose-invert-headings': theme('colors.gold.DEFAULT'),
+            '--tw-prose-invert-links': theme('colors.gold.light'),
+            '--tw-prose-invert-bold': theme('colors.gold.DEFAULT'),
+            '--tw-prose-invert-counters': theme('colors.gold.dark'),
+            '--tw-prose-invert-bullets': theme('colors.gold.DEFAULT'),
+            '--tw-prose-invert-hr': theme('colors.gold.dark'),
+            '--tw-prose-invert-quotes': theme('colors.warm.muted'),
+            '--tw-prose-invert-quote-borders': theme('colors.gold.dark'),
+          },
+        },
+      }),
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
 };
 export default config;

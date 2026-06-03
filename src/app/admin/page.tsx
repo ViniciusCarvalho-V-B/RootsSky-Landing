@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronLeft, Plus, Trash2, LogOut } from "lucide-react";
+import { ChevronLeft, Plus, Trash2, LogOut, Edit2, Zap, Star } from "lucide-react";
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -18,6 +18,7 @@ export default function AdminPage() {
   const [updateContent, setUpdateContent] = useState("");
   const [updateAuthor, setUpdateAuthor] = useState("Admin");
   const [isSubmittingUpdate, setIsSubmittingUpdate] = useState(false);
+  const [editingUpdateId, setEditingUpdateId] = useState<string | null>(null);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [suggestions, setSuggestions] = useState<any[]>([]);
@@ -26,6 +27,7 @@ export default function AdminPage() {
   const [sugType, setSugType] = useState<'updown' | 'poll'>('updown');
   const [sugOptions, setSugOptions] = useState([{ label: "" }, { label: "" }]);
   const [isSubmittingSug, setIsSubmittingSug] = useState(false);
+  const [editingSugId, setEditingSugId] = useState<string | null>(null);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
@@ -99,16 +101,19 @@ export default function AdminPage() {
     e.preventDefault();
     setIsSubmittingUpdate(true);
     try {
-      const res = await fetch('/api/admin/updates', {
-        method: 'POST',
+      const url = editingUpdateId ? `/api/admin/updates/${editingUpdateId}` : '/api/admin/updates';
+      const method = editingUpdateId ? 'PUT' : 'POST';
+      const res = await fetch(url, {
+        method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title: updateTitle, content: updateContent, author: updateAuthor })
       });
       if (res.ok) {
         setUpdateTitle("");
         setUpdateContent("");
+        setEditingUpdateId(null);
         fetchUpdates();
-        alert("Atualização publicada!");
+        alert(editingUpdateId ? "Atualização editada!" : "Atualização publicada!");
       } else {
         alert("Erro ao publicar");
       }
@@ -117,6 +122,12 @@ export default function AdminPage() {
     } finally {
       setIsSubmittingUpdate(false);
     }
+  };
+
+  const cancelEditUpdate = () => {
+    setUpdateTitle("");
+    setUpdateContent("");
+    setEditingUpdateId(null);
   };
 
   const handleDeleteUpdate = async (id: string) => {
@@ -133,6 +144,34 @@ export default function AdminPage() {
     if (res.ok) setSuggestions(await res.json());
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleEditSug = (sug: any) => {
+    setEditingSugId(sug.id);
+    setSugTitle(sug.title);
+    setSugDesc(sug.description || "");
+    setSugType(sug.type);
+    if (sug.type === 'poll' && sug.options) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      setSugOptions(sug.options.map((o:any) => ({ label: o.label })));
+    }
+  };
+
+  const cancelEditSug = () => {
+    setEditingSugId(null);
+    setSugTitle("");
+    setSugDesc("");
+    setSugType('updown');
+    setSugOptions([{ label: "" }, { label: "" }]);
+  };
+
+  const handleDeleteSug = async (id: string) => {
+    if (!confirm("Tem certeza que deseja apagar esta sugestão/enquete?")) return;
+    try {
+      const res = await fetch(`/api/suggestions/${id}`, { method: 'DELETE' });
+      if (res.ok) fetchSuggestions();
+    } catch {}
+  };
+
   const handleCreateSuggestion = async (e: React.FormEvent) => {
     e.preventDefault();
     if (sugType === 'poll') {
@@ -145,8 +184,10 @@ export default function AdminPage() {
 
     setIsSubmittingSug(true);
     try {
-      const res = await fetch('/api/suggestions', {
-        method: 'POST',
+      const url = editingSugId ? `/api/suggestions/${editingSugId}` : '/api/suggestions';
+      const method = editingSugId ? 'PUT' : 'POST';
+      const res = await fetch(url, {
+        method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           title: sugTitle, 
@@ -160,8 +201,9 @@ export default function AdminPage() {
         setSugTitle("");
         setSugDesc("");
         setSugOptions([{ label: "" }, { label: "" }]);
+        setEditingSugId(null);
         fetchSuggestions();
-        alert("Sugestão/Enquete criada!");
+        alert(editingSugId ? "Sugestão editada!" : "Sugestão/Enquete criada!");
       } else {
         const d = await res.json();
         alert(d.error || "Erro ao criar");
@@ -255,7 +297,33 @@ export default function AdminPage() {
         {activeTab === 'updates' && (
           <div className="space-y-8">
             <div className="medieval-panel p-6">
-              <h2 className="text-gold font-cinzel mb-4">Nova Atualização</h2>
+              <h2 className="text-gold font-cinzel mb-4">
+                {editingUpdateId ? "Editar Atualização" : "Nova Atualização"}
+              </h2>
+
+              {!editingUpdateId && (
+                <div className="flex flex-wrap gap-2 mb-4">
+                  <button 
+                    onClick={() => {
+                      setUpdateTitle("Atualização de Conteúdo");
+                      setUpdateContent("## 🌟 GRANDE ATUALIZAÇÃO: NOVA ERA\n\nAventureiros, os ventos mudaram! Uma nova expansão acaba de chegar nas ilhas celestes.\n\n![Nova Dugeon](https://minhas-imagens.com/dungeon.jpg)\n\n### ⚔️ Novas Funcionalidades\n- **Novo Sistema de Dungeons**: Explore ruínas antigas nas ilhas inferiores.\n- **Novos Itens Místicos**: Armaduras forjadas com lágrimas de ghast.\n\n### 🛠️ Balanceamento & Economia\n- O preço da _Cenoura Dourada_ na loja foi reduzido.\n- Spawners de Iron Golem agora têm tempo de recarga maior.\n\n### 🐛 Correções\n- Corrigido o bug onde a água desaparecia no bioma do Nether.\n\n[Assista ao Trailer da Atualização](https://youtube.com/...)");
+                    }}
+                    className="text-xs bg-gold/10 hover:bg-gold/20 text-gold px-3 py-1.5 rounded flex items-center gap-1 transition-colors"
+                  >
+                    <Star size={12} /> Preset: Grande Atualização
+                  </button>
+                  <button 
+                    onClick={() => {
+                      setUpdateTitle("Pequenos Ajustes");
+                      setUpdateContent("### 🔧 Ajustes e Manutenção\n\nFizemos algumas correções rápidas para melhorar sua jogabilidade nas ilhas.\n\n- **Economia**: Ajustado o valor de venda das plantações (buff de 5%).\n- **Correção**: Jogadores não perdem mais itens ao cair no void com o pet ativo.\n- **Visual**: Nova cor para as tags de [VIP] e [MVP] no chat.");
+                    }}
+                    className="text-xs bg-cyan-900/40 hover:bg-cyan-900/60 text-cyan-400 px-3 py-1.5 rounded flex items-center gap-1 transition-colors"
+                  >
+                    <Zap size={12} /> Preset: Ajustes Rápidos
+                  </button>
+                </div>
+              )}
+
               <form onSubmit={handleCreateUpdate} className="space-y-4">
                 <input
                   type="text"
@@ -281,9 +349,16 @@ export default function AdminPage() {
                     onChange={e => setUpdateAuthor(e.target.value)}
                     className="bg-black/40 border border-gold/20 rounded p-2 text-sm text-warm focus:border-gold/50 focus:outline-none w-48"
                   />
-                  <button type="submit" disabled={isSubmittingUpdate} className="btn-premium px-6 py-2">
-                    {isSubmittingUpdate ? "Publicando..." : "Publicar"}
-                  </button>
+                  <div className="flex gap-2">
+                    {editingUpdateId && (
+                      <button type="button" onClick={cancelEditUpdate} className="bg-red-900/40 hover:bg-red-900/60 text-red-400 px-4 py-2 rounded text-sm transition-colors border border-red-500/20">
+                        Cancelar
+                      </button>
+                    )}
+                    <button type="submit" disabled={isSubmittingUpdate} className="btn-premium px-6 py-2">
+                      {isSubmittingUpdate ? "Salvando..." : (editingUpdateId ? "Salvar Edição" : "Publicar")}
+                    </button>
+                  </div>
                 </div>
               </form>
             </div>
@@ -298,9 +373,20 @@ export default function AdminPage() {
                     <p className="text-warm-dim text-sm mt-1 line-clamp-2">{u.content}</p>
                     <div className="text-xs text-warm-dim/50 mt-2">Por {u.author} em {new Date(u.createdAt).toLocaleString('pt-BR')}</div>
                   </div>
-                  <button onClick={() => handleDeleteUpdate(u.id)} className="text-red-400 hover:text-red-300 p-2 bg-red-400/10 rounded">
-                    <Trash2 size={16} />
-                  </button>
+                  <div className="flex flex-col gap-2">
+                    <button onClick={() => {
+                      setEditingUpdateId(u.id);
+                      setUpdateTitle(u.title);
+                      setUpdateContent(u.content);
+                      setUpdateAuthor(u.author);
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }} className="text-blue-400 hover:text-blue-300 p-2 bg-blue-400/10 rounded" title="Editar">
+                      <Edit2 size={16} />
+                    </button>
+                    <button onClick={() => handleDeleteUpdate(u.id)} className="text-red-400 hover:text-red-300 p-2 bg-red-400/10 rounded" title="Apagar">
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -311,7 +397,9 @@ export default function AdminPage() {
         {activeTab === 'suggestions' && (
           <div className="space-y-8">
             <div className="medieval-panel p-6">
-              <h2 className="text-gold font-cinzel mb-4">Nova Sugestão (Para Votação)</h2>
+              <h2 className="text-gold font-cinzel mb-4">
+                {editingSugId ? "Editar Sugestão/Enquete" : "Nova Sugestão (Para Votação)"}
+              </h2>
               <form onSubmit={handleCreateSuggestion} className="space-y-4">
                 <input
                   type="text"
@@ -331,12 +419,12 @@ export default function AdminPage() {
                 
                 <div className="flex items-center gap-4 py-2 border-y border-white/5">
                   <label className="text-warm text-sm flex items-center gap-2">
-                    <input type="radio" checked={sugType === 'updown'} onChange={() => setSugType('updown')} /> 
-                    👍 Curtir / Não Curtir
+                    <input type="radio" checked={sugType === 'updown'} onChange={() => !editingSugId && setSugType('updown')} disabled={!!editingSugId} /> 
+                    Curtir / Não Curtir
                   </label>
                   <label className="text-warm text-sm flex items-center gap-2">
-                    <input type="radio" checked={sugType === 'poll'} onChange={() => setSugType('poll')} /> 
-                    📊 Enquete (Opções)
+                    <input type="radio" checked={sugType === 'poll'} onChange={() => !editingSugId && setSugType('poll')} disabled={!!editingSugId} /> 
+                    Enquete (Opções)
                   </label>
                 </div>
 
@@ -361,15 +449,22 @@ export default function AdminPage() {
                         )}
                       </div>
                     ))}
-                    <button type="button" onClick={() => setSugOptions([...sugOptions, {label: ""}])} className="text-gold text-sm flex items-center gap-1 mt-2">
-                      <Plus size={14} /> Adicionar Opção
-                    </button>
+                    {!editingSugId && (
+                      <button type="button" onClick={() => setSugOptions([...sugOptions, {label: ""}])} className="text-gold text-sm flex items-center gap-1 mt-2">
+                        <Plus size={14} /> Adicionar Opção
+                      </button>
+                    )}
                   </div>
                 )}
 
-                <div className="flex justify-end">
+                <div className="flex justify-end gap-2">
+                  {editingSugId && (
+                    <button type="button" onClick={cancelEditSug} className="bg-red-900/40 hover:bg-red-900/60 text-red-400 px-4 py-2 rounded text-sm transition-colors border border-red-500/20">
+                      Cancelar
+                    </button>
+                  )}
                   <button type="submit" disabled={isSubmittingSug} className="btn-premium px-6 py-2">
-                    {isSubmittingSug ? "Criando..." : "Criar para Votação"}
+                    {isSubmittingSug ? "Salvando..." : (editingSugId ? "Salvar Edição" : "Criar para Votação")}
                   </button>
                 </div>
               </form>
@@ -390,19 +485,31 @@ export default function AdminPage() {
                     </div>
                   </div>
                   
-                  <div className="flex items-center gap-3 w-full sm:w-auto">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full sm:w-auto">
                     <select 
                       value={sug.status} 
                       onChange={(e) => handleStatusChange(sug.id, e.target.value)}
-                      className="bg-black/40 border border-gold/30 rounded p-1.5 text-sm text-warm focus:outline-none flex-1 sm:flex-none"
+                      className="bg-black/40 border border-gold/30 rounded p-1.5 text-sm text-warm focus:outline-none w-full sm:w-auto"
                     >
-                      <option value="open">Aberta (Aceitando votos)</option>
+                      <option value="open">Aberta</option>
                       <option value="reviewing">Em Análise</option>
                       <option value="approved">Aprovada</option>
                       <option value="rejected">Recusada</option>
                       <option value="cancelled">Cancelada</option>
                       <option value="implemented">Implementada</option>
                     </select>
+                    
+                    <div className="flex gap-2 w-full sm:w-auto justify-end mt-2 sm:mt-0">
+                      <button onClick={() => {
+                        handleEditSug(sug);
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }} className="text-blue-400 hover:text-blue-300 p-2 bg-blue-400/10 rounded" title="Editar">
+                        <Edit2 size={16} />
+                      </button>
+                      <button onClick={() => handleDeleteSug(sug.id)} className="text-red-400 hover:text-red-300 p-2 bg-red-400/10 rounded" title="Apagar">
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}

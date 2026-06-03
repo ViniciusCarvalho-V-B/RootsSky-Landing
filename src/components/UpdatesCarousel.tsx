@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 type Update = {
   id: string;
@@ -136,10 +138,10 @@ export default function UpdatesCarousel() {
                 
                 <div className="gold-divider mb-4 opacity-50" />
                 
-                <div className="flex-grow">
-                  <p className="text-warm/90 font-inter text-sm sm:text-base leading-relaxed line-clamp-3 sm:line-clamp-4 whitespace-pre-wrap">
+                <div className="flex-grow prose prose-invert prose-gold max-w-none text-warm/90 font-inter text-sm sm:text-base leading-relaxed line-clamp-4 overflow-hidden">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
                     {update.content}
-                  </p>
+                  </ReactMarkdown>
                 </div>
                 
                 <div className="mt-6 pt-4 border-t border-gold/10 flex justify-between items-center text-xs sm:text-sm text-warm-dim font-inter">

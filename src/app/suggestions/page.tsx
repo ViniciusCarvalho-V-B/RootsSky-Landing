@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, ThumbsUp, ThumbsDown } from "lucide-react";
 
 type SuggestionOption = {
   id: string;
@@ -299,7 +299,7 @@ export default function SuggestionsPage() {
                             : 'bg-dark-wood/80 border-white/5 text-warm hover:border-leaf-light/50 hover:text-leaf-light hover:bg-leaf-light/10 disabled:opacity-50 disabled:hover:border-white/5 disabled:hover:text-warm disabled:hover:bg-dark-wood/80'
                         }`}
                       >
-                        👍 {sug.upVotes || 0}
+                        <ThumbsUp size={18} className={hasVoted?.type === 'up' ? 'fill-leaf-light/20' : ''} /> {sug.upVotes || 0}
                       </button>
                       <button 
                         onClick={() => handleVoteClick(sug.id, 'down')}
@@ -310,7 +310,7 @@ export default function SuggestionsPage() {
                             : 'bg-dark-wood/80 border-white/5 text-warm hover:border-red-500/50 hover:text-red-400 hover:bg-red-500/10 disabled:opacity-50 disabled:hover:border-white/5 disabled:hover:text-warm disabled:hover:bg-dark-wood/80'
                         }`}
                       >
-                        👎 {sug.downVotes || 0}
+                        <ThumbsDown size={18} className={hasVoted?.type === 'down' ? 'fill-red-500/20' : ''} /> {sug.downVotes || 0}
                       </button>
                     </div>
                   )}
