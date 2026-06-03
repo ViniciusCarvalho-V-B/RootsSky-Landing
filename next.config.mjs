@@ -6,12 +6,6 @@ const nextConfig = {
       { protocol: "https", hostname: "crafatar.com" },
     ],
   },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
 };
 
 export default nextConfig;
