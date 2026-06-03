@@ -51,3 +51,55 @@ model CommandQueue {
   
   order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
 }
+
+// -------------------------------------------------------------
+// Atualizações do Servidor
+// -------------------------------------------------------------
+
+model Update {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  author    String   @default("Admin")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// -------------------------------------------------------------
+// Sugestões / Enquetes da Comunidade
+// -------------------------------------------------------------
+
+model Suggestion {
+  id          String             @id @default(cuid())
+  title       String
+  description String?
+  type        String             @default("updown") // "updown" ou "poll"
+  status      String             @default("open")   // open, reviewing, approved, rejected, cancelled, implemented
+  options     SuggestionOption[]
+  votes       SuggestionVote[]
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+}
+
+model SuggestionOption {
+  id           String           @id @default(cuid())
+  suggestionId String
+  suggestion   Suggestion       @relation(fields: [suggestionId], references: [id], onDelete: Cascade)
+  label        String
+  order        Int              @default(0)
+  votes        SuggestionVote[]
+}
+
+model SuggestionVote {
+  id           String            @id @default(cuid())
+  suggestionId String
+  suggestion   Suggestion        @relation(fields: [suggestionId], references: [id], onDelete: Cascade)
+  optionId     String?
+  option       SuggestionOption? @relation(fields: [optionId], references: [id], onDelete: Cascade)
+  voteType     String?           // "up" ou "down" (apenas para tipo updown)
+  playerNick   String
+  playerUuid   String
+  createdAt    DateTime          @default(now())
+
+  @@unique([suggestionId, playerUuid])
+}

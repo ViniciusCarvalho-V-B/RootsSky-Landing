@@ -4,6 +4,7 @@ import React, { useState, useCallback } from "react";
 import Image from "next/image";
 import { useServerStatus } from "@/hooks/useServerStatus";
 import { useDiscordStatus } from "@/hooks/useDiscordStatus";
+import UpdatesCarousel from "./UpdatesCarousel";
 
 export default function HeroSection() {
   const [copied, setCopied] = useState(false);
@@ -134,7 +135,7 @@ export default function HeroSection() {
                 {copied ? (
                   <span className="text-leaf-light">✓ COPIADO!</span>
                 ) : (
-                  "CLICK TO COPY"
+                  "CLIQUE PARA COPIAR"
                 )}
               </div>
             </div>
@@ -184,7 +185,7 @@ export default function HeroSection() {
                 DISCORD SERVER
               </div>
               <div className="text-warm-dim text-[10px] uppercase tracking-wider">
-                CLICK TO JOIN
+                CLIQUE PARA ENTRAR
               </div>
             </div>
             {/* Discord Icon */}
@@ -225,6 +226,9 @@ export default function HeroSection() {
                 <a href="/team" className="medieval-btn">
                   Equipe
                 </a>
+                <a href="/suggestions" className="medieval-btn">
+                  Sugestões
+                </a>
               </div>
             </div>
           </div>
@@ -254,6 +258,11 @@ export default function HeroSection() {
                   Divirta-se e prepare-se para a aventura!
                 </p>
               </div>
+            </div>
+            
+            {/* Updates Carousel Section */}
+            <div className="mt-6 sm:mt-8">
+              <UpdatesCarousel />
             </div>
           </div>
         </div>
