@@ -31,7 +31,7 @@ export const storeItems: Record<Category, Product[]> = {
         "Acesso ao Kit Ascendente semanal",
         "Acesso ao chat colorido",
       ],
-      command: "pex user {name} group set ascendente; passeadmin givevip {name}; eco give {name} 100000"
+      command: "lp user {name} group set ascendente; passeadmin givevip {name}; eco give {name} 100000; crates key give {name} spawner_key 3; crates key give {name} epic_key 5; crates key give {name} block_key 10"
     },
     {
       id: "raiz_ancestral",
@@ -50,7 +50,7 @@ export const storeItems: Record<Category, Product[]> = {
         "Acesso ao /is fly na própria ilha",
         "Acesso virtual: /craft, /feed, /ec",
       ],
-      command: "pex user {name} group set ancestral; passeadmin givevip {name}; eco give {name} 250000"
+      command: "lp user {name} group set ancestral; passeadmin givevip {name}; eco give {name} 250000; crates key give {name} spawner_key 7; crates key give {name} epic_key 15; crates key give {name} block_key 20"
     },
     {
       id: "raiz_celeste",
@@ -68,7 +68,7 @@ export const storeItems: Record<Category, Product[]> = {
         "Acesso ao /fly em qualquer lugar",
         "Upgrades extras na Ilha e 3 baús virtuais",
       ],
-      command: "pex user {name} group set celeste; passeadmin givevip {name}"
+      command: "lp user {name} group set celeste; passeadmin givevip {name}; crates key give {name} spawner_key 15; crates key give {name} epic_key 30; crates key give {name} block_key 30"
     },
   ],
   coins: [
