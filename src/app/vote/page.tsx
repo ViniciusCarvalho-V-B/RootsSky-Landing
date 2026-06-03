@@ -1,7 +1,5 @@
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
-
 export const metadata = {
   title: "Vote no RootsSky - Ajude o Servidor",
   description: "Vote no RootsSky e ganhe recompensas épicas dentro do jogo!",
