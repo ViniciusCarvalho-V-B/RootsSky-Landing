@@ -45,8 +45,7 @@ export default function TeamPage() {
         style={{
           backgroundImage: "url('/svg/hero-bg.svg')",
           backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundAttachment: "fixed"
+          backgroundPosition: "center"
         }}
       />
       <div className="fixed inset-0 z-[1] bg-gradient-to-b from-dark-wood/80 via-dark-wood to-dark-wood pointer-events-none" />
@@ -94,11 +93,11 @@ export default function TeamPage() {
                 <span className="h-px bg-gold/20 flex-1" />
               </h2>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="flex flex-wrap justify-center gap-8">
                 {group.members.map((member, idx) => (
                   <div 
                     key={idx}
-                    className="group relative flex flex-col items-center p-8 rounded-2xl bg-forest-deep/80 border border-gold/10 hover:border-gold/40 transition-all duration-500 hover:-translate-y-2 overflow-hidden"
+                    className="group relative flex flex-col items-center p-8 rounded-2xl bg-forest-deep/80 border border-gold/10 hover:border-gold/40 transition-all duration-500 hover:-translate-y-2 overflow-hidden w-full max-w-[320px]"
                   >
                     {/* Glowing background behind avatar */}
                     <div className={`absolute top-0 inset-x-0 h-32 bg-gradient-to-b ${member.color} opacity-20 group-hover:opacity-40 transition-opacity blur-xl`} />
@@ -108,7 +107,7 @@ export default function TeamPage() {
                       <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-gold to-dark-wood opacity-50 blur-md group-hover:opacity-100 transition-opacity" />
                       <div className="relative w-full h-full rounded-xl overflow-hidden border-2 border-gold shadow-2xl bg-dark-wood">
                         <Image
-                          src={`https://minotar.net/body/${member.nick}/128.png`}
+                          src={`https://minotar.net/helm/${member.nick}/128.png`}
                           alt={`Avatar de ${member.name}`}
                           width={128}
                           height={128}
@@ -123,13 +122,9 @@ export default function TeamPage() {
                       {member.name}
                     </h3>
                     
-                    <div className={`px-4 py-1 rounded-full border text-[10px] font-bold uppercase tracking-widest mb-4 relative z-10 ${member.tagColor}`}>
+                    <div className={`px-4 py-1 rounded-full border text-[10px] font-bold uppercase tracking-widest mb-2 relative z-10 ${member.tagColor}`}>
                       {member.tag}
                     </div>
-                    
-                    <p className="text-center text-warm-dim/80 text-sm font-inter leading-relaxed relative z-10 group-hover:text-warm-dim transition-colors">
-                      {member.description}
-                    </p>
                   </div>
                 ))}
               </div>

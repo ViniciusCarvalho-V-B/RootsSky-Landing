@@ -26,8 +26,7 @@ export default function VotePage() {
         style={{
           backgroundImage: "url('/svg/hero-bg.svg')",
           backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundAttachment: "fixed"
+          backgroundPosition: "center"
         }}
       />
       <div className="fixed inset-0 z-[1] bg-gradient-to-b from-dark-wood via-dark-wood/95 to-dark-wood pointer-events-none" />
@@ -101,57 +100,6 @@ export default function VotePage() {
               </div>
             </a>
           ))}
-        </div>
-
-        {/* Top Voters Mockup Section */}
-        <div className="medieval-panel p-6 sm:p-10 relative overflow-hidden">
-          <div className="absolute -top-24 -right-24 w-64 h-64 bg-gold/5 rounded-full blur-3xl pointer-events-none" />
-          
-          <div className="text-center mb-8">
-            <h2 className="font-cinzel font-bold text-2xl sm:text-3xl text-gold uppercase tracking-widest">
-              Top Eleitores do Mês
-            </h2>
-            <p className="text-warm-dim text-sm mt-2">
-              Os maiores heróis que nos ajudam a alcançar o topo.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            {/* 2nd Place */}
-            <div className="flex flex-col items-center justify-end order-2 md:order-1 mt-6 md:mt-12">
-              <div className="relative mb-4">
-                <Image src="https://minotar.net/helm/Steve/80.png" alt="2nd Place" width={80} height={80} className="rounded-lg border-2 border-[#C0C0C0] shadow-[0_0_15px_rgba(192,192,192,0.3)] rendering-pixelated" />
-                <div className="absolute -bottom-3 -right-3 w-8 h-8 rounded-full bg-[#C0C0C0] flex items-center justify-center font-cinzel font-black text-dark-wood border-2 border-dark-wood">2</div>
-              </div>
-              <div className="font-outfit font-bold text-warm text-lg">MisterVoter</div>
-              <div className="text-warm-dim text-sm">142 Votos</div>
-            </div>
-
-            {/* 1st Place */}
-            <div className="flex flex-col items-center justify-end order-1 md:order-2 transform md:-translate-y-4">
-              <div className="relative mb-4">
-                <Image src="https://minotar.net/helm/Alex/100.png" alt="1st Place" width={100} height={100} className="rounded-lg border-4 border-gold shadow-[0_0_25px_rgba(212,175,55,0.5)] rendering-pixelated" />
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="#D4AF37" stroke="#8B6914" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                  </svg>
-                </div>
-                <div className="absolute -bottom-4 -right-4 w-10 h-10 rounded-full bg-gold flex items-center justify-center font-cinzel font-black text-dark-wood border-2 border-dark-wood text-xl">1</div>
-              </div>
-              <div className="font-outfit font-bold text-gold-shine text-xl">LendaViva</div>
-              <div className="text-warm-dim text-sm font-bold">155 Votos</div>
-            </div>
-
-            {/* 3rd Place */}
-            <div className="flex flex-col items-center justify-end order-3 md:order-3 mt-6 md:mt-16">
-              <div className="relative mb-4">
-                <Image src="https://minotar.net/helm/Herobrine/70.png" alt="3rd Place" width={70} height={70} className="rounded-lg border-2 border-[#CD7F32] shadow-[0_0_15px_rgba(205,127,50,0.3)] rendering-pixelated" />
-                <div className="absolute -bottom-3 -right-3 w-7 h-7 rounded-full bg-[#CD7F32] flex items-center justify-center font-cinzel font-black text-dark-wood border-2 border-dark-wood text-sm">3</div>
-              </div>
-              <div className="font-outfit font-bold text-warm text-base">ApoiadorBR</div>
-              <div className="text-warm-dim text-sm">130 Votos</div>
-            </div>
-          </div>
         </div>
 
       </div>
