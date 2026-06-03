@@ -21,7 +21,7 @@ const storeCategories = [
   { key: "bundles", label: "Pacotes" },
 ];
 
-const siteLinks = [
+const siteLinks: { label: string; href: string; external?: boolean }[] = [
   {
     label: "Votar",
     href: "/vote",
