@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-const navLinks = [
+const navLinks: { label: string; href: string; external?: boolean }[] = [
   { label: "Início", href: "/" },
   { label: "Loja", href: "/store" },
   { label: "Votar", href: "/vote" },
