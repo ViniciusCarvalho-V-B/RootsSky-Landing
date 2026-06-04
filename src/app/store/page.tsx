@@ -190,6 +190,7 @@ function StorePageContent() {
               <span className="block w-5 h-0.5 bg-warm-muted" />
             </button>
             <Link href="/">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/svg/logo-rootssky.svg"
                 alt="RootsSky"

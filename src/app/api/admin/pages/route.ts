@@ -14,7 +14,8 @@ export async function POST(request: Request) {
       data: { slug, title, content }
     });
     return NextResponse.json(newPage);
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : "Erro desconhecido";
+    return NextResponse.json({ error: msg }, { status: 400 });
   }
 }

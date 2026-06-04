@@ -31,10 +31,10 @@ export default function AdminPage() {
   const [isSubmittingSug, setIsSubmittingSug] = useState(false);
   const [editingSugId, setEditingSugId] = useState<string | null>(null);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     // Verificar autenticacao na montagem
     checkAuth();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const checkAuth = async () => {

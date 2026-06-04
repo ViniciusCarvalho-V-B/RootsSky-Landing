@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 export default function CouponsAdmin() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [coupons, setCoupons] = useState<any[]>([]);
   const [code, setCode] = useState("");
   const [discountPct, setDiscountPct] = useState("");
@@ -48,6 +49,7 @@ export default function CouponsAdmin() {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEdit = (c: any) => {
     setEditingId(c.id);
     setCode(c.code);
@@ -64,6 +66,7 @@ export default function CouponsAdmin() {
     } catch {}
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const toggleStatus = async (c: any) => {
     try {
       const res = await fetch(`/api/admin/coupons/${c.id}`, {

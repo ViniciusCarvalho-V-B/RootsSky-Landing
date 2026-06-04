@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 export default function PagesAdmin() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [pages, setPages] = useState<any[]>([]);
   const [slug, setSlug] = useState("");
   const [title, setTitle] = useState("");
@@ -46,6 +47,7 @@ export default function PagesAdmin() {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEdit = (p: any) => {
     setEditingId(p.id);
     setSlug(p.slug);

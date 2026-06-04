@@ -113,7 +113,10 @@ export default function BattlePassPage() {
               {features.map((feature) => (
                 <Card key={feature.title} className="group text-center">
                   {feature.isSvg ? (
-                    <img src={feature.icon} alt={feature.title} className="w-10 h-10 mx-auto mb-4 icon-glow" />
+                    <>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={feature.icon} alt={feature.title} className="w-10 h-10 mx-auto mb-4 icon-glow" />
+                    </>
                   ) : (
                     <span className="text-3xl mb-4 block">{feature.icon}</span>
                   )}

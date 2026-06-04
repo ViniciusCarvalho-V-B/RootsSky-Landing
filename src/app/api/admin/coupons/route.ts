@@ -14,7 +14,8 @@ export async function POST(request: Request) {
       data: { code: code.toUpperCase(), discountPct: parseFloat(discountPct), eligibleItems, isActive }
     });
     return NextResponse.json(newCoupon);
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : "Erro desconhecido";
+    return NextResponse.json({ error: msg }, { status: 400 });
   }
 }
