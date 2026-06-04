@@ -227,13 +227,13 @@ export default function CouponsAdmin() {
       <div className="grid gap-4">
         {coupons.map((c) => (
           <div key={c.id} className="medieval-panel p-4 flex justify-between items-center group">
-            <div>
+            <div className="flex-1 min-w-0 mr-4">
               <div className="flex items-center gap-3">
                 <h3 className="text-warm-light font-bold font-mono text-lg">{c.code}</h3>
                 <span className="text-roots-green font-bold bg-roots-green/10 px-2 py-0.5 rounded text-sm">-{c.discountPct}%</span>
                 {!c.isActive && <span className="text-red-400 text-xs border border-red-400/30 px-2 rounded">Inativo</span>}
               </div>
-              <p className="text-warm-dim text-xs mt-1 break-words whitespace-normal">
+              <p className="text-warm-dim text-xs mt-1 break-all whitespace-normal">
                 Elegível: {c.eligibleItems || "Todos os itens da loja"}
                 <br />
                 Usos: {c.uses} / {c.maxUses || "∞"} 
