@@ -310,28 +310,11 @@ function StorePageContent() {
           {/* Coupon Input */}
           <div className="flex flex-col items-center justify-center mb-8 animate-slide-up" style={{ animationDelay: "0.2s" }}>
             
-            {availableCoupons.length > 0 && (
-              <div className="mb-3 w-full max-w-sm">
-                 <select 
-                   className="w-full bg-dark-wood border border-gold/30 rounded-md py-1.5 px-3 text-warm-dim font-inter text-xs focus:outline-none focus:border-gold/60"
-                   onChange={(e) => {
-                     setCouponCode(e.target.value);
-                     setCouponMsg(null);
-                   }}
-                   value={availableCoupons.some(c => c.code === couponCode) ? couponCode : ""}
-                 >
-                   <option value="">Selecione um cupom disponível...</option>
-                   {availableCoupons.map(c => (
-                     <option key={c.code} value={c.code}>{c.code} (-{c.discountPct}%)</option>
-                   ))}
-                 </select>
-              </div>
-            )}
-
             <div className="bg-wood/50 border border-gold/20 p-2 rounded-lg flex items-center gap-2 max-w-sm w-full">
               <span className="text-xl px-2">🎟️</span>
               <input 
                 type="text" 
+                list="coupons-datalist"
                 placeholder="Cupom de Desconto" 
                 value={couponCode}
                 onChange={(e) => {
@@ -340,6 +323,13 @@ function StorePageContent() {
                 }}
                 className="bg-transparent border-none text-warm-light placeholder:text-warm-dim/50 focus:outline-none flex-grow uppercase font-cinzel font-bold text-sm min-w-0"
               />
+              {availableCoupons.length > 0 && (
+                <datalist id="coupons-datalist">
+                  {availableCoupons.map(c => (
+                    <option key={c.code} value={c.code}>{c.code} (-{c.discountPct}%)</option>
+                  ))}
+                </datalist>
+              )}
               {couponCode && (
                 <button 
                   onClick={() => {
@@ -465,7 +455,7 @@ function StorePageContent() {
                       let oldPrice = currentItem.originalPrice;
                       
                       if (activeCoupon) {
-                        const isEligible = !activeCoupon.eligibleItems || activeCoupon.eligibleItems.split(",").includes(item.id);
+                        const isEligible = !activeCoupon.eligibleItems || activeCoupon.eligibleItems.split(",").includes(item.id) || activeCoupon.eligibleItems.split(",").includes(currentItem.id);
                         if (isEligible) {
                           const newRawPrice = currentItem.rawPrice * (1 - activeCoupon.discountPct / 100);
                           displayPrice = `R$ ${newRawPrice.toFixed(2).replace('.', ',')}`;

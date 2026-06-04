@@ -71,6 +71,20 @@ export default function CouponsAdmin() {
     setSelectedItemsIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
   };
 
+  const selectAllRanks = () => {
+    const rankIds = storeItems.ranks.map(cat => cat.options ? cat.options.map(o => o.id) : [cat.id]).flat();
+    setSelectedItemsIds(prev => Array.from(new Set([...prev, ...rankIds])));
+  };
+
+  const selectAllKeys = () => {
+    const keyIds = storeItems.keys.map(cat => cat.options ? cat.options.map(o => o.id) : [cat.id]).flat();
+    setSelectedItemsIds(prev => Array.from(new Set([...prev, ...keyIds])));
+  };
+  
+  const clearSelection = () => {
+    setSelectedItemsIds([]);
+  };
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEdit = (c: any) => {
     setEditingId(c.id);
@@ -151,7 +165,14 @@ export default function CouponsAdmin() {
             </div>
           </div>
           <div>
-            <label className="text-warm-dim text-xs mb-2 block">Itens Elegíveis (Deixe vazio para aplicar a todos da loja)</label>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-warm-dim text-xs block">Itens Elegíveis (Deixe vazio para aplicar a todos da loja)</label>
+              <div className="flex gap-2">
+                <button type="button" onClick={selectAllRanks} className="text-xs text-gold/80 hover:text-gold transition-colors">Todos VIPs</button>
+                <button type="button" onClick={selectAllKeys} className="text-xs text-gold/80 hover:text-gold transition-colors">Todas Chaves</button>
+                <button type="button" onClick={clearSelection} className="text-xs text-red-400/80 hover:text-red-400 transition-colors">Limpar</button>
+              </div>
+            </div>
             <div className="bg-black/40 border border-gold/20 rounded max-h-48 overflow-y-auto p-2 space-y-1">
               {allCatalogItems.map(item => (
                 <label key={item.id} className="flex items-center gap-2 cursor-pointer hover:bg-gold/5 p-1 rounded">
@@ -210,7 +231,7 @@ export default function CouponsAdmin() {
                 <span className="text-roots-green font-bold bg-roots-green/10 px-2 py-0.5 rounded text-sm">-{c.discountPct}%</span>
                 {!c.isActive && <span className="text-red-400 text-xs border border-red-400/30 px-2 rounded">Inativo</span>}
               </div>
-              <p className="text-warm-dim text-xs mt-1">
+              <p className="text-warm-dim text-xs mt-1 break-words whitespace-normal">
                 Elegível: {c.eligibleItems || "Todos os itens da loja"}
                 <br />
                 Usos: {c.uses} / {c.maxUses || "∞"} 
