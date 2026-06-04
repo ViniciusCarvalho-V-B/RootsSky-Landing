@@ -404,7 +404,7 @@ function StorePageContent() {
                 
                 <div className="relative z-10 mb-4">
                   <button 
-                    onClick={() => handleOpenPreview(currentItem.id, currentItem.name)}
+                    onClick={() => handleOpenPreview(currentItem.id, 'label' in currentItem ? `${item.name} - ${currentItem.label}` : item.name)}
                     className="text-xs text-gold/80 hover:text-gold transition-colors underline decoration-gold/30 hover:decoration-gold/80"
                   >
                     Ver Benefícios Detalhados

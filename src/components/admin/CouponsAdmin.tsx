@@ -71,6 +71,7 @@ export default function CouponsAdmin() {
     setSelectedItemsIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEdit = (c: any) => {
     setEditingId(c.id);
     setCode(c.code);
