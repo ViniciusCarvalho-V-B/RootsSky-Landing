@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { STORE_CATALOG } from "@/lib/catalog";
+import { storeItems } from "@/lib/catalog";
 
 const allCatalogItems = [
-  ...STORE_CATALOG.ranks.map(cat => cat.options ? cat.options.map(o => ({ id: o.id, name: `${cat.name} - ${o.name}` })) : [{ id: cat.id, name: cat.name }]).flat(),
-  ...STORE_CATALOG.keys.map(cat => cat.options ? cat.options.map(o => ({ id: o.id, name: `${cat.name} - ${o.name}` })) : [{ id: cat.id, name: cat.name }]).flat()
+  ...storeItems.ranks.map(cat => cat.options ? cat.options.map(o => ({ id: o.id, name: `${cat.name} - ${o.label}` })) : [{ id: cat.id, name: cat.name }]).flat(),
+  ...storeItems.keys.map(cat => cat.options ? cat.options.map(o => ({ id: o.id, name: `${cat.name} - ${o.label}` })) : [{ id: cat.id, name: cat.name }]).flat()
 ];
 
 export default function CouponsAdmin() {
