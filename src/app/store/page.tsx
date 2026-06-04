@@ -23,6 +23,8 @@ function StorePageContent() {
   const [couponValidating, setCouponValidating] = useState(false);
   const [couponMsg, setCouponMsg] = useState<{ text: string, type: 'success'|'error' } | null>(null);
   const [activeCoupon, setActiveCoupon] = useState<{ code: string, discountPct: number, eligibleItems: string | null } | null>(null);
+  const [availableCoupons, setAvailableCoupons] = useState<{code: string, discountPct: number}[]>([]);
+
 
   // Player authentication state
   const [playerNick, setPlayerNick] = useState<string | null>(null);
@@ -48,6 +50,16 @@ function StorePageContent() {
       setTimeout(() => setShowSuccessToast(false), 6000);
     }
   }, [searchParams]);
+
+  // Carrega coupons ativos
+  useEffect(() => {
+    fetch('/api/coupons/active')
+      .then(r => r.json())
+      .then(data => {
+        if (Array.isArray(data)) setAvailableCoupons(data);
+      })
+      .catch(() => {});
+  }, []);
 
   // Carrega do localStorage no client-side
   useEffect(() => {
@@ -297,6 +309,25 @@ function StorePageContent() {
 
           {/* Coupon Input */}
           <div className="flex flex-col items-center justify-center mb-8 animate-slide-up" style={{ animationDelay: "0.2s" }}>
+            
+            {availableCoupons.length > 0 && (
+              <div className="mb-3 w-full max-w-sm">
+                 <select 
+                   className="w-full bg-dark-wood border border-gold/30 rounded-md py-1.5 px-3 text-warm-dim font-inter text-xs focus:outline-none focus:border-gold/60"
+                   onChange={(e) => {
+                     setCouponCode(e.target.value);
+                     setCouponMsg(null);
+                   }}
+                   value={availableCoupons.some(c => c.code === couponCode) ? couponCode : ""}
+                 >
+                   <option value="">Selecione um cupom disponível...</option>
+                   {availableCoupons.map(c => (
+                     <option key={c.code} value={c.code}>{c.code} (-{c.discountPct}%)</option>
+                   ))}
+                 </select>
+              </div>
+            )}
+
             <div className="bg-wood/50 border border-gold/20 p-2 rounded-lg flex items-center gap-2 max-w-sm w-full">
               <span className="text-xl px-2">🎟️</span>
               <input 
@@ -307,12 +338,27 @@ function StorePageContent() {
                   setCouponCode(e.target.value.toUpperCase());
                   if (couponMsg) setCouponMsg(null);
                 }}
-                className="bg-transparent border-none text-warm-light placeholder:text-warm-dim/50 focus:outline-none flex-grow uppercase font-cinzel font-bold text-sm"
+                className="bg-transparent border-none text-warm-light placeholder:text-warm-dim/50 focus:outline-none flex-grow uppercase font-cinzel font-bold text-sm min-w-0"
               />
+              {couponCode && (
+                <button 
+                  onClick={() => {
+                    setCouponCode("");
+                    setCouponMsg(null);
+                    setActiveCoupon(null);
+                  }}
+                  className="text-warm-dim hover:text-red-400 p-1 mr-1 transition-colors"
+                  title="Remover cupom"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              )}
               <button
                 onClick={handleValidateCoupon}
                 disabled={couponValidating || !couponCode.trim()}
-                className="bg-gold/10 hover:bg-gold/20 text-gold-shine px-4 py-1.5 rounded text-sm font-bold transition-colors disabled:opacity-50"
+                className="bg-gold/10 hover:bg-gold/20 text-gold-shine px-4 py-1.5 rounded text-sm font-bold transition-colors disabled:opacity-50 whitespace-nowrap"
               >
                 {couponValidating ? "..." : "Aplicar"}
               </button>
@@ -423,7 +469,7 @@ function StorePageContent() {
                         if (isEligible) {
                           const newRawPrice = currentItem.rawPrice * (1 - activeCoupon.discountPct / 100);
                           displayPrice = `R$ ${newRawPrice.toFixed(2).replace('.', ',')}`;
-                          oldPrice = currentItem.price;
+                          oldPrice = currentItem.originalPrice || currentItem.price;
                         }
                       }
                       
