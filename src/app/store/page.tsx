@@ -309,7 +309,7 @@ function StorePageContent() {
           </div>
 
           {/* Coupon Input */}
-          <div className="flex flex-col items-center justify-center mb-8 animate-slide-up" style={{ animationDelay: "0.2s" }}>
+          <div className="flex flex-col items-center justify-center mb-8 animate-slide-up relative z-50" style={{ animationDelay: "0.2s" }}>
             
             <div className="relative bg-wood/50 border border-gold/20 p-2 rounded-lg flex items-center gap-2 max-w-sm w-full">
               <span className="text-xl px-2">🎟️</span>
