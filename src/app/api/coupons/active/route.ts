@@ -19,6 +19,7 @@ export async function GET() {
         eligibleItems: true,
         maxUses: true,
         uses: true,
+        expiresAt: true,
       }
     });
 

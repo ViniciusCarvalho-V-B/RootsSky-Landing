@@ -17,6 +17,8 @@ export default function CouponsAdmin() {
   const [expiresAt, setExpiresAt] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
 
   useEffect(() => {
     fetchCoupons();
@@ -55,7 +57,9 @@ export default function CouponsAdmin() {
         setIsActive(true);
         setEditingId(null);
         fetchCoupons();
-        alert(editingId ? "Cupom atualizado!" : "Cupom criado!");
+        setToastMessage(editingId ? "Cupom atualizado com sucesso!" : "Cupom criado com sucesso!");
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 3000);
       } else {
         const data = await res.json();
         alert(data.error || "Erro ao salvar cupom");
@@ -248,6 +252,26 @@ export default function CouponsAdmin() {
           </div>
         ))}
         {coupons.length === 0 && <p className="text-warm-dim text-center py-4">Nenhum cupom criado.</p>}
+      </div>
+
+      {/* Toast Notification */}
+      <div className={`fixed bottom-4 right-4 z-50 transition-all duration-500 ease-out ${showToast ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0 pointer-events-none'}`}>
+        <div className="bg-wood/90 backdrop-blur-md border border-roots-green/30 shadow-lg shadow-roots-green/20 rounded-xl p-4 flex items-center gap-4">
+          <div className="bg-roots-green/20 rounded-full p-2">
+            <svg className="w-5 h-5 text-roots-green" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <div>
+            <h3 className="font-cinzel font-bold text-roots-green text-sm">Sucesso!</h3>
+            <p className="text-warm-light font-inter text-xs">{toastMessage}</p>
+          </div>
+          <button onClick={() => setShowToast(false)} className="ml-auto text-warm-dim hover:text-warm p-1">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   );

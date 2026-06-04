@@ -23,7 +23,8 @@ function StorePageContent() {
   const [couponValidating, setCouponValidating] = useState(false);
   const [couponMsg, setCouponMsg] = useState<{ text: string, type: 'success'|'error' } | null>(null);
   const [activeCoupon, setActiveCoupon] = useState<{ code: string, discountPct: number, eligibleItems: string | null } | null>(null);
-  const [availableCoupons, setAvailableCoupons] = useState<{code: string, discountPct: number}[]>([]);
+  const [availableCoupons, setAvailableCoupons] = useState<{code: string, discountPct: number, expiresAt?: string | null, maxUses?: number | null, uses?: number}[]>([]);
+  const [isCouponDropdownOpen, setIsCouponDropdownOpen] = useState(false);
 
 
   // Player authentication state
@@ -310,26 +311,81 @@ function StorePageContent() {
           {/* Coupon Input */}
           <div className="flex flex-col items-center justify-center mb-8 animate-slide-up" style={{ animationDelay: "0.2s" }}>
             
-            <div className="bg-wood/50 border border-gold/20 p-2 rounded-lg flex items-center gap-2 max-w-sm w-full">
+            <div className="relative bg-wood/50 border border-gold/20 p-2 rounded-lg flex items-center gap-2 max-w-sm w-full">
               <span className="text-xl px-2">🎟️</span>
               <input 
                 type="text" 
-                list="coupons-datalist"
                 placeholder="Cupom de Desconto" 
                 value={couponCode}
+                onFocus={() => setIsCouponDropdownOpen(true)}
+                onBlur={() => setTimeout(() => setIsCouponDropdownOpen(false), 200)}
                 onChange={(e) => {
                   setCouponCode(e.target.value.toUpperCase());
                   if (couponMsg) setCouponMsg(null);
+                  setIsCouponDropdownOpen(true);
                 }}
                 className="bg-transparent border-none text-warm-light placeholder:text-warm-dim/50 focus:outline-none flex-grow uppercase font-cinzel font-bold text-sm min-w-0"
               />
-              {availableCoupons.length > 0 && (
-                <datalist id="coupons-datalist">
-                  {availableCoupons.map(c => (
-                    <option key={c.code} value={c.code}>{c.code} (-{c.discountPct}%)</option>
-                  ))}
-                </datalist>
+              
+              {isCouponDropdownOpen && availableCoupons.length > 0 && (
+                <div className="absolute top-full left-0 right-0 mt-2 bg-dark-wood border border-gold/30 rounded-lg shadow-2xl overflow-hidden z-50">
+                  <div className="max-h-60 overflow-y-auto custom-scrollbar">
+                    {availableCoupons.map(c => {
+                      const usesLeft = c.maxUses ? c.maxUses - (c.uses || 0) : null;
+                      const isLowUses = usesLeft !== null && usesLeft <= 5;
+                      
+                      const expiresInHours = c.expiresAt ? (new Date(c.expiresAt).getTime() - Date.now()) / (1000 * 60 * 60) : null;
+                      const isExpiringSoon = expiresInHours !== null && expiresInHours <= 48 && expiresInHours > 0;
+                      
+                      let timeStr = "";
+                      if (expiresInHours !== null && expiresInHours > 0) {
+                        if (expiresInHours < 1) timeStr = "< 1 hora";
+                        else if (expiresInHours < 24) timeStr = `${Math.floor(expiresInHours)} horas`;
+                        else timeStr = `${Math.floor(expiresInHours / 24)} dias`;
+                      }
+
+                      return (
+                        <div 
+                          key={c.code} 
+                          onMouseDown={() => {
+                            setCouponCode(c.code);
+                            setIsCouponDropdownOpen(false);
+                            if (couponMsg) setCouponMsg(null);
+                          }}
+                          className="p-3 border-b border-gold/10 hover:bg-gold/10 cursor-pointer flex flex-col gap-1 last:border-0 transition-colors"
+                        >
+                          <div className="flex justify-between items-center">
+                            <span className="font-mono font-bold text-warm-light text-sm">{c.code}</span>
+                            <span className="text-roots-green font-bold bg-roots-green/10 px-2 py-0.5 rounded text-xs">-{c.discountPct}%</span>
+                          </div>
+                          
+                          {(isLowUses || isExpiringSoon) && (
+                            <div className="flex gap-3 text-[11px] mt-1">
+                              {isLowUses && (
+                                <span className="flex items-center gap-1 text-red-400 font-inter">
+                                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                  </svg>
+                                  Restam {usesLeft} {usesLeft === 1 ? 'uso' : 'usos'}!
+                                </span>
+                              )}
+                              {isExpiringSoon && (
+                                <span className="flex items-center gap-1 text-orange-400 font-inter">
+                                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                  </svg>
+                                  Expira em {timeStr}
+                                </span>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
               )}
+
               {couponCode && (
                 <button 
                   onClick={() => {
