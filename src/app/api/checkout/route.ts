@@ -91,7 +91,7 @@ export async function POST(request: Request) {
           pending: `${process.env.NEXT_PUBLIC_APP_URL}/store?pending=true`,
         },
         auto_return: "approved",
-        notification_url: `${process.env.NEXT_PUBLIC_APP_URL}/api/webhooks/mercadopago`, // A URL do nosso novo Webhook
+        notification_url: "https://www.rootssky.app/api/webhooks/mercadopago", // URL FORÇADA COM WWW PARA EVITAR ERRO 308
       }
     });
 
