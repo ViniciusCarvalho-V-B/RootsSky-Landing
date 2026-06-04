@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { productId, playerNick, playerUuid } = body;
+    const { productId, playerNick, playerUuid, couponCode } = body;
 
     if (!productId || !playerNick || !playerUuid) {
       return NextResponse.json({ error: "Dados incompletos." }, { status: 400 });
@@ -21,17 +21,32 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Produto inválido." }, { status: 400 });
     }
 
+    let finalPrice = item.rawPrice;
+    let appliedCoupon = null;
+
+    if (couponCode) {
+      const coupon = await prisma.coupon.findUnique({ where: { code: couponCode } });
+      if (coupon && coupon.isActive) {
+        // Verifica se é elegível
+        const isEligible = !coupon.eligibleItems || coupon.eligibleItems.split(",").includes(item.id);
+        if (isEligible) {
+          finalPrice = parseFloat((finalPrice * (1 - coupon.discountPct / 100)).toFixed(2));
+          appliedCoupon = coupon.code;
+        }
+      }
+    }
+
     // 1. Criar o pedido no nosso banco de dados (Status PENDING)
     const order = await prisma.order.create({
       data: {
         playerNick,
         playerUuid,
-        totalAmount: item.rawPrice,
+        totalAmount: finalPrice,
         status: "PENDING",
         items: {
           create: {
             productId: item.id,
-            price: item.rawPrice,
+            price: finalPrice,
             quantity: 1,
           }
         }
@@ -62,9 +77,9 @@ export async function POST(request: Request) {
       }
 
       // Webhook do Discord simulado
-      await sendDiscordPurchaseNotification(playerNick, [item.name], item.rawPrice);
+      await sendDiscordPurchaseNotification(playerNick, [item.name], finalPrice);
 
-      return NextResponse.json({ url: `${process.env.NEXT_PUBLIC_APP_URL}/store?success=true` });
+      return NextResponse.json({ url: `https://www.rootssky.app/store?success=true` });
     }
 
     // 2. Criar a Preference (Sessão de Checkout) do Mercado Pago
@@ -73,11 +88,11 @@ export async function POST(request: Request) {
         items: [
           {
             id: item.id,
-            title: item.name,
+            title: item.name + (appliedCoupon ? ` (Cupom: ${appliedCoupon})` : ""),
             description: `Comprador: ${playerNick}`,
             quantity: 1,
             currency_id: "BRL",
-            unit_price: item.rawPrice,
+            unit_price: finalPrice,
           }
         ],
         external_reference: order.id, // Passa o ID do pedido para o Webhook identificar depois
@@ -86,9 +101,9 @@ export async function POST(request: Request) {
           command_to_queue: item.command,
         },
         back_urls: {
-          success: `${process.env.NEXT_PUBLIC_APP_URL}/store?success=true`,
-          failure: `${process.env.NEXT_PUBLIC_APP_URL}/store?canceled=true`,
-          pending: `${process.env.NEXT_PUBLIC_APP_URL}/store?pending=true`,
+          success: `https://www.rootssky.app/store?success=true`,
+          failure: `https://www.rootssky.app/store?canceled=true`,
+          pending: `https://www.rootssky.app/store?pending=true`,
         },
         auto_return: "approved",
         notification_url: "https://www.rootssky.app/api/webhooks/mercadopago", // URL FORÇADA COM WWW PARA EVITAR ERRO 308

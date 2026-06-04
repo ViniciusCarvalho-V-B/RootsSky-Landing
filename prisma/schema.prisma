@@ -103,3 +103,30 @@ model SuggestionVote {
 
   @@unique([suggestionId, playerUuid])
 }
+
+// -------------------------------------------------------------
+// Páginas Dinâmicas
+// -------------------------------------------------------------
+
+model Page {
+  id        String   @id @default(cuid())
+  slug      String   @unique // ex: regras, termos
+  title     String
+  content   String   // Markdown ou HTML
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// -------------------------------------------------------------
+// Cupons de Desconto
+// -------------------------------------------------------------
+
+model Coupon {
+  id            String   @id @default(cuid())
+  code          String   @unique
+  discountPct   Float    // Porcentagem de desconto (ex: 15.0)
+  eligibleItems String?  // Lista separada por virgula de IDs (ex: "raiz_ascendente,raiz_ancestral") ou null para todos
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}

@@ -16,8 +16,8 @@ const footerSections: { title: string; links: FooterLink[] }[] = [
     links: [
       { label: "Início", href: "/" },
       { label: "Loja", href: "/store" },
-      { label: "Regras", href: "#" },
-      { label: "Wiki", href: "#" },
+      { label: "Benefícios VIP", href: "/vip-beneficios" },
+      { label: "Regras", href: "/regras" },
     ],
   },
   {
@@ -28,7 +28,7 @@ const footerSections: { title: string; links: FooterLink[] }[] = [
         href: "https://discord.gg/UxUM66WSSD",
         external: true,
       },
-      { label: "Votar", href: "#" },
+      { label: "Votar", href: "/vote" },
       { label: "Fórum", href: "#" },
       { label: "Twitter", href: "#" },
     ],
@@ -36,9 +36,8 @@ const footerSections: { title: string; links: FooterLink[] }[] = [
   {
     title: "Legal",
     links: [
-      { label: "Termos de Serviço", href: "#" },
-      { label: "Política de Privacidade", href: "#" },
-      { label: "Política de Reembolso", href: "#" },
+      { label: "Termos de Serviço", href: "/termos" },
+      { label: "Política de Reembolso", href: "/reembolso" },
     ],
   },
 ];

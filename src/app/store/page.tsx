@@ -16,6 +16,8 @@ function StorePageContent() {
   const [active, setActive] = useState<Category>("ranks");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
+  const [couponCode, setCouponCode] = useState("");
 
   // Player authentication state
   const [playerNick, setPlayerNick] = useState<string | null>(null);
@@ -83,6 +85,7 @@ function StorePageContent() {
           productId,
           playerNick: nick,
           playerUuid: uuid,
+          couponCode: couponCode.trim(),
         }),
       });
       const data = await res.json();
@@ -223,8 +226,7 @@ function StorePageContent() {
           >
             {([
               { key: "ranks" as Category, label: "🌿 Ranks" },
-              { key: "coins" as Category, label: "💰 Moedas" },
-              { key: "bundles" as Category, label: "📦 Pacotes" },
+              { key: "keys" as Category, label: "🔑 Chaves" },
             ]).map((cat) => (
               <button
                 key={cat.key}
@@ -240,9 +242,27 @@ function StorePageContent() {
             ))}
           </div>
 
+          {/* Coupon Input */}
+          <div className="flex justify-center mb-8 animate-slide-up" style={{ animationDelay: "0.2s" }}>
+            <div className="bg-wood/50 border border-gold/20 p-2 rounded-lg flex items-center gap-2 max-w-sm w-full">
+              <span className="text-xl px-2">🎟️</span>
+              <input 
+                type="text" 
+                placeholder="Cupom de Desconto" 
+                value={couponCode}
+                onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                className="bg-transparent border-none text-warm-light placeholder:text-warm-dim/50 focus:outline-none flex-grow uppercase font-cinzel font-bold text-sm"
+              />
+            </div>
+          </div>
+
           {/* Product Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {items.map((item, index) => (
+            {items.map((item, index) => {
+              const selectedOptionId = selectedOptions[item.id] || (item.options ? item.options[0].id : item.id);
+              const currentItem = item.options ? item.options.find(o => o.id === selectedOptionId) || item.options[0] : item;
+
+              return (
               <div
                 key={item.id}
                 className={`medieval-panel p-5 sm:p-6 flex flex-col group animate-slide-up ${
@@ -252,9 +272,9 @@ function StorePageContent() {
               >
                 {/* Badge row */}
                 <div className="relative z-10 flex items-center justify-between mb-4">
-                  {item.badge ? (
+                  {currentItem.badge || item.badge ? (
                     <CardBadge variant={item.badgeVariant || "emerald"}>
-                      {item.badge}
+                      {currentItem.badge || item.badge}
                     </CardBadge>
                   ) : (
                     <span />
@@ -291,29 +311,47 @@ function StorePageContent() {
                   </ul>
                 )}
 
+                {/* Options Selector if available */}
+                {item.options && (
+                  <div className="relative z-10 mb-4">
+                    <label className="block text-xs font-cinzel text-warm-dim mb-1 uppercase tracking-wider">Quantidade:</label>
+                    <select
+                      value={selectedOptionId}
+                      onChange={(e) => setSelectedOptions(prev => ({ ...prev, [item.id]: e.target.value }))}
+                      className="w-full bg-dark-wood border border-gold/30 rounded-md py-2 px-3 text-warm font-inter text-sm focus:outline-none focus:border-gold/60"
+                    >
+                      {item.options.map(opt => (
+                        <option key={opt.id} value={opt.id}>
+                          {opt.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
                 {/* Price & CTA */}
                 <div className="relative z-10 mt-auto">
                   <div className="flex items-baseline gap-2 mb-4">
                     <span className="font-cinzel font-black text-2xl text-gradient-gold">
-                      {item.price}
+                      {currentItem.price}
                     </span>
-                    {item.originalPrice && (
+                    {currentItem.originalPrice && (
                       <span className="text-sm text-warm-dim line-through font-inter">
-                        {item.originalPrice}
+                        {currentItem.originalPrice}
                       </span>
                     )}
                   </div>
                   <Button
                     variant={item.popular ? "premium" : "primary"}
                     className="w-full text-center justify-center"
-                    onClick={() => handlePurchaseClick(item.id)}
+                    onClick={() => handlePurchaseClick(selectedOptionId)}
                     disabled={isCheckingOut}
                   >
-                    {isCheckingOut && pendingProductId === item.id ? "Aguarde..." : "Comprar Agora"}
+                    {isCheckingOut && pendingProductId === selectedOptionId ? "Aguarde..." : "Comprar Agora"}
                   </Button>
                 </div>
               </div>
-            ))}
+            )})}
           </div>
 
           {/* Disclaimer */}

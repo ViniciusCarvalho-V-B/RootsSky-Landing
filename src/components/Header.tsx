@@ -7,6 +7,7 @@ import Image from "next/image";
 const navLinks: { label: string; href: string; external?: boolean }[] = [
   { label: "Início", href: "/" },
   { label: "Loja", href: "/store" },
+  { label: "Regras", href: "/regras" },
   { label: "Votar", href: "/vote" },
   { label: "Sugestões", href: "/suggestions" },
   { label: "Equipe", href: "/team" },

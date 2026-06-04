@@ -4,13 +4,15 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Trash2, LogOut, Plus, Star, Zap, Edit2, ImagePlus, ChevronLeft } from 'lucide-react';
+import PagesAdmin from '@/components/admin/PagesAdmin';
+import CouponsAdmin from '@/components/admin/CouponsAdmin';
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
-  const [activeTab, setActiveTab] = useState<'updates' | 'suggestions'>('updates');
+  const [activeTab, setActiveTab] = useState<'updates' | 'suggestions' | 'pages' | 'coupons'>('updates');
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [updates, setUpdates] = useState<any[]>([]);
@@ -278,20 +280,38 @@ export default function AdminPage() {
         <h1 className="font-cinzel text-3xl text-gold-shine mb-8">Painel Administrativo</h1>
 
         {/* Tabs */}
-        <div className="flex gap-4 mb-8 border-b border-gold/20 pb-1">
+        <div className="flex gap-4 mb-8 border-b border-gold/20 pb-1 overflow-x-auto">
           <button 
             onClick={() => setActiveTab('updates')}
-            className={`font-cinzel uppercase text-sm tracking-wider pb-2 px-2 transition-all ${activeTab === 'updates' ? 'text-gold border-b-2 border-gold' : 'text-warm-dim hover:text-warm'}`}
+            className={`font-cinzel uppercase text-sm tracking-wider pb-2 px-2 transition-all whitespace-nowrap ${activeTab === 'updates' ? 'text-gold border-b-2 border-gold' : 'text-warm-dim hover:text-warm'}`}
           >
             Atualizações
           </button>
           <button 
             onClick={() => setActiveTab('suggestions')}
-            className={`font-cinzel uppercase text-sm tracking-wider pb-2 px-2 transition-all ${activeTab === 'suggestions' ? 'text-gold border-b-2 border-gold' : 'text-warm-dim hover:text-warm'}`}
+            className={`font-cinzel uppercase text-sm tracking-wider pb-2 px-2 transition-all whitespace-nowrap ${activeTab === 'suggestions' ? 'text-gold border-b-2 border-gold' : 'text-warm-dim hover:text-warm'}`}
           >
-            Sugestões / Enquetes
+            Enquetes
+          </button>
+          <button 
+            onClick={() => setActiveTab('pages')}
+            className={`font-cinzel uppercase text-sm tracking-wider pb-2 px-2 transition-all whitespace-nowrap ${activeTab === 'pages' ? 'text-gold border-b-2 border-gold' : 'text-warm-dim hover:text-warm'}`}
+          >
+            Páginas
+          </button>
+          <button 
+            onClick={() => setActiveTab('coupons')}
+            className={`font-cinzel uppercase text-sm tracking-wider pb-2 px-2 transition-all whitespace-nowrap ${activeTab === 'coupons' ? 'text-gold border-b-2 border-gold' : 'text-warm-dim hover:text-warm'}`}
+          >
+            Cupons
           </button>
         </div>
+
+        {/* --- TAB: PAGES --- */}
+        {activeTab === 'pages' && <PagesAdmin />}
+
+        {/* --- TAB: COUPONS --- */}
+        {activeTab === 'coupons' && <CouponsAdmin />}
 
         {/* --- TAB: UPDATES --- */}
         {activeTab === 'updates' && (

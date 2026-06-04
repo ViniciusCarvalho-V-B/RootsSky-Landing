@@ -1,4 +1,14 @@
-export type Category = "ranks" | "coins" | "bundles";
+export type Category = "ranks" | "keys";
+
+export interface ProductOption {
+  id: string; // ex: "chave_rara_5"
+  label: string; // "5 Chaves (-10%)"
+  quantity: number; // 5
+  price: string; // "R$ 4,45"
+  rawPrice: number; // 4.45
+  originalPrice?: string; // "R$ 4,95"
+  badge?: string; // "10% OFF"
+}
 
 export interface Product {
   id: string;
@@ -11,7 +21,8 @@ export interface Product {
   badgeVariant?: "emerald" | "gold" | "cyan";
   perks?: string[];
   popular?: boolean;
-  command: string;
+  command: string; // Aceita {quantity} se houver options
+  options?: ProductOption[];
 }
 
 export const storeItems: Record<Category, Product[]> = {
@@ -19,8 +30,8 @@ export const storeItems: Record<Category, Product[]> = {
     {
       id: "raiz_ascendente",
       name: "Raiz Ascendente",
-      price: "R$ 1,00",
-      rawPrice: 1.00,
+      price: "R$ 10,99",
+      rawPrice: 10.99,
       description: "O primeiro passo em direção aos céus. Tag: [Ascendente]",
       badge: "VIP I",
       badgeVariant: "emerald",
@@ -50,7 +61,7 @@ export const storeItems: Record<Category, Product[]> = {
         "Acesso ao /is fly na própria ilha",
         "Acesso virtual: /craft, /feed, /ec",
       ],
-      command: "lp user {name} group set ancestral; passeadmin givevip {name}; eco give {name} 250000; crates key give {name} spawner_key 7; crates key give {name} epic_key 15; crates key give {name} block_key 20"
+      command: "lp user {name} group set ancestral; passeadmin givevip {name}; eco give {name} 250000; crates key give {name} spawner_key 7; crates key give {name} epic_key 15; crates key give {name} blocks_key 20"
     },
     {
       id: "raiz_celeste",
@@ -68,119 +79,98 @@ export const storeItems: Record<Category, Product[]> = {
         "Acesso ao /fly em qualquer lugar",
         "Upgrades extras na Ilha e 3 baús virtuais",
       ],
-      command: "lp user {name} group set celeste; passeadmin givevip {name}; crates key give {name} spawner_key 15; crates key give {name} epic_key 30; crates key give {name} block_key 30"
+      command: "lp user {name} group set celeste; passeadmin givevip {name}; crates key give {name} spawner_key 15; crates key give {name} epic_key 30; crates key give {name} blocks_key 30"
     },
   ],
-  coins: [
+  keys: [
     {
-      id: "coins_1k",
-      name: "1.000 Moedas",
-      price: "R$ 9,90",
-      rawPrice: 9.9,
-      description: "Um impulso de moedas para sua ilha.",
-      perks: ["Entrega instantânea", "Use na /shop"],
-      command: "eco give {name} 1000"
+      id: "chave_rara",
+      name: "Chave Rara",
+      price: "R$ 0,99",
+      rawPrice: 0.99,
+      description: "Desbloqueie caixas raras e consiga recompensas básicas.",
+      perks: ["Itens Básicos", "Moedas", "XP"],
+      command: "crates key give {name} rara_key {quantity}",
+      options: [
+        { id: "chave_rara_1", label: "1 Chave", quantity: 1, rawPrice: 0.99, price: "R$ 0,99" },
+        { id: "chave_rara_5", label: "5 Chaves", quantity: 5, rawPrice: 4.45, price: "R$ 4,45", originalPrice: "R$ 4,95", badge: "10% OFF" },
+        { id: "chave_rara_10", label: "10 Chaves", quantity: 10, rawPrice: 8.41, price: "R$ 8,41", originalPrice: "R$ 9,90", badge: "15% OFF" },
+        { id: "chave_rara_20", label: "20 Chaves", quantity: 20, rawPrice: 15.84, price: "R$ 15,84", originalPrice: "R$ 19,80", badge: "20% OFF" },
+      ]
     },
     {
-      id: "coins_5k",
-      name: "5.000 Moedas",
-      price: "R$ 39,90",
-      rawPrice: 39.9,
-      originalPrice: "R$ 49,50",
-      description: "Melhor custo-benefício — economize 20%!",
-      badge: "20% OFF",
+      id: "chave_blocos",
+      name: "Chave de Blocos",
+      price: "R$ 1,50",
+      rawPrice: 1.50,
+      description: "Caixa focada em blocos de construção e decoração.",
+      perks: ["Blocos Raros", "Decorações", "Itens de Ilha"],
+      command: "crates key give {name} blocks_key {quantity}",
+      options: [
+        { id: "chave_blocos_1", label: "1 Chave", quantity: 1, rawPrice: 1.50, price: "R$ 1,50" },
+        { id: "chave_blocos_5", label: "5 Chaves", quantity: 5, rawPrice: 6.75, price: "R$ 6,75", originalPrice: "R$ 7,50", badge: "10% OFF" },
+        { id: "chave_blocos_10", label: "10 Chaves", quantity: 10, rawPrice: 12.75, price: "R$ 12,75", originalPrice: "R$ 15,00", badge: "15% OFF" },
+        { id: "chave_blocos_20", label: "20 Chaves", quantity: 20, rawPrice: 24.00, price: "R$ 24,00", originalPrice: "R$ 30,00", badge: "20% OFF" },
+      ]
+    },
+    {
+      id: "chave_epica",
+      name: "Chave Épica",
+      price: "R$ 1,99",
+      rawPrice: 1.99,
+      description: "Acesse recompensas valiosas e itens especiais.",
+      badge: "Mais Vendida",
       badgeVariant: "gold",
       popular: true,
-      perks: [
-        "Entrega instantânea",
-        "Use na /shop",
-        "Bônus de 20% no valor",
-      ],
-      command: "eco give {name} 5000"
+      perks: ["Equipamentos Fortes", "Boosters", "Itens Raros"],
+      command: "crates key give {name} epic_key {quantity}",
+      options: [
+        { id: "chave_epica_1", label: "1 Chave", quantity: 1, rawPrice: 1.99, price: "R$ 1,99" },
+        { id: "chave_epica_5", label: "5 Chaves", quantity: 5, rawPrice: 8.95, price: "R$ 8,95", originalPrice: "R$ 9,95", badge: "10% OFF" },
+        { id: "chave_epica_10", label: "10 Chaves", quantity: 10, rawPrice: 16.91, price: "R$ 16,91", originalPrice: "R$ 19,90", badge: "15% OFF" },
+        { id: "chave_epica_20", label: "20 Chaves", quantity: 20, rawPrice: 31.84, price: "R$ 31,84", originalPrice: "R$ 39,80", badge: "20% OFF" },
+      ]
     },
     {
-      id: "coins_10k",
-      name: "10.000 Moedas",
-      price: "R$ 69,90",
-      rawPrice: 69.9,
-      originalPrice: "R$ 99,00",
-      description: "O pacote definitivo — economize 30%!",
-      badge: "30% OFF",
+      id: "chave_spawner",
+      name: "Chave Spawner",
+      price: "R$ 2,99",
+      rawPrice: 2.99,
+      description: "A chance de conseguir spawners raros para sua farm.",
+      badge: "Valioso",
       badgeVariant: "cyan",
-      perks: [
-        "Entrega instantânea",
-        "Use na /shop",
-        "Bônus de 30% no valor",
-      ],
-      command: "eco give {name} 10000"
-    },
-  ],
-  bundles: [
-    {
-      id: "pacote_semente",
-      name: "Pacote Semente",
-      price: "R$ 24,90",
-      rawPrice: 24.9,
-      originalPrice: "R$ 34,80",
-      description: "Tudo que você precisa para começar forte.",
-      badge: "Economize 28%",
-      badgeVariant: "emerald",
-      perks: [
-        "Acesso ao Passe VIP",
-        "Rank Semente",
-        "1.000 Moedas",
-        "Kit Iniciante",
-        "Expansão de Ilha",
-      ],
-      command: "pex user {name} group set semente; eco give {name} 1000; passeadmin givevip {name}"
-    },
-    {
-      id: "pacote_raiz_viva",
-      name: "Pacote Raiz Viva",
-      price: "R$ 54,90",
-      rawPrice: 54.9,
-      originalPrice: "R$ 79,80",
-      description: "O pacote mais popular para jogadores dedicados.",
-      badge: "Mais Popular",
-      badgeVariant: "gold",
-      popular: true,
-      perks: [
-        "Acesso ao Passe VIP",
-        "Rank Raiz Viva",
-        "5.000 Moedas",
-        "Kit Premium",
-        "2x Expansão de Ilha",
-        "Pet Exclusivo",
-      ],
-      command: "pex user {name} group set raiz_viva; eco give {name} 5000; passeadmin givevip {name}"
-    },
-    {
-      id: "pacote_yggdrasil",
-      name: "Pacote Yggdrasil",
-      price: "R$ 99,90",
-      rawPrice: 99.9,
-      originalPrice: "R$ 158,80",
-      description: "O pacote completo definitivo. Economize 37%!",
-      badge: "Melhor Oferta",
-      badgeVariant: "cyan",
-      perks: [
-        "Acesso ao Passe VIP",
-        "Rank Yggdrasil",
-        "10.000 Moedas",
-        "Todos os Kits",
-        "5x Expansão de Ilha",
-        "3 Pets Exclusivos",
-        "Aura Personalizada",
-      ],
-      command: "pex user {name} group set yggdrasil; eco give {name} 10000; passeadmin givevip {name}"
-    },
-  ],
+      perks: ["Spawners", "Ovos de Monstros", "Dinheiro"],
+      command: "crates key give {name} spawner_key {quantity}",
+      options: [
+        { id: "chave_spawner_1", label: "1 Chave", quantity: 1, rawPrice: 2.99, price: "R$ 2,99" },
+        { id: "chave_spawner_5", label: "5 Chaves", quantity: 5, rawPrice: 13.45, price: "R$ 13,45", originalPrice: "R$ 14,95", badge: "10% OFF" },
+        { id: "chave_spawner_10", label: "10 Chaves", quantity: 10, rawPrice: 25.41, price: "R$ 25,41", originalPrice: "R$ 29,90", badge: "15% OFF" },
+        { id: "chave_spawner_20", label: "20 Chaves", quantity: 20, rawPrice: 47.84, price: "R$ 47,84", originalPrice: "R$ 59,80", badge: "20% OFF" },
+      ]
+    }
+  ]
 };
 
 // Catalogo achatado para facilitar a busca no backend por ID
 export const CATALOG = Object.values(storeItems).reduce((acc, items) => {
   items.forEach(item => {
     acc[item.id] = item;
+    // Cadastrar também as opções como produtos válidos no carrinho/checkout
+    if (item.options) {
+      item.options.forEach(opt => {
+        // Criar um pseudo-produto para cada opção, herdando o ID base mas substituindo valores
+        acc[opt.id] = {
+          ...item,
+          id: opt.id,
+          name: `${item.name} (${opt.label})`,
+          price: opt.price,
+          rawPrice: opt.rawPrice,
+          originalPrice: opt.originalPrice,
+          // Vamos substituir {quantity} no comando base pela quantidade dessa opção
+          command: item.command.replace("{quantity}", opt.quantity.toString())
+        };
+      });
+    }
   });
   return acc;
 }, {} as Record<string, Product>);
