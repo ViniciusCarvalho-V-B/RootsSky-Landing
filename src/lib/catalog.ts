@@ -31,7 +31,7 @@ export const storeItems: Record<Category, Product[]> = {
         "Acesso ao Kit Ascendente semanal",
         "Acesso ao chat colorido",
       ],
-      command: "lp user {name} group set ascendente; passeadmin givevip {name}; eco give {name} 100000; crates key give {name} spawner_key 3; crates key give {name} epic_key 5; crates key give {name} block_key 10"
+      command: "lp user {name} group set ascendente; passeadmin givevip {name}; eco give {name} 100000; crates key give {name} spawner_key 3; crates key give {name} epic_key 5; crates key give {name} blocks_key 10"
     },
     {
       id: "raiz_ancestral",
