@@ -386,6 +386,18 @@ function StorePageContent() {
                 </div>
               )}
 
+              {/* Botão de Seta para Abrir/Fechar Dropdown */}
+              <button 
+                type="button"
+                onClick={() => setIsCouponDropdownOpen(!isCouponDropdownOpen)}
+                className="text-warm-dim hover:text-gold p-1 transition-colors"
+                title="Ver cupons disponíveis"
+              >
+                <svg className={`w-4 h-4 transition-transform ${isCouponDropdownOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
               {couponCode && (
                 <button 
                   onClick={() => {
