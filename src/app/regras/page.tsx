@@ -1,6 +1,6 @@
 import DynamicPage from "@/components/DynamicPage";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 const defaultRules = `
 Seja bem-vindo ao RootsSky! Para manter uma comunidade divertida e segura, todos os jogadores devem respeitar as regras abaixo.

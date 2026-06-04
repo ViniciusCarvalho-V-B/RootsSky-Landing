@@ -1,6 +1,6 @@
 import DynamicPage from "@/components/DynamicPage";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 const defaultVipBenefits = `
 Ao adquirir um rank VIP em nossa loja, você não apenas apoia os custos de manutenção e desenvolvimento do servidor, mas também ganha recompensas exclusivas, facilitadores de jogabilidade e cosméticos únicos que destacam sua presença no **RootsSky**.

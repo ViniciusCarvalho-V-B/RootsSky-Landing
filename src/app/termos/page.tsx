@@ -1,6 +1,6 @@
 import DynamicPage from "@/components/DynamicPage";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 const defaultTOS = `
 Bem-vindo ao RootsSky. Ao acessar, jogar ou utilizar qualquer serviço relacionado ao nosso servidor (incluindo o servidor do Minecraft, o site e a nossa loja), você concorda com estes Termos de Serviço em sua totalidade. Se você não concordar com qualquer parte deste documento, você deve cessar imediatamente o uso de nossos serviços.

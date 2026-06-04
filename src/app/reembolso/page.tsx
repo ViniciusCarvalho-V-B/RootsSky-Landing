@@ -1,6 +1,6 @@
 import DynamicPage from "@/components/DynamicPage";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 const defaultRefunds = `
 Esta política tem força de contrato digital irrevogável entre você (o comprador e/ou titular do meio de pagamento) e a rede RootsSky, e entra em vigor no momento exato em que uma transação é confirmada em nossa loja.
