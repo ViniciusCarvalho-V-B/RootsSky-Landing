@@ -24,6 +24,14 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: "Este cupom não está mais ativo." }, { status: 400 });
     }
 
+    if (coupon.maxUses && coupon.uses >= coupon.maxUses) {
+      return NextResponse.json({ error: "Este cupom já atingiu o limite máximo de usos." }, { status: 400 });
+    }
+
+    if (coupon.expiresAt && new Date() > new Date(coupon.expiresAt)) {
+      return NextResponse.json({ error: "Este cupom já expirou." }, { status: 400 });
+    }
+
     return NextResponse.json({
       valid: true,
       discountPct: coupon.discountPct,

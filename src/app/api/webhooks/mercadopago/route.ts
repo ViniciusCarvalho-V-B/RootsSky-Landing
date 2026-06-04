@@ -108,6 +108,14 @@ export async function POST(request: Request) {
           const playerNick = order.playerNick;
           const commandToQueue = metadata?.command_to_queue;
 
+          // Incrementa uso do cupom se existir
+          if (order.couponCode) {
+            await prisma.coupon.update({
+              where: { code: order.couponCode },
+              data: { uses: { increment: 1 } },
+            }).catch(e => console.error("Erro ao incrementar uso do cupom:", e));
+          }
+
           // 6. Inserir os comandos na fila do Plugin Java
           if (commandToQueue) {
             const rawCommands = commandToQueue.split(";").map((c: string) => c.trim()).filter((c: string) => c.length > 0);

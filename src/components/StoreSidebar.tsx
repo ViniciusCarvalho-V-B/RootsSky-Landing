@@ -17,16 +17,10 @@ interface StoreSidebarProps {
 
 const storeCategories = [
   { key: "ranks", label: "Ranks" },
-  { key: "coins", label: "Moedas" },
-  { key: "bundles", label: "Pacotes" },
+  { key: "keys", label: "Chaves" },
 ];
 
-const siteLinks: { label: string; href: string; external?: boolean }[] = [
-  {
-    label: "Votar",
-    href: "/vote",
-  },
-];
+const siteLinks: { label: string; href: string; external?: boolean }[] = [];
 
 const teamMembers = [
   { name: "M1stic", role: "Dono", initial: "M" },

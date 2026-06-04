@@ -27,11 +27,23 @@ export async function POST(request: Request) {
     if (couponCode) {
       const coupon = await prisma.coupon.findUnique({ where: { code: couponCode } });
       if (coupon && coupon.isActive) {
-        // Verifica se é elegível
-        const isEligible = !coupon.eligibleItems || coupon.eligibleItems.split(",").includes(item.id);
-        if (isEligible) {
-          finalPrice = parseFloat((finalPrice * (1 - coupon.discountPct / 100)).toFixed(2));
-          appliedCoupon = coupon.code;
+        let isValid = true;
+        
+        if (coupon.maxUses && coupon.uses >= coupon.maxUses) {
+          isValid = false;
+        }
+        
+        if (coupon.expiresAt && new Date() > new Date(coupon.expiresAt)) {
+          isValid = false;
+        }
+
+        if (isValid) {
+          // Verifica se é elegível
+          const isEligible = !coupon.eligibleItems || coupon.eligibleItems.split(",").includes(item.id);
+          if (isEligible) {
+            finalPrice = parseFloat((finalPrice * (1 - coupon.discountPct / 100)).toFixed(2));
+            appliedCoupon = coupon.code;
+          }
         }
       }
     }
@@ -43,6 +55,7 @@ export async function POST(request: Request) {
         playerUuid,
         totalAmount: finalPrice,
         status: "PENDING",
+        couponCode: appliedCoupon,
         items: {
           create: {
             productId: item.id,
@@ -63,6 +76,13 @@ export async function POST(request: Request) {
           status: "pending_delivery", 
         },
       });
+      // Incrementa uso do cupom se existir
+      if (order.couponCode) {
+        await prisma.coupon.update({
+          where: { code: order.couponCode },
+          data: { uses: { increment: 1 } },
+        }).catch(e => console.error("Erro ao incrementar uso do cupom mock:", e));
+      }
       
       // Simula o processamento do webhook inserindo os comandos na fila
       const rawCommands = item.command.split(";").map((c) => c.trim()).filter((c) => c.length > 0);

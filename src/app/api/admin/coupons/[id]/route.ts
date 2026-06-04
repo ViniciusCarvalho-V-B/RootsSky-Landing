@@ -4,10 +4,23 @@ import { prisma } from "@/lib/prisma";
 export async function PUT(request: Request, { params }: { params: { id: string } }) {
   try {
     const body = await request.json();
-    const { code, discountPct, eligibleItems, isActive } = body;
+    const { code, discountPct, eligibleItems, maxUses, expiresAt, isActive } = body;
+    
+    let parsedExpiresAt = null;
+    if (expiresAt) {
+      parsedExpiresAt = new Date(expiresAt);
+    }
+    
     const coupon = await prisma.coupon.update({
       where: { id: params.id },
-      data: { code: code.toUpperCase(), discountPct: parseFloat(discountPct), eligibleItems, isActive }
+      data: { 
+        code: code.toUpperCase(), 
+        discountPct: parseFloat(discountPct), 
+        eligibleItems, 
+        maxUses: maxUses ? parseInt(maxUses) : null,
+        expiresAt: parsedExpiresAt,
+        isActive 
+      }
     });
     return NextResponse.json(coupon);
   } catch (error: unknown) {

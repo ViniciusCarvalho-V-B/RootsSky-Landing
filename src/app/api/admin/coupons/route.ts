@@ -9,9 +9,22 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { code, discountPct, eligibleItems, isActive } = body;
+    const { code, discountPct, eligibleItems, maxUses, expiresAt, isActive } = body;
+    
+    let parsedExpiresAt = null;
+    if (expiresAt) {
+      parsedExpiresAt = new Date(expiresAt);
+    }
+    
     const newCoupon = await prisma.coupon.create({
-      data: { code: code.toUpperCase(), discountPct: parseFloat(discountPct), eligibleItems, isActive }
+      data: { 
+        code: code.toUpperCase(), 
+        discountPct: parseFloat(discountPct), 
+        eligibleItems, 
+        maxUses: maxUses ? parseInt(maxUses) : null,
+        expiresAt: parsedExpiresAt,
+        isActive 
+      }
     });
     return NextResponse.json(newCoupon);
   } catch (error: unknown) {

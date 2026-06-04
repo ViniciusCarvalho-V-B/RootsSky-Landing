@@ -10,6 +10,8 @@ import PlayerModal from "@/components/PlayerModal";
 import StoreStats from "@/components/StoreStats";
 
 import { Category, storeItems } from "@/lib/catalog";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 function StorePageContent() {
   const searchParams = useSearchParams();
@@ -20,6 +22,7 @@ function StorePageContent() {
   const [couponCode, setCouponCode] = useState("");
   const [couponValidating, setCouponValidating] = useState(false);
   const [couponMsg, setCouponMsg] = useState<{ text: string, type: 'success'|'error' } | null>(null);
+  const [activeCoupon, setActiveCoupon] = useState<{ code: string, discountPct: number, eligibleItems: string | null } | null>(null);
 
   // Player authentication state
   const [playerNick, setPlayerNick] = useState<string | null>(null);
@@ -27,6 +30,12 @@ function StorePageContent() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [pendingProductId, setPendingProductId] = useState<string | null>(null);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
+
+  // Previews Modal
+  const [previewModalOpen, setPreviewModalOpen] = useState(false);
+  const [previewContent, setPreviewContent] = useState("");
+  const [previewLoading, setPreviewLoading] = useState(false);
+  const [previewProductName, setPreviewProductName] = useState("");
 
   const items = storeItems[active];
 
@@ -112,13 +121,35 @@ function StorePageContent() {
       const data = await res.json();
       if (res.ok && data.valid) {
         setCouponMsg({ text: `Cupom válido! -${data.discountPct}%`, type: 'success' });
+        setActiveCoupon({ code: couponCode.trim(), discountPct: data.discountPct, eligibleItems: data.eligibleItems });
       } else {
         setCouponMsg({ text: data.error || "Cupom inválido", type: 'error' });
+        setActiveCoupon(null);
       }
     } catch {
       setCouponMsg({ text: "Erro ao verificar cupom", type: 'error' });
     } finally {
       setCouponValidating(false);
+    }
+  };
+
+  const handleOpenPreview = async (productId: string, productName: string) => {
+    setPreviewProductName(productName);
+    setPreviewContent("");
+    setPreviewModalOpen(true);
+    setPreviewLoading(true);
+    try {
+      const res = await fetch(`/api/previews/${productId}`);
+      if (res.ok) {
+        const data = await res.json();
+        setPreviewContent(data.content || "*Nenhum detalhe adicional configurado para este pacote.*");
+      } else {
+        setPreviewContent("*Nenhum detalhe adicional configurado para este pacote.*");
+      }
+    } catch {
+      setPreviewContent("*Erro ao carregar detalhes do pacote.*");
+    } finally {
+      setPreviewLoading(false);
     }
   };
 
@@ -328,7 +359,12 @@ function StorePageContent() {
                   {item.name}
                 </h3>
                 <p className="relative z-10 text-sm text-warm-muted font-inter mb-4 flex-grow leading-relaxed">
-                  {item.description}
+                  {item.description.split(/(\[Ascendente\]|\[Ancestral\]|\[Celeste\])/g).map((part, i) => {
+                    if (part === "[Ascendente]") return <span key={i} className="text-roots-green font-bold">{part}</span>;
+                    if (part === "[Ancestral]") return <span key={i} className="text-leaf-light font-bold">{part}</span>;
+                    if (part === "[Celeste]") return <span key={i} className="text-cyan-400 font-bold">{part}</span>;
+                    return part;
+                  })}
                 </p>
 
                 {/* Perks */}
@@ -365,18 +401,45 @@ function StorePageContent() {
                     </select>
                   </div>
                 )}
+                
+                <div className="relative z-10 mb-4">
+                  <button 
+                    onClick={() => handleOpenPreview(currentItem.id, currentItem.name)}
+                    className="text-xs text-gold/80 hover:text-gold transition-colors underline decoration-gold/30 hover:decoration-gold/80"
+                  >
+                    Ver Benefícios Detalhados
+                  </button>
+                </div>
 
                 {/* Price & CTA */}
                 <div className="relative z-10 mt-auto">
                   <div className="flex items-baseline gap-2 mb-4">
-                    <span className="font-cinzel font-black text-2xl text-gradient-gold">
-                      {currentItem.price}
-                    </span>
-                    {currentItem.originalPrice && (
-                      <span className="text-sm text-warm-dim line-through font-inter">
-                        {currentItem.originalPrice}
-                      </span>
-                    )}
+                    {(() => {
+                      let displayPrice = currentItem.price;
+                      let oldPrice = currentItem.originalPrice;
+                      
+                      if (activeCoupon) {
+                        const isEligible = !activeCoupon.eligibleItems || activeCoupon.eligibleItems.split(",").includes(item.id);
+                        if (isEligible) {
+                          const newRawPrice = currentItem.rawPrice * (1 - activeCoupon.discountPct / 100);
+                          displayPrice = `R$ ${newRawPrice.toFixed(2).replace('.', ',')}`;
+                          oldPrice = currentItem.price;
+                        }
+                      }
+                      
+                      return (
+                        <>
+                          <span className="font-cinzel font-black text-2xl text-gradient-gold">
+                            {displayPrice}
+                          </span>
+                          {oldPrice && (
+                            <span className="text-sm text-red-400/80 line-through font-inter">
+                              {oldPrice}
+                            </span>
+                          )}
+                        </>
+                      );
+                    })()}
                   </div>
                   <Button
                     variant={item.popular ? "premium" : "primary"}
@@ -400,6 +463,57 @@ function StorePageContent() {
           </div>
         </div>
       </main>
+
+      {/* MODAL DE PREVIEW DOS BENEFÍCIOS */}
+      {previewModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
+          <div className="bg-dark-wood border-2 border-gold/40 rounded-xl shadow-2xl shadow-gold/20 w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden relative">
+            
+            {/* Header Modal */}
+            <div className="p-4 sm:p-6 border-b border-gold/20 flex justify-between items-center bg-black/20">
+              <h2 className="font-cinzel font-bold text-xl sm:text-2xl text-gold-shine uppercase tracking-wide">
+                Benefícios: {previewProductName}
+              </h2>
+              <button 
+                onClick={() => setPreviewModalOpen(false)}
+                className="text-warm-dim hover:text-warm transition-colors"
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18 6L6 18M6 6l12 12"/>
+                </svg>
+              </button>
+            </div>
+
+            {/* Content Modal */}
+            <div className="p-6 overflow-y-auto flex-1 custom-scrollbar">
+              {previewLoading ? (
+                <div className="flex flex-col items-center justify-center py-12 text-gold">
+                  <div className="w-8 h-8 border-4 border-gold/30 border-t-gold rounded-full animate-spin mb-4"></div>
+                  <p className="font-cinzel text-sm animate-pulse uppercase tracking-widest">Carregando pergaminhos...</p>
+                </div>
+              ) : (
+                <div className="prose prose-invert prose-gold max-w-none font-inter text-warm-light/90 prose-headings:font-cinzel prose-headings:text-gold prose-img:rounded-lg prose-img:border prose-img:border-gold/20 prose-a:text-gold-light hover:prose-a:text-gold prose-strong:text-gold-shine text-sm sm:text-base">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {previewContent}
+                  </ReactMarkdown>
+                </div>
+              )}
+            </div>
+
+            {/* Footer Modal */}
+            <div className="p-4 border-t border-gold/20 bg-black/40 flex justify-end">
+              <button 
+                onClick={() => setPreviewModalOpen(false)}
+                className="px-6 py-2 rounded-lg bg-wood-light/20 text-warm hover:bg-wood-light/40 border border-gold/10 hover:border-gold/40 transition-all font-inter text-sm"
+              >
+                Fechar
+              </button>
+            </div>
+            
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

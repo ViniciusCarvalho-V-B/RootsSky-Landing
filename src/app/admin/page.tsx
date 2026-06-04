@@ -6,13 +6,14 @@ import Link from "next/link";
 import { Trash2, LogOut, Plus, Star, Zap, Edit2, ImagePlus, ChevronLeft } from 'lucide-react';
 import PagesAdmin from '@/components/admin/PagesAdmin';
 import CouponsAdmin from '@/components/admin/CouponsAdmin';
+import PreviewsAdmin from '@/components/admin/PreviewsAdmin';
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
-  const [activeTab, setActiveTab] = useState<'updates' | 'suggestions' | 'pages' | 'coupons'>('updates');
+  const [activeTab, setActiveTab] = useState<'updates' | 'suggestions' | 'pages' | 'coupons' | 'previews'>('updates');
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [updates, setUpdates] = useState<any[]>([]);
@@ -305,6 +306,12 @@ export default function AdminPage() {
           >
             Cupons
           </button>
+          <button 
+            onClick={() => setActiveTab('previews')}
+            className={`font-cinzel uppercase text-sm tracking-wider pb-2 px-2 transition-all whitespace-nowrap ${activeTab === 'previews' ? 'text-gold border-b-2 border-gold' : 'text-warm-dim hover:text-warm'}`}
+          >
+            Benefícios (Previews)
+          </button>
         </div>
 
         {/* --- TAB: PAGES --- */}
@@ -312,6 +319,9 @@ export default function AdminPage() {
 
         {/* --- TAB: COUPONS --- */}
         {activeTab === 'coupons' && <CouponsAdmin />}
+
+        {/* --- TAB: PREVIEWS --- */}
+        {activeTab === 'previews' && <PreviewsAdmin />}
 
         {/* --- TAB: UPDATES --- */}
         {activeTab === 'updates' && (

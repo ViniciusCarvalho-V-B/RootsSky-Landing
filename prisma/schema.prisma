@@ -24,6 +24,7 @@ model Order {
   playerUuid      String   // UUID oficial da Mojang
   totalAmount     Float
   status          String   @default("PENDING") // PENDING, COMPLETED, REFUNDED, CANCELED
+  couponCode      String?  // Opcional: Cupom utilizado na compra
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
   
@@ -126,7 +127,22 @@ model Coupon {
   code          String   @unique
   discountPct   Float    // Porcentagem de desconto (ex: 15.0)
   eligibleItems String?  // Lista separada por virgula de IDs (ex: "raiz_ascendente,raiz_ancestral") ou null para todos
+  maxUses       Int?     // Limite máximo de usos. Null = Ilimitado
+  uses          Int      @default(0) // Contador de usos atuais
+  expiresAt     DateTime? // Data limite de uso. Null = Nunca expira
   isActive      Boolean  @default(true)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+}
+
+// -------------------------------------------------------------
+// Previews Customizáveis dos Ranks/Pacotes (Loja)
+// -------------------------------------------------------------
+
+model ProductPreview {
+  id        String   @id @default(cuid())
+  productId String   @unique // ID do catálogo, ex: "raiz_ascendente"
+  content   String   // Markdown ou HTML com os detalhes/imagens do kit
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

@@ -13,6 +13,8 @@ export default function CouponsAdmin() {
   const [discountPct, setDiscountPct] = useState("");
   const [selectedItemsIds, setSelectedItemsIds] = useState<string[]>([]);
   const [isActive, setIsActive] = useState(true);
+  const [maxUses, setMaxUses] = useState("");
+  const [expiresAt, setExpiresAt] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -35,11 +37,20 @@ export default function CouponsAdmin() {
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code, discountPct, eligibleItems: eligibleItemsStr, isActive }),
+        body: JSON.stringify({ 
+          code, 
+          discountPct, 
+          eligibleItems: eligibleItemsStr, 
+          maxUses: maxUses || null,
+          expiresAt: expiresAt || null,
+          isActive 
+        }),
       });
       if (res.ok) {
         setCode("");
         setDiscountPct("");
+        setMaxUses("");
+        setExpiresAt("");
         setSelectedItemsIds([]);
         setIsActive(true);
         setEditingId(null);
@@ -60,11 +71,12 @@ export default function CouponsAdmin() {
     setSelectedItemsIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEdit = (c: any) => {
     setEditingId(c.id);
     setCode(c.code);
     setDiscountPct(c.discountPct.toString());
+    setMaxUses(c.maxUses ? c.maxUses.toString() : "");
+    setExpiresAt(c.expiresAt ? new Date(c.expiresAt).toISOString().slice(0, 16) : "");
     setSelectedItemsIds(c.eligibleItems ? c.eligibleItems.split(',').map((s: string) => s.trim()) : []);
     setIsActive(c.isActive);
   };
@@ -115,6 +127,28 @@ export default function CouponsAdmin() {
               className="w-full bg-black/40 border border-gold/20 rounded px-4 py-2 text-warm focus:border-gold/50 focus:outline-none"
             />
           </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="text-warm-dim text-xs mb-1 block">Limite de Usos (Deixe vazio para ilimitado)</label>
+              <input
+                type="number"
+                min="1"
+                placeholder="Ex: 10"
+                value={maxUses}
+                onChange={(e) => setMaxUses(e.target.value)}
+                className="w-full bg-black/40 border border-gold/20 rounded px-4 py-2 text-warm focus:border-gold/50 focus:outline-none"
+              />
+            </div>
+            <div>
+              <label className="text-warm-dim text-xs mb-1 block">Data de Validade (Deixe vazio para não expirar)</label>
+              <input
+                type="datetime-local"
+                value={expiresAt}
+                onChange={(e) => setExpiresAt(e.target.value)}
+                className="w-full bg-black/40 border border-gold/20 rounded px-4 py-2 text-warm focus:border-gold/50 focus:outline-none"
+              />
+            </div>
+          </div>
           <div>
             <label className="text-warm-dim text-xs mb-2 block">Itens Elegíveis (Deixe vazio para aplicar a todos da loja)</label>
             <div className="bg-black/40 border border-gold/20 rounded max-h-48 overflow-y-auto p-2 space-y-1">
@@ -152,6 +186,8 @@ export default function CouponsAdmin() {
                   setEditingId(null);
                   setCode("");
                   setDiscountPct("");
+                  setMaxUses("");
+                  setExpiresAt("");
                   setSelectedItemsIds([]);
                   setIsActive(true);
                 }}
@@ -173,7 +209,12 @@ export default function CouponsAdmin() {
                 <span className="text-roots-green font-bold bg-roots-green/10 px-2 py-0.5 rounded text-sm">-{c.discountPct}%</span>
                 {!c.isActive && <span className="text-red-400 text-xs border border-red-400/30 px-2 rounded">Inativo</span>}
               </div>
-              <p className="text-warm-dim text-xs mt-1">Elegível: {c.eligibleItems || "Todos os itens da loja"}</p>
+              <p className="text-warm-dim text-xs mt-1">
+                Elegível: {c.eligibleItems || "Todos os itens da loja"}
+                <br />
+                Usos: {c.uses} / {c.maxUses || "∞"} 
+                {c.expiresAt && ` | Expira em: ${new Date(c.expiresAt).toLocaleString('pt-BR')}`}
+              </p>
             </div>
             <div className="flex gap-2 opacity-50 group-hover:opacity-100 transition-opacity">
               <button onClick={() => toggleStatus(c)} className="p-2 hover:bg-gold/20 rounded text-gold-light text-sm">
