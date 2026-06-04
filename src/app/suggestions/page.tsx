@@ -65,9 +65,12 @@ export default function SuggestionsPage() {
     }
 
     // Tenta recuperar historico de votos local (para UI rapida)
-    const storedVotes = localStorage.getItem("roots_votes");
+    const storedVotes = storedUuid ? localStorage.getItem(`roots_votes_${storedUuid}`) : null;
     if (storedVotes) {
       try { setVotedIds(JSON.parse(storedVotes)); } catch {}
+    } else {
+      const oldVotes = localStorage.getItem("roots_votes");
+      if (oldVotes) { try { setVotedIds(JSON.parse(oldVotes)); } catch {} }
     }
 
     fetchSuggestions('all');
@@ -107,12 +110,19 @@ export default function SuggestionsPage() {
         setNickError("Jogador não encontrado ou erro na API.");
       } else {
         const nick = data.name;
-        const uuid = data.id;
+        const uuid = data.uuid;
         
         setPlayerNick(nick);
         setPlayerUuid(uuid);
         localStorage.setItem("roots_nick", nick);
         localStorage.setItem("roots_uuid", uuid);
+        
+        const specificVotes = localStorage.getItem(`roots_votes_${uuid}`);
+        if (specificVotes) {
+          try { setVotedIds(JSON.parse(specificVotes)); } catch {}
+        } else {
+          setVotedIds({});
+        }
         
         setShowNickModal(false);
 
@@ -159,7 +169,7 @@ export default function SuggestionsPage() {
           // Já votou no servidor mas nao tinhamos no local storage
           const newVoted = { ...votedIds, [suggestionId]: { type: voteType, optionId } };
           setVotedIds(newVoted);
-          localStorage.setItem("roots_votes", JSON.stringify(newVoted));
+          localStorage.setItem(`roots_votes_${uuid}`, JSON.stringify(newVoted));
         }
         alert(data.error || "Erro ao computar voto.");
         return;
@@ -168,7 +178,7 @@ export default function SuggestionsPage() {
       // Sucesso - atualiza UI localmente para refletir imediatamente sem refetch completo
       const newVoted = { ...votedIds, [suggestionId]: { type: voteType, optionId } };
       setVotedIds(newVoted);
-      localStorage.setItem("roots_votes", JSON.stringify(newVoted));
+      localStorage.setItem(`roots_votes_${uuid}`, JSON.stringify(newVoted));
 
       setSuggestions(prev => prev.map(sug => {
         if (sug.id !== suggestionId) return sug;

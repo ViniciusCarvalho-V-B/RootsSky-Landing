@@ -229,6 +229,9 @@ export default function HeroSection() {
                 <a href="/suggestions" className="medieval-btn">
                   Sugestões
                 </a>
+                <a href="/regras" className="medieval-btn text-gold border-gold/40 hover:bg-gold/10">
+                  Regras
+                </a>
               </div>
             </div>
           </div>

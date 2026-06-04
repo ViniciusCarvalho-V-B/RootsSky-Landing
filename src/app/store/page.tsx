@@ -18,6 +18,8 @@ function StorePageContent() {
   const [showSuccessToast, setShowSuccessToast] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
   const [couponCode, setCouponCode] = useState("");
+  const [couponValidating, setCouponValidating] = useState(false);
+  const [couponMsg, setCouponMsg] = useState<{ text: string, type: 'success'|'error' } | null>(null);
 
   // Player authentication state
   const [playerNick, setPlayerNick] = useState<string | null>(null);
@@ -98,6 +100,25 @@ function StorePageContent() {
     } catch {
       alert("Erro de conexão ao processar compra.");
       setIsCheckingOut(false);
+    }
+  };
+
+  const handleValidateCoupon = async () => {
+    if (!couponCode.trim()) return;
+    setCouponValidating(true);
+    setCouponMsg(null);
+    try {
+      const res = await fetch(`/api/coupons/validate?code=${couponCode.trim()}`);
+      const data = await res.json();
+      if (res.ok && data.valid) {
+        setCouponMsg({ text: `Cupom válido! -${data.discountPct}%`, type: 'success' });
+      } else {
+        setCouponMsg({ text: data.error || "Cupom inválido", type: 'error' });
+      }
+    } catch {
+      setCouponMsg({ text: "Erro ao verificar cupom", type: 'error' });
+    } finally {
+      setCouponValidating(false);
     }
   };
 
@@ -244,17 +265,32 @@ function StorePageContent() {
           </div>
 
           {/* Coupon Input */}
-          <div className="flex justify-center mb-8 animate-slide-up" style={{ animationDelay: "0.2s" }}>
+          <div className="flex flex-col items-center justify-center mb-8 animate-slide-up" style={{ animationDelay: "0.2s" }}>
             <div className="bg-wood/50 border border-gold/20 p-2 rounded-lg flex items-center gap-2 max-w-sm w-full">
               <span className="text-xl px-2">🎟️</span>
               <input 
                 type="text" 
                 placeholder="Cupom de Desconto" 
                 value={couponCode}
-                onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                onChange={(e) => {
+                  setCouponCode(e.target.value.toUpperCase());
+                  if (couponMsg) setCouponMsg(null);
+                }}
                 className="bg-transparent border-none text-warm-light placeholder:text-warm-dim/50 focus:outline-none flex-grow uppercase font-cinzel font-bold text-sm"
               />
+              <button
+                onClick={handleValidateCoupon}
+                disabled={couponValidating || !couponCode.trim()}
+                className="bg-gold/10 hover:bg-gold/20 text-gold-shine px-4 py-1.5 rounded text-sm font-bold transition-colors disabled:opacity-50"
+              >
+                {couponValidating ? "..." : "Aplicar"}
+              </button>
             </div>
+            {couponMsg && (
+              <p className={`mt-2 text-sm font-bold ${couponMsg.type === 'success' ? 'text-roots-green' : 'text-red-400'}`}>
+                {couponMsg.text}
+              </p>
+            )}
           </div>
 
           {/* Product Grid */}

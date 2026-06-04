@@ -15,7 +15,7 @@ export default async function DynamicPage({ slug, defaultTitle, defaultContent }
   const content = page?.content || defaultContent;
 
   return (
-    <div className="min-h-screen bg-dark-wood py-16 stars-bg relative">
+    <div className="min-h-screen bg-dark-wood pt-[120px] pb-24 stars-bg relative">
       {/* Green ambient glow */}
       <div
         className="absolute inset-0 pointer-events-none"

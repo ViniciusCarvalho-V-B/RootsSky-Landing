@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from "react";
+import { STORE_CATALOG } from "@/lib/catalog";
+
+const allCatalogItems = [
+  ...STORE_CATALOG.ranks.map(cat => cat.options ? cat.options.map(o => ({ id: o.id, name: `${cat.name} - ${o.name}` })) : [{ id: cat.id, name: cat.name }]).flat(),
+  ...STORE_CATALOG.keys.map(cat => cat.options ? cat.options.map(o => ({ id: o.id, name: `${cat.name} - ${o.name}` })) : [{ id: cat.id, name: cat.name }]).flat()
+];
 
 export default function CouponsAdmin() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [coupons, setCoupons] = useState<any[]>([]);
   const [code, setCode] = useState("");
   const [discountPct, setDiscountPct] = useState("");
-  const [eligibleItems, setEligibleItems] = useState("");
+  const [selectedItemsIds, setSelectedItemsIds] = useState<string[]>([]);
   const [isActive, setIsActive] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -25,15 +31,16 @@ export default function CouponsAdmin() {
     try {
       const url = editingId ? `/api/admin/coupons/${editingId}` : "/api/admin/coupons";
       const method = editingId ? "PUT" : "POST";
+      const eligibleItemsStr = selectedItemsIds.length > 0 ? selectedItemsIds.join(',') : null;
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code, discountPct, eligibleItems: eligibleItems || null, isActive }),
+        body: JSON.stringify({ code, discountPct, eligibleItems: eligibleItemsStr, isActive }),
       });
       if (res.ok) {
         setCode("");
         setDiscountPct("");
-        setEligibleItems("");
+        setSelectedItemsIds([]);
         setIsActive(true);
         setEditingId(null);
         fetchCoupons();
@@ -49,12 +56,16 @@ export default function CouponsAdmin() {
     }
   };
 
+  const toggleItem = (id: string) => {
+    setSelectedItemsIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
+  };
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEdit = (c: any) => {
     setEditingId(c.id);
     setCode(c.code);
     setDiscountPct(c.discountPct.toString());
-    setEligibleItems(c.eligibleItems || "");
+    setSelectedItemsIds(c.eligibleItems ? c.eligibleItems.split(',').map((s: string) => s.trim()) : []);
     setIsActive(c.isActive);
   };
 
@@ -105,14 +116,20 @@ export default function CouponsAdmin() {
             />
           </div>
           <div>
-            <label className="text-warm-dim text-xs mb-1 block">IDs Elegíveis (Separados por vírgula. Deixe em branco para todos os itens)</label>
-            <input
-              type="text"
-              placeholder="Ex: raiz_ascendente,chave_rara"
-              value={eligibleItems}
-              onChange={(e) => setEligibleItems(e.target.value)}
-              className="w-full bg-black/40 border border-gold/20 rounded px-4 py-2 text-warm focus:border-gold/50 focus:outline-none font-mono text-sm"
-            />
+            <label className="text-warm-dim text-xs mb-2 block">Itens Elegíveis (Deixe vazio para aplicar a todos da loja)</label>
+            <div className="bg-black/40 border border-gold/20 rounded max-h-48 overflow-y-auto p-2 space-y-1">
+              {allCatalogItems.map(item => (
+                <label key={item.id} className="flex items-center gap-2 cursor-pointer hover:bg-gold/5 p-1 rounded">
+                  <input 
+                    type="checkbox"
+                    checked={selectedItemsIds.includes(item.id)}
+                    onChange={() => toggleItem(item.id)}
+                    className="accent-gold w-3 h-3"
+                  />
+                  <span className="text-warm-light text-sm">{item.name}</span>
+                </label>
+              ))}
+            </div>
           </div>
           <div className="flex items-center gap-2">
             <input
@@ -135,7 +152,7 @@ export default function CouponsAdmin() {
                   setEditingId(null);
                   setCode("");
                   setDiscountPct("");
-                  setEligibleItems("");
+                  setSelectedItemsIds([]);
                   setIsActive(true);
                 }}
                 className="bg-red-500/10 text-red-400 hover:bg-red-500/20 px-6 py-2 rounded-lg font-cinzel font-bold text-sm transition-colors border border-red-500/20"

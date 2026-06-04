@@ -26,7 +26,6 @@ const siteLinks: { label: string; href: string; external?: boolean }[] = [
     label: "Votar",
     href: "/vote",
   },
-  { label: "Regras", href: "#" },
 ];
 
 const teamMembers = [
