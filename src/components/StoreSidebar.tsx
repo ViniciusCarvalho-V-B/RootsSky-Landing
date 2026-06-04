@@ -157,9 +157,9 @@ export default function StoreSidebar({
               {loading ? "..." : (online ? players : "OFF")}
             </span>
           </div>
-          <div className="font-jetbrains font-bold text-xs text-gold-shine uppercase tracking-wider overflow-hidden text-ellipsis whitespace-nowrap px-1 max-w-full">
-            ROOTSSKY.HASKHOSTING.COM.BR
-          </div>
+          <p className="font-cinzel font-black text-gold text-lg tracking-wider drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
+            JOGAR.ROOTSSKY.APP
+          </p>
           <span className="text-warm-dim text-[9px] uppercase tracking-widest">
             {copied ? (
               <span className="text-leaf-light">✓ Copiado!</span>

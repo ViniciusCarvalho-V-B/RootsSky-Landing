@@ -8,6 +8,8 @@ export interface ProductOption {
   rawPrice: number; // 4.45
   originalPrice?: string; // "R$ 4,95"
   badge?: string; // "10% OFF"
+  duration?: string; // "30d", "90d", etc
+  command?: string; // Para sobrescrever o comando base
 }
 
 export interface Product {
@@ -42,7 +44,13 @@ export const storeItems: Record<Category, Product[]> = {
         "Acesso ao Kit Ascendente semanal",
         "Acesso ao chat colorido",
       ],
-      command: "lp user {name} group set ascendente; passeadmin givevip {name}; eco give {name} 100000; crates key give {name} spawner_key 3; crates key give {name} epic_key 5; crates key give {name} blocks_key 10"
+      command: "lp user {name} parent addtemp ascendente {duration}; passeadmin givevip {name} {duration}; eco give {name} 100000; crates key give {name} spawner_key 3; crates key give {name} epic_key 5; crates key give {name} blocks_key 10; minecraft:title @a times 10 80 20; minecraft:title @a title {\"text\":\"NOVA RAIZ ASCENDENTE!\",\"color\":\"green\",\"bold\":true}; minecraft:title @a subtitle [{\"text\":\"O jogador \",\"color\":\"gray\"},{\"text\":\"{name}\",\"color\":\"green\",\"bold\":true},{\"text\":\" adquiriu o VIP I!\",\"color\":\"gray\"}]",
+      options: [
+        { id: "ascendente_1m", label: "1 Mês", quantity: 1, duration: "30d", rawPrice: 10.99, price: "R$ 10,99" },
+        { id: "ascendente_3m", label: "3 Meses", quantity: 1, duration: "90d", rawPrice: 31.32, price: "R$ 31,32", originalPrice: "R$ 32,97", badge: "5% OFF" },
+        { id: "ascendente_6m", label: "6 Meses", quantity: 1, duration: "180d", rawPrice: 59.34, price: "R$ 59,34", originalPrice: "R$ 65,94", badge: "10% OFF" },
+        { id: "ascendente_12m", label: "12 Meses", quantity: 1, duration: "365d", rawPrice: 112.09, price: "R$ 112,09", originalPrice: "R$ 131,88", badge: "15% OFF" },
+      ]
     },
     {
       id: "raiz_ancestral",
@@ -61,7 +69,13 @@ export const storeItems: Record<Category, Product[]> = {
         "Acesso ao /is fly na própria ilha",
         "Acesso virtual: /craft, /feed, /ec",
       ],
-      command: "lp user {name} group set ancestral; passeadmin givevip {name}; eco give {name} 250000; crates key give {name} spawner_key 7; crates key give {name} epic_key 15; crates key give {name} blocks_key 20"
+      command: "lp user {name} parent addtemp ancestral {duration}; passeadmin givevip {name} {duration}; eco give {name} 250000; crates key give {name} spawner_key 7; crates key give {name} epic_key 15; crates key give {name} blocks_key 20; minecraft:title @a times 10 80 20; minecraft:title @a title {\"text\":\"NOVA RAIZ ANCESTRAL!\",\"color\":\"dark_green\",\"bold\":true}; minecraft:title @a subtitle [{\"text\":\"O jogador \",\"color\":\"gray\"},{\"text\":\"{name}\",\"color\":\"dark_green\",\"bold\":true},{\"text\":\" adquiriu o VIP II!\",\"color\":\"gray\"}]",
+      options: [
+        { id: "ancestral_1m", label: "1 Mês", quantity: 1, duration: "30d", rawPrice: 24.99, price: "R$ 24,99" },
+        { id: "ancestral_3m", label: "3 Meses", quantity: 1, duration: "90d", rawPrice: 71.22, price: "R$ 71,22", originalPrice: "R$ 74,97", badge: "5% OFF" },
+        { id: "ancestral_6m", label: "6 Meses", quantity: 1, duration: "180d", rawPrice: 134.94, price: "R$ 134,94", originalPrice: "R$ 149,94", badge: "10% OFF" },
+        { id: "ancestral_12m", label: "12 Meses", quantity: 1, duration: "365d", rawPrice: 254.89, price: "R$ 254,89", originalPrice: "R$ 299,88", badge: "15% OFF" },
+      ]
     },
     {
       id: "raiz_celeste",
@@ -79,7 +93,13 @@ export const storeItems: Record<Category, Product[]> = {
         "Acesso ao /fly em qualquer lugar",
         "Upgrades extras na Ilha e 3 baús virtuais",
       ],
-      command: "lp user {name} group set celeste; passeadmin givevip {name}; crates key give {name} spawner_key 15; crates key give {name} epic_key 30; crates key give {name} blocks_key 30"
+      command: "lp user {name} parent addtemp celeste {duration}; passeadmin givevip {name} {duration}; crates key give {name} spawner_key 15; crates key give {name} epic_key 30; crates key give {name} blocks_key 30; crates key give @a epic_key 1; minecraft:title @a times 10 100 20; minecraft:title @a title {\"text\":\"NOVA RAIZ CELESTE!\",\"color\":\"aqua\",\"bold\":true}; minecraft:title @a subtitle [{\"text\":\"O jogador \",\"color\":\"gray\"},{\"text\":\"{name}\",\"color\":\"aqua\",\"bold\":true},{\"text\":\" adquiriu o VIP III!\",\"color\":\"gray\"}]; minecraft:execute as @a at @s run minecraft:playsound minecraft:ui.toast.challenge_complete master @s ~ ~ ~ 1 1",
+      options: [
+        { id: "celeste_1m", label: "1 Mês", quantity: 1, duration: "30d", rawPrice: 49.99, price: "R$ 49,99" },
+        { id: "celeste_3m", label: "3 Meses", quantity: 1, duration: "90d", rawPrice: 142.47, price: "R$ 142,47", originalPrice: "R$ 149,97", badge: "5% OFF" },
+        { id: "celeste_6m", label: "6 Meses", quantity: 1, duration: "180d", rawPrice: 269.94, price: "R$ 269,94", originalPrice: "R$ 299,94", badge: "10% OFF" },
+        { id: "celeste_12m", label: "12 Meses", quantity: 1, duration: "365d", rawPrice: 509.89, price: "R$ 509,89", originalPrice: "R$ 599,88", badge: "15% OFF" },
+      ]
     },
   ],
   keys: [
@@ -166,8 +186,10 @@ export const CATALOG = Object.values(storeItems).reduce((acc, items) => {
           price: opt.price,
           rawPrice: opt.rawPrice,
           originalPrice: opt.originalPrice,
-          // Vamos substituir {quantity} no comando base pela quantidade dessa opção
-          command: item.command.replace("{quantity}", opt.quantity.toString())
+          // Vamos substituir {quantity} e {duration} no comando base
+          command: opt.command || item.command
+            .replace("{quantity}", opt.quantity.toString())
+            .replace(/{duration}/g, opt.duration || "30d")
         };
       });
     }
