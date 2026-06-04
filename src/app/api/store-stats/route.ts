@@ -8,7 +8,7 @@ export async function GET() {
   try {
     // 1. Últimas compras aprovadas
     const recentOrders = await prisma.order.findMany({
-      where: { status: "COMPLETED" },
+      where: { status: { in: ["COMPLETED", "pending_delivery"] } },
       orderBy: { createdAt: "desc" },
       take: 5,
       include: { items: true },
@@ -31,7 +31,7 @@ export async function GET() {
     // Prisma no SQLite suporta groupBy
     const topGroups = await prisma.order.groupBy({
       by: ['playerNick'],
-      where: { status: "COMPLETED" },
+      where: { status: { in: ["COMPLETED", "pending_delivery"] } },
       _sum: {
         totalAmount: true,
       },
@@ -55,7 +55,7 @@ export async function GET() {
 
     const monthlyAgg = await prisma.order.aggregate({
       where: {
-        status: "COMPLETED",
+        status: { in: ["COMPLETED", "pending_delivery"] },
         createdAt: {
           gte: startOfMonth,
         },
