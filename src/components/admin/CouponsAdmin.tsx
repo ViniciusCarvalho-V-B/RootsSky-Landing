@@ -22,7 +22,7 @@ export default function CouponsAdmin() {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      const url = editingId ? \`/api/admin/coupons/\${editingId}\` : "/api/admin/coupons";
+      const url = editingId ? `/api/admin/coupons/${editingId}` : "/api/admin/coupons";
       const method = editingId ? "PUT" : "POST";
       const res = await fetch(url, {
         method,
@@ -59,14 +59,14 @@ export default function CouponsAdmin() {
   const handleDelete = async (id: string) => {
     if (!confirm("Apagar cupom permanentemente?")) return;
     try {
-      const res = await fetch(\`/api/admin/coupons/\${id}\`, { method: "DELETE" });
+      const res = await fetch(`/api/admin/coupons/${id}`, { method: "DELETE" });
       if (res.ok) fetchCoupons();
     } catch {}
   };
 
   const toggleStatus = async (c: any) => {
     try {
-      const res = await fetch(\`/api/admin/coupons/\${c.id}\`, {
+      const res = await fetch(`/api/admin/coupons/${c.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...c, isActive: !c.isActive }),

@@ -4,7 +4,7 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    const res = await fetch("https://api.mcstatus.io/v2/status/java/rootssky.haskhosting.com.br", {
+    const res = await fetch("https://api.mcstatus.io/v2/status/java/jogar.rootssky.app", {
       cache: "no-store",
     });
     

@@ -21,7 +21,7 @@ export default function PagesAdmin() {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      const url = editingId ? \`/api/admin/pages/\${editingId}\` : "/api/admin/pages";
+      const url = editingId ? `/api/admin/pages/${editingId}` : "/api/admin/pages";
       const method = editingId ? "PUT" : "POST";
       const res = await fetch(url, {
         method,
@@ -56,7 +56,7 @@ export default function PagesAdmin() {
   const handleDelete = async (id: string) => {
     if (!confirm("Apagar página permanentemente?")) return;
     try {
-      const res = await fetch(\`/api/admin/pages/\${id}\`, { method: "DELETE" });
+      const res = await fetch(`/api/admin/pages/${id}`, { method: "DELETE" });
       if (res.ok) fetchPages();
     } catch {}
   };

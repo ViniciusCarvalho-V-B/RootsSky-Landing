@@ -43,7 +43,7 @@ export default function StoreSidebar({
   onChangeNick,
 }: StoreSidebarProps) {
   const [copied, setCopied] = useState(false);
-  const ip = "rootssky.haskhosting.com.br";
+  const ip = "jogar.rootssky.app";
   const { players, online, loading } = useServerStatus();
   const { online: discordOnline, loading: discordLoading } = useDiscordStatus();
 

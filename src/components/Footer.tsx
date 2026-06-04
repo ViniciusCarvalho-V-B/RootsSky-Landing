@@ -69,7 +69,7 @@ export default function Footer() {
               troque, compita e conquiste os céus com milhares de jogadores.
             </p>
             <div className="font-jetbrains text-sm text-gold tracking-wider">
-              rootssky.haskhosting.com.br
+              jogar.rootssky.app
             </div>
           </div>
 

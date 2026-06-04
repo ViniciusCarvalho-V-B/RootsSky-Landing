@@ -4,7 +4,7 @@ import React, { useState, useCallback } from "react";
 
 export default function ServerIP() {
   const [copied, setCopied] = useState(false);
-  const ip = "rootssky.haskhosting.com.br";
+  const ip = "jogar.rootssky.app";
 
   const handleCopy = useCallback(async () => {
     try {
