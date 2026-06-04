@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { storeItems } from "@/lib/catalog";
+import { toast } from "react-hot-toast";
+import { ConfirmModal } from "@/components/ui/ConfirmModal";
 
 const allCatalogItems = [
   ...storeItems.ranks.map(cat => cat.options ? cat.options.map(o => ({ id: o.id, name: `${cat.name} - ${o.label}` })) : [{ id: cat.id, name: cat.name }]).flat(),
@@ -17,8 +19,7 @@ export default function CouponsAdmin() {
   const [expiresAt, setExpiresAt] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState("");
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchCoupons();
@@ -57,15 +58,13 @@ export default function CouponsAdmin() {
         setIsActive(true);
         setEditingId(null);
         fetchCoupons();
-        setToastMessage(editingId ? "Cupom atualizado com sucesso!" : "Cupom criado com sucesso!");
-        setShowToast(true);
-        setTimeout(() => setShowToast(false), 3000);
+        toast.success(editingId ? "Cupom atualizado com sucesso!" : "Cupom criado com sucesso!");
       } else {
         const data = await res.json();
-        alert(data.error || "Erro ao salvar cupom");
+        toast.error(data.error || "Erro ao salvar cupom");
       }
     } catch {
-      alert("Erro de conexão");
+      toast.error("Erro de conexão");
     } finally {
       setIsSubmitting(false);
     }
@@ -101,7 +100,6 @@ export default function CouponsAdmin() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Apagar cupom permanentemente?")) return;
     try {
       const res = await fetch(`/api/admin/coupons/${id}`, { method: "DELETE" });
       if (res.ok) fetchCoupons();
@@ -246,33 +244,32 @@ export default function CouponsAdmin() {
               <button onClick={() => toggleStatus(c)} className="p-2 hover:bg-gold/20 rounded text-gold-light text-sm">
                 {c.isActive ? "Desativar" : "Ativar"}
               </button>
-              <button onClick={() => handleEdit(c)} className="p-2 hover:bg-gold/20 rounded text-gold">Editar</button>
-              <button onClick={() => handleDelete(c.id)} className="p-2 hover:bg-red-500/20 rounded text-red-400">Apagar</button>
+              <button onClick={() => {
+                  handleEdit(c);
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }} className="text-gold hover:text-gold-shine px-2 py-1 bg-gold/10 rounded transition-colors text-xs font-bold">
+                Editar
+              </button>
+              <button onClick={() => setDeletingId(c.id)} className="text-red-400 hover:text-red-300 px-2 py-1 bg-red-400/10 rounded transition-colors text-xs font-bold">
+                Apagar
+              </button>
             </div>
           </div>
         ))}
-        {coupons.length === 0 && <p className="text-warm-dim text-center py-4">Nenhum cupom criado.</p>}
+        {coupons.length === 0 && <p className="text-warm-dim text-center py-4">Nenhum cupom ativo no momento.</p>}
       </div>
 
-      {/* Toast Notification */}
-      <div className={`fixed bottom-4 right-4 z-50 transition-all duration-500 ease-out ${showToast ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0 pointer-events-none'}`}>
-        <div className="bg-wood/90 backdrop-blur-md border border-roots-green/30 shadow-lg shadow-roots-green/20 rounded-xl p-4 flex items-center gap-4">
-          <div className="bg-roots-green/20 rounded-full p-2">
-            <svg className="w-5 h-5 text-roots-green" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-            </svg>
-          </div>
-          <div>
-            <h3 className="font-cinzel font-bold text-roots-green text-sm">Sucesso!</h3>
-            <p className="text-warm-light font-inter text-xs">{toastMessage}</p>
-          </div>
-          <button onClick={() => setShowToast(false)} className="ml-auto text-warm-dim hover:text-warm p-1">
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-      </div>
+      <ConfirmModal 
+        isOpen={!!deletingId}
+        title="Apagar Cupom"
+        message="Tem certeza que deseja apagar este cupom permanentemente?"
+        onConfirm={() => {
+          if (deletingId) handleDelete(deletingId);
+          setDeletingId(null);
+        }}
+        onCancel={() => setDeletingId(null)}
+      />
+
     </div>
   );
 }

@@ -1,9 +1,9 @@
-"use client";
-
 import React, { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { storeItems } from "@/lib/catalog";
+import { toast } from "react-hot-toast";
+import { ConfirmModal } from "@/components/ui/ConfirmModal";
 
 const allCatalogItems = [
   ...storeItems.ranks.map(cat => cat.options ? cat.options.map(o => ({ id: o.id, name: `${cat.name} - ${o.label}` })) : [{ id: cat.id, name: cat.name }]).flat(),
@@ -18,6 +18,7 @@ export default function PreviewsAdmin() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [viewMode, setViewMode] = useState<"edit" | "preview">("edit");
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchPreviews();
@@ -42,13 +43,13 @@ export default function PreviewsAdmin() {
         setContent("");
         setEditingId(null);
         fetchPreviews();
-        alert(editingId ? "Benefícios atualizados!" : "Benefícios criados!");
+        toast.success(editingId ? "Benefícios atualizados!" : "Benefícios criados!");
       } else {
         const data = await res.json();
-        alert(data.error || "Erro ao salvar benefícios");
+        toast.error(data.error || "Erro ao salvar benefícios");
       }
     } catch {
-      alert("Erro de conexão");
+      toast.error("Erro de conexão");
     } finally {
       setIsSubmitting(false);
     }
@@ -63,7 +64,6 @@ export default function PreviewsAdmin() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Apagar benefícios permanentemente?")) return;
     try {
       const res = await fetch(`/api/admin/previews/${id}`, { method: "DELETE" });
       if (res.ok) fetchPreviews();
@@ -159,14 +159,32 @@ export default function PreviewsAdmin() {
                 <p className="text-xs text-warm-dim mt-1 truncate max-w-md">{p.content.substring(0, 80)}...</p>
               </div>
               <div className="flex gap-2 opacity-50 group-hover:opacity-100 transition-opacity">
-                <button onClick={() => handleEdit(p)} className="p-2 hover:bg-gold/20 rounded text-gold">Editar</button>
-                <button onClick={() => handleDelete(p.id)} className="p-2 hover:bg-red-500/20 rounded text-red-400">Apagar</button>
+                <button onClick={() => {
+                  handleEdit(p);
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }} className="text-gold hover:text-gold-shine px-2 py-1 bg-gold/10 rounded transition-colors text-xs font-bold">
+                  Editar
+                </button>
+                <button onClick={() => setDeletingId(p.id)} className="text-red-400 hover:text-red-300 px-2 py-1 bg-red-400/10 rounded transition-colors text-xs font-bold">
+                  Apagar
+                </button>
               </div>
             </div>
           );
         })}
         {previews.length === 0 && <p className="text-warm-dim text-center py-4">Nenhum preview criado.</p>}
       </div>
+
+      <ConfirmModal 
+        isOpen={!!deletingId}
+        title="Apagar Benefícios"
+        message="Tem certeza que deseja apagar estes benefícios permanentemente?"
+        onConfirm={() => {
+          if (deletingId) handleDelete(deletingId);
+          setDeletingId(null);
+        }}
+        onCancel={() => setDeletingId(null)}
+      />
     </div>
   );
 }

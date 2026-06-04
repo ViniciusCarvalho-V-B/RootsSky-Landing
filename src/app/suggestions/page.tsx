@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { ChevronLeft, ThumbsUp, ThumbsDown } from "lucide-react";
+import { toast } from "react-hot-toast";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
@@ -148,7 +149,7 @@ export default function SuggestionsPage() {
 
     // Se ja votou, poderia ter logica para remover o voto, mas no MVP apenas previnimos click repetido se já soubermos.
     if (votedIds[suggestionId]) {
-      alert("Você já votou nesta sugestão!");
+      toast.error("Você já votou nesta sugestão!");
       return;
     }
 
@@ -171,7 +172,7 @@ export default function SuggestionsPage() {
           setVotedIds(newVoted);
           localStorage.setItem(`roots_votes_${uuid}`, JSON.stringify(newVoted));
         }
-        alert(data.error || "Erro ao computar voto.");
+        toast.error(data.error || "Erro ao computar voto.");
         return;
       }
 
@@ -198,7 +199,7 @@ export default function SuggestionsPage() {
 
     } catch {
       console.error("Erro ao votar");
-      alert("Erro ao votar.");
+      toast.error("Erro ao votar.");
     }
   };
 

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, Suspense } from "react";
+import { toast } from "react-hot-toast";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import StoreSidebar from "@/components/StoreSidebar";
@@ -116,11 +117,11 @@ function StorePageContent() {
       if (data.url) {
         window.location.href = data.url; // Redireciona pro Stripe
       } else {
-        alert(data.error || "Erro ao iniciar checkout.");
+        toast.error(data.error || "Erro ao iniciar checkout.");
         setIsCheckingOut(false);
       }
     } catch {
-      alert("Erro de conexão ao processar compra.");
+      toast.error("Erro de conexão ao processar compra.");
       setIsCheckingOut(false);
     }
   };

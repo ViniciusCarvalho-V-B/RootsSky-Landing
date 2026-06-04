@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { toast } from "react-hot-toast";
+import { ConfirmModal } from "@/components/ui/ConfirmModal";
 import { Trash2, LogOut, Plus, Star, Zap, Edit2, ImagePlus, ChevronLeft } from 'lucide-react';
 import PagesAdmin from '@/components/admin/PagesAdmin';
 import CouponsAdmin from '@/components/admin/CouponsAdmin';
@@ -31,6 +33,9 @@ export default function AdminPage() {
   const [sugOptions, setSugOptions] = useState([{ label: "" }, { label: "" }]);
   const [isSubmittingSug, setIsSubmittingSug] = useState(false);
   const [editingSugId, setEditingSugId] = useState<string | null>(null);
+
+  const [deletingUpdateId, setDeletingUpdateId] = useState<string | null>(null);
+  const [deletingSugId, setDeletingSugId] = useState<string | null>(null);
 
   useEffect(() => {
     // Verificar autenticacao na montagem
@@ -116,12 +121,12 @@ export default function AdminPage() {
         setUpdateContent("");
         setEditingUpdateId(null);
         fetchUpdates();
-        alert(editingUpdateId ? "Atualização editada!" : "Atualização publicada!");
+        toast.success(editingUpdateId ? "Atualização editada!" : "Atualização publicada!");
       } else {
-        alert("Erro ao publicar");
+        toast.error("Erro ao publicar");
       }
     } catch {
-      alert("Erro de conexão");
+      toast.error("Erro de conexão");
     } finally {
       setIsSubmittingUpdate(false);
     }
@@ -134,7 +139,6 @@ export default function AdminPage() {
   };
 
   const handleDeleteUpdate = async (id: string) => {
-    if (!confirm("Tem certeza que deseja apagar esta atualização?")) return;
     try {
       const res = await fetch(`/api/admin/updates/${id}`, { method: 'DELETE' });
       if (res.ok) fetchUpdates();
@@ -168,7 +172,6 @@ export default function AdminPage() {
   };
 
   const handleDeleteSug = async (id: string) => {
-    if (!confirm("Tem certeza que deseja apagar esta sugestão/enquete?")) return;
     try {
       const res = await fetch(`/api/suggestions/${id}`, { method: 'DELETE' });
       if (res.ok) fetchSuggestions();
@@ -180,7 +183,7 @@ export default function AdminPage() {
     if (sugType === 'poll') {
       const validOptions = sugOptions.filter(o => o.label.trim() !== '');
       if (validOptions.length < 2) {
-        alert("Enquetes precisam de pelo menos 2 opções válidas.");
+        toast.error("Enquetes precisam de pelo menos 2 opções válidas.");
         return;
       }
     }
@@ -206,13 +209,13 @@ export default function AdminPage() {
         setSugOptions([{ label: "" }, { label: "" }]);
         setEditingSugId(null);
         fetchSuggestions();
-        alert(editingSugId ? "Sugestão editada!" : "Sugestão/Enquete criada!");
+        toast.success(editingSugId ? "Sugestão editada!" : "Sugestão/Enquete criada!");
       } else {
         const d = await res.json();
-        alert(d.error || "Erro ao criar");
+        toast.error(d.error || "Erro ao criar");
       }
     } catch {
-      alert("Erro de conexão");
+      toast.error("Erro de conexão");
     } finally {
       setIsSubmittingSug(false);
     }
@@ -411,21 +414,19 @@ export default function AdminPage() {
                   <div>
                     <h4 className="text-gold font-bold">{u.title}</h4>
                     <p className="text-warm-dim text-sm mt-1 line-clamp-2">{u.content}</p>
-                    <div className="text-xs text-warm-dim/50 mt-2">Por {u.author} em {new Date(u.createdAt).toLocaleString('pt-BR')}</div>
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <button onClick={() => {
-                      setEditingUpdateId(u.id);
-                      setUpdateTitle(u.title);
-                      setUpdateContent(u.content);
-                      setUpdateAuthor(u.author);
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }} className="text-blue-400 hover:text-blue-300 p-2 bg-blue-400/10 rounded" title="Editar">
-                      <Edit2 size={16} />
-                    </button>
-                    <button onClick={() => handleDeleteUpdate(u.id)} className="text-red-400 hover:text-red-300 p-2 bg-red-400/10 rounded" title="Apagar">
-                      <Trash2 size={16} />
-                    </button>
+                    <div className="flex justify-between items-center text-xs mt-2">
+                      <span className="text-warm-dim">Por: {u.author}</span>
+                      <div className="flex gap-2">
+                        <button onClick={() => {
+                          setUpdateTitle(u.title);
+                          setUpdateContent(u.content);
+                          setUpdateAuthor(u.author);
+                          setEditingUpdateId(u.id);
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }} className="text-gold hover:text-gold-shine transition-colors">Editar</button>
+                        <button onClick={() => setDeletingUpdateId(u.id)} className="text-red-400 hover:text-red-300 transition-colors">Apagar</button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -549,15 +550,12 @@ export default function AdminPage() {
                       <option value="implemented">Implementada</option>
                     </select>
                     
-                    <div className="flex gap-2 w-full sm:w-auto justify-end mt-2 sm:mt-0">
-                      <button onClick={() => {
-                        handleEditSug(sug);
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                      }} className="text-blue-400 hover:text-blue-300 p-2 bg-blue-400/10 rounded" title="Editar">
-                        <Edit2 size={16} />
+                    <div className="flex gap-2">
+                      <button onClick={() => handleEditSug(sug)} className="text-gold hover:text-gold-shine transition-colors text-sm">
+                        <Edit2 className="w-4 h-4" />
                       </button>
-                      <button onClick={() => handleDeleteSug(sug.id)} className="text-red-400 hover:text-red-300 p-2 bg-red-400/10 rounded" title="Apagar">
-                        <Trash2 size={16} />
+                      <button onClick={() => setDeletingSugId(sug.id)} className="text-red-400 hover:text-red-300 transition-colors text-sm">
+                        <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
                   </div>
@@ -567,6 +565,29 @@ export default function AdminPage() {
           </div>
         )}
       </div>
+      
+      {/* Modais de Confirmação */}
+      <ConfirmModal 
+        isOpen={!!deletingUpdateId}
+        title="Apagar Atualização"
+        message="Tem certeza que deseja apagar esta atualização? Esta ação não pode ser desfeita."
+        onConfirm={() => {
+          if (deletingUpdateId) handleDeleteUpdate(deletingUpdateId);
+          setDeletingUpdateId(null);
+        }}
+        onCancel={() => setDeletingUpdateId(null)}
+      />
+      
+      <ConfirmModal 
+        isOpen={!!deletingSugId}
+        title="Apagar Sugestão/Enquete"
+        message="Tem certeza que deseja apagar permanentemente? Os votos também serão perdidos."
+        onConfirm={() => {
+          if (deletingSugId) handleDeleteSug(deletingSugId);
+          setDeletingSugId(null);
+        }}
+        onCancel={() => setDeletingSugId(null)}
+      />
     </main>
   );
 }

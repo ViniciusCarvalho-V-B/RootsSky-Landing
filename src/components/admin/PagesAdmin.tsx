@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { toast } from "react-hot-toast";
+import { ConfirmModal } from "@/components/ui/ConfirmModal";
 
 export default function PagesAdmin() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -8,6 +10,7 @@ export default function PagesAdmin() {
   const [content, setContent] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchPages();
@@ -35,13 +38,13 @@ export default function PagesAdmin() {
         setContent("");
         setEditingId(null);
         fetchPages();
-        alert(editingId ? "Página atualizada!" : "Página criada!");
+        toast.success(editingId ? "Página atualizada!" : "Página criada!");
       } else {
         const data = await res.json();
-        alert(data.error || "Erro ao salvar página");
+        toast.error(data.error || "Erro ao salvar página");
       }
     } catch {
-      alert("Erro de conexão");
+      toast.error("Erro de conexão");
     } finally {
       setIsSubmitting(false);
     }
@@ -56,7 +59,6 @@ export default function PagesAdmin() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Apagar página permanentemente?")) return;
     try {
       const res = await fetch(`/api/admin/pages/${id}`, { method: "DELETE" });
       if (res.ok) fetchPages();
@@ -125,13 +127,31 @@ export default function PagesAdmin() {
               <h3 className="text-warm-light font-bold">{p.title} <span className="text-warm-dim text-xs ml-2">/{p.slug}</span></h3>
             </div>
             <div className="flex gap-2 opacity-50 group-hover:opacity-100 transition-opacity">
-              <button onClick={() => handleEdit(p)} className="p-2 hover:bg-gold/20 rounded text-gold">Editar</button>
-              <button onClick={() => handleDelete(p.id)} className="p-2 hover:bg-red-500/20 rounded text-red-400">Apagar</button>
+              <button onClick={() => {
+                handleEdit(p);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }} className="text-gold hover:text-gold-shine px-2 py-1 bg-gold/10 rounded transition-colors text-xs font-bold">
+                Editar
+              </button>
+              <button onClick={() => setDeletingId(p.id)} className="text-red-400 hover:text-red-300 px-2 py-1 bg-red-400/10 rounded transition-colors text-xs font-bold">
+                Apagar
+              </button>
             </div>
           </div>
         ))}
         {pages.length === 0 && <p className="text-warm-dim text-center py-4">Nenhuma página criada.</p>}
       </div>
+
+      <ConfirmModal 
+        isOpen={!!deletingId}
+        title="Apagar Página"
+        message="Tem certeza que deseja apagar esta página permanentemente?"
+        onConfirm={() => {
+          if (deletingId) handleDelete(deletingId);
+          setDeletingId(null);
+        }}
+        onCancel={() => setDeletingId(null)}
+      />
     </div>
   );
 }

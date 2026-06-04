@@ -45,6 +45,8 @@ export const metadata: Metadata = {
   ],
 };
 
+import { Toaster } from 'react-hot-toast';
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -57,6 +59,25 @@ export default function RootLayout({
     >
       <body className="bg-dark-wood text-warm font-inter antialiased">
         <LanguageProvider>{children}</LanguageProvider>
+        <Toaster position="bottom-right" toastOptions={{
+          style: {
+            background: '#1D1A16', // bg-dark-wood
+            color: '#F4E7C3', // text-warm-light
+            border: '1px solid rgba(228, 179, 99, 0.3)', // border-gold/30
+          },
+          success: {
+            iconTheme: {
+              primary: '#10B981', // green-500
+              secondary: '#1D1A16',
+            },
+          },
+          error: {
+            iconTheme: {
+              primary: '#EF4444', // red-500
+              secondary: '#1D1A16',
+            }
+          }
+        }} />
       </body>
     </html>
   );
