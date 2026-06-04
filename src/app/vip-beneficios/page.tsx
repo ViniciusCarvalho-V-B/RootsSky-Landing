@@ -49,8 +49,7 @@ O ápice do poder no RootsSky. O VIP para os jogadores mais dedicados.
 
 ---
 
-> [!TIP]
-> Lembre-se: Todas as vantagens são ativadas **instantaneamente** após a confirmação do pagamento. Digite \`/vips\` no jogo para ver informações detalhadas sobre os Kits in-game.
+> **Dica:** Lembre-se: Todas as vantagens são ativadas **instantaneamente** após a confirmação do pagamento. Digite \`/vips\` no jogo para ver informações detalhadas sobre os Kits in-game.
 `;
 
 export default function VipBeneficiosPage() {

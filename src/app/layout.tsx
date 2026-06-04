@@ -32,7 +32,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "RootsSky — Servidor Premium de Minecraft Skyblock",
+  title: "RootsSky — O Melhor Servidor Skyblock Brasileiro",
   description:
     "Entre no RootsSky, a melhor experiência Premium de Minecraft Skyblock do Brasil. Ilhas personalizadas, arenas PvP, economia dinâmica, clãs, missões e muito mais. Jogue agora!",
   keywords: [

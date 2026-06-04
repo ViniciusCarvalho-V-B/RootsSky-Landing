@@ -28,8 +28,8 @@ const footerSections: { title: string; links: FooterLink[] }[] = [
         href: "https://discord.gg/UxUM66WSSD",
         external: true,
       },
-      { label: "Votar", href: "/vote" },
-      { label: "Fórum", href: "#" },
+      { label: "Instagram", href: "#", external: true },
+      { label: "YouTube", href: "#", external: true },
       { label: "Twitter", href: "#" },
     ],
   },
@@ -65,8 +65,7 @@ export default function Footer() {
               />
             </Link>
             <p className="text-sm text-warm-muted font-inter leading-relaxed mb-6 max-w-sm">
-              A experiência definitiva de Minecraft Skyblock Premium. Construa,
-              troque, compita e conquiste os céus com milhares de jogadores.
+              O melhor servidor Skyblock do Brasil! Jogue com ping baixo, economia realista e preços justos feitos de jogadores para jogadores. Construa, troque e conquiste os céus conosco.
             </p>
             <div className="font-jetbrains text-sm text-gold tracking-wider">
               jogar.rootssky.app
