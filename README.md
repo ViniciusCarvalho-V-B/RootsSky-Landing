@@ -47,40 +47,5 @@ RootsSky é a plataforma web completa e painel de e-commerce desenvolvida para o
 * Uma conta no Supabase (para o PostgreSQL)
 * Uma conta de Desenvolvedor no MercadoPago
 
-### Instalação
-
-1. Clone o repositório
-```bash
-git clone https://github.com/ViniciusCarvalho-V-B/RootsSky-Landing.git
-cd RootsSky-Landing
-```
-
-2. Instale as dependências
-```bash
-npm install
-```
-
-3. Configure as variáveis de ambiente
-Crie um arquivo `.env` na raiz do projeto baseado no `.env.example` (se houver) e preencha as chaves:
-```env
-DATABASE_URL="sua-url-do-supabase-postgresql"
-MERCADOPAGO_ACCESS_TOKEN="seu-access-token-mp"
-MERCADOPAGO_WEBHOOK_SECRET="seu-secret-de-webhook"
-ADMIN_PASSWORD="senha-do-painel-admin"
-```
-
-4. Sincronize o Banco de Dados (Prisma)
-```bash
-npx prisma generate
-npx prisma db push
-```
-
-5. Inicie o servidor de desenvolvimento
-```bash
-npm run dev
-```
-
-O site estará disponível em `http://localhost:3000`.
-
 ## 📈 Status do Projeto
 O projeto encontra-se em **Produção Ativa**, hospedado na Vercel e servindo aos jogadores do RootsSky.
