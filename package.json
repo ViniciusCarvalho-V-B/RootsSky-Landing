@@ -12,7 +12,7 @@
     "@prisma/client": "5.14.0",
     "lucide-react": "^1.17.0",
     "mercadopago": "^3.1.0",
-    "next": "14.2.35",
+    "next": "15.5.18",
     "react": "^18",
     "react-dom": "^18",
     "react-hot-toast": "^2.6.0",
