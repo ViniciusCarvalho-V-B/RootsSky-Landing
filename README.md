@@ -40,12 +40,5 @@ RootsSky é a plataforma web completa e painel de e-commerce desenvolvida para o
 * [PostgreSQL](https://www.postgresql.org/) hospedado na [Supabase](https://supabase.com/)
 * [MercadoPago SDK](https://www.mercadopago.com.br/developers)
 
-## ⚙️ Rodando Localmente
-
-### Pré-requisitos
-* Node.js 18+
-* Uma conta no Supabase (para o PostgreSQL)
-* Uma conta de Desenvolvedor no MercadoPago
-
 ## 📈 Status do Projeto
 O projeto encontra-se em **Produção Ativa**, hospedado na Vercel e servindo aos jogadores do RootsSky.
