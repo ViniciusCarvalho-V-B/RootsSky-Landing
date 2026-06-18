@@ -26,7 +26,7 @@ export default function PrivacyPolicyPage() {
             <ul>
               <li>Entregar os produtos virtuais em sua conta no jogo.</li>
               <li>Histórico de compras para suporte e prevenção a fraudes.</li>
-              <li>Exibir as "Últimas Compras" ou "Top Apoiadores" em nosso site, caso você não opte por ocultar.</li>
+              <li>Exibir as &quot;Últimas Compras&quot; ou &quot;Top Apoiadores&quot; em nosso site, caso você não opte por ocultar.</li>
             </ul>
           </p>
 

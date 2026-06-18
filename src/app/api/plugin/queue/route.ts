@@ -22,7 +22,7 @@ function isAuthorized(request: Request) {
   
   try {
     return crypto.timingSafeEqual(Buffer.from(token), Buffer.from(secret));
-  } catch (err) {
+  } catch {
     return false; // Retorna falso se os tamanhos não baterem
   }
 }
