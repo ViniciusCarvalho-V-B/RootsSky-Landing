@@ -6,7 +6,7 @@ import Button from "./Button";
 interface CheckoutConsentModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: () => void;
+  onConfirm: (isAnonymous: boolean) => void;
   loading?: boolean;
 }
 
@@ -14,6 +14,7 @@ export default function CheckoutConsentModal({ isOpen, onClose, onConfirm, loadi
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [refundAccepted, setRefundAccepted] = useState(false);
+  const [hideNick, setHideNick] = useState(false);
   const [error, setError] = useState("");
 
   if (!isOpen) return null;
@@ -21,11 +22,11 @@ export default function CheckoutConsentModal({ isOpen, onClose, onConfirm, loadi
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!termsAccepted || !privacyAccepted || !refundAccepted) {
-      setError("Você deve aceitar todos os termos e políticas para prosseguir com a compra.");
+      setError("Você deve aceitar todos os termos e políticas obrigatórias para prosseguir com a compra.");
       return;
     }
     setError("");
-    onConfirm();
+    onConfirm(hideNick);
   };
 
   return (
@@ -52,6 +53,24 @@ export default function CheckoutConsentModal({ isOpen, onClose, onConfirm, loadi
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-3">
+            {/* Opcional: Ocultar Nick */}
+            <div className="flex items-start gap-3 p-3 bg-dark-wood/30 border border-leaf-light/20 rounded-lg">
+              <input
+                type="checkbox"
+                id="hide_nick_consent"
+                checked={hideNick}
+                onChange={(e) => setHideNick(e.target.checked)}
+                className="mt-1 bg-dark-wood border-leaf-light/30 rounded text-leaf-light focus:ring-leaf-light/50 cursor-pointer"
+                disabled={loading}
+              />
+              <label htmlFor="hide_nick_consent" className="text-sm text-warm-dim font-inter cursor-pointer select-none">
+                <span className="text-leaf-light font-bold text-xs uppercase tracking-wider block mb-0.5">Opcional</span>
+                Desejo <strong>ocultar meu Nickname</strong> da lista pública de &quot;Últimas Compras&quot; e &quot;Top Apoiadores&quot; no site.
+              </label>
+            </div>
+
+            <div className="gold-divider my-2 opacity-50" />
+
             {/* Termos de Serviço */}
             <div className="flex items-start gap-3 p-3 bg-dark-wood/50 border border-gold/10 rounded-lg">
               <input

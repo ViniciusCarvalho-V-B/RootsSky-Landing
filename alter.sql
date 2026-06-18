@@ -1,0 +1,1 @@
+ALTER TABLE "Order" ADD COLUMN "isAnonymous" BOOLEAN NOT NULL DEFAULT false;

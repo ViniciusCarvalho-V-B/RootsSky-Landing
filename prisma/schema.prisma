@@ -25,6 +25,7 @@ model Order {
   totalAmount     Float
   status          String   @default("PENDING") // PENDING, COMPLETED, REFUNDED, CANCELED
   couponCode      String?  // Opcional: Cupom utilizado na compra
+  isAnonymous     Boolean  @default(false) // Ocultar nick das vitrines de ultimas compras
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
   

@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { productId, playerNick, playerUuid, couponCode } = body;
+    const { productId, playerNick, playerUuid, couponCode, isAnonymous } = body;
 
     if (!productId || !playerNick || !playerUuid) {
       return NextResponse.json({ error: "Dados incompletos." }, { status: 400 });
@@ -68,6 +68,7 @@ export async function POST(request: Request) {
         totalAmount: finalPrice,
         status: "PENDING",
         couponCode: appliedCoupon,
+        isAnonymous: isAnonymous === true,
         items: {
           create: {
             productId: item.id,

@@ -6,9 +6,12 @@ export const revalidate = 60; // Cache de 60 segundos no Next.js (se usar SSR/IS
 
 export async function GET() {
   try {
-    // 1. Últimas compras aprovadas
+    // 1. Últimas compras aprovadas (Públicas)
     const recentOrders = await prisma.order.findMany({
-      where: { status: { in: ["COMPLETED", "pending_delivery"] } },
+      where: { 
+        status: { in: ["COMPLETED", "pending_delivery"] },
+        isAnonymous: false
+      },
       orderBy: { createdAt: "desc" },
       take: 5,
       include: { items: true },
@@ -26,11 +29,14 @@ export async function GET() {
       };
     });
 
-    // 2. Top Apoiadores
+    // 2. Top Apoiadores (Públicos)
     // Prisma no SQLite suporta groupBy
     const topGroups = await prisma.order.groupBy({
       by: ['playerNick'],
-      where: { status: { in: ["COMPLETED", "pending_delivery"] } },
+      where: { 
+        status: { in: ["COMPLETED", "pending_delivery"] },
+        isAnonymous: false
+      },
       _sum: {
         totalAmount: true,
       },

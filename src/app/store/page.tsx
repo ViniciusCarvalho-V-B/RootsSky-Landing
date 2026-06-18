@@ -105,7 +105,7 @@ function StorePageContent() {
     }
   };
 
-  const proceedToCheckout = async (productId: string, nick: string, uuid: string) => {
+  const proceedToCheckout = async (productId: string, nick: string, uuid: string, isAnonymous: boolean = false) => {
     setIsCheckingOut(true);
     try {
       const res = await fetch("/api/checkout", {
@@ -116,6 +116,7 @@ function StorePageContent() {
           playerNick: nick,
           playerUuid: uuid,
           couponCode: couponCode.trim(),
+          isAnonymous,
         }),
       });
       const data = await res.json();
@@ -629,9 +630,9 @@ function StorePageContent() {
         isOpen={isConsentModalOpen}
         onClose={() => setIsConsentModalOpen(false)}
         loading={isCheckingOut}
-        onConfirm={() => {
+        onConfirm={(hideNick) => {
           if (consentProductId && playerNick && playerUuid) {
-            proceedToCheckout(consentProductId, playerNick, playerUuid);
+            proceedToCheckout(consentProductId, playerNick, playerUuid, hideNick);
           }
         }}
       />
