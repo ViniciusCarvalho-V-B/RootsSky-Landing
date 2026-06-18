@@ -1,10 +1,16 @@
 import { NextResponse } from 'next/server';
 import { createAdminResponse, removeAdminResponse } from '@/lib/admin-auth';
+import { authRateLimiter } from '@/lib/rate-limit';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
   try {
+    const ip = request.headers.get('x-forwarded-for') || 'unknown';
+    if (!authRateLimiter.check(ip)) {
+      return NextResponse.json({ error: "Muitas tentativas. Tente novamente mais tarde." }, { status: 429 });
+    }
+
     const body = await request.json();
     const { password } = body;
 

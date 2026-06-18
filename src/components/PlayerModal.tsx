@@ -93,7 +93,7 @@ export default function PlayerModal({ isOpen, onClose, onSuccess }: PlayerModalP
               className="mt-1 bg-dark-wood border-gold/30 rounded text-gold focus:ring-gold/50 cursor-pointer"
             />
             <label htmlFor="terms" className="text-xs text-warm-dim font-inter leading-relaxed cursor-pointer select-none">
-              Eu li e aceito os <a href="/termos" target="_blank" className="text-gold hover:underline">Termos de Serviço</a> e concordo com a <a href="/reembolso" target="_blank" className="text-gold hover:underline">Política de Reembolso</a> (Nenhum reembolso é garantido para itens virtuais).
+              Eu li e aceito os <a href="/termos" target="_blank" className="text-gold hover:underline">Termos de Serviço</a> e concordo com a <a href="/privacy" target="_blank" className="text-gold hover:underline">Política de Privacidade</a> (incluindo o tratamento dos meus dados conforme a LGPD).
             </label>
           </div>
 

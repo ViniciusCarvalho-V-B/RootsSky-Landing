@@ -1,10 +1,16 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { couponRateLimiter } from '@/lib/rate-limit';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
   try {
+    const ip = request.headers.get('x-forwarded-for') || 'unknown';
+    if (!couponRateLimiter.check(ip)) {
+      return NextResponse.json({ error: "Muitas validações. Tente novamente mais tarde." }, { status: 429 });
+    }
+
     const { searchParams } = new URL(request.url);
     const code = searchParams.get('code')?.toUpperCase();
 

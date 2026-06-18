@@ -72,9 +72,8 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: "Invalid Signature" }, { status: 403 });
       }
     } else {
-      console.warn("Recebido webhook sem x-signature (pode ser ambiente de teste do MP).");
-      // O MP às vezes manda testes iniciais sem signature completa, mas num ambiente restrito real, bloquearíamos aqui:
-      // return NextResponse.json({ error: "Missing Signature" }, { status: 401 });
+      console.warn("Recebido webhook sem x-signature (bloqueado em produção).");
+      return NextResponse.json({ error: "Missing Signature" }, { status: 401 });
     }
 
     // 3. Processar apenas eventos de pagamento "payment"
@@ -118,9 +117,10 @@ export async function POST(request: Request) {
 
           // 6. Inserir os comandos na fila do Plugin Java
           if (commandToQueue) {
+            const safeNick = playerNick.replace(/[^a-zA-Z0-9_]/g, '');
             const rawCommands = commandToQueue.split(";").map((c: string) => c.trim()).filter((c: string) => c.length > 0);
             for (const rawCmd of rawCommands) {
-              const finalCommand = rawCmd.replace(/{name}/g, playerNick);
+              const finalCommand = rawCmd.replace(/{name}/g, safeNick);
               await prisma.commandQueue.create({
                 data: {
                   orderId: orderId,

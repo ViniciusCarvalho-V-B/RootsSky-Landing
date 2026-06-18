@@ -23,10 +23,17 @@ export async function GET() {
       }
     });
 
-    const availableCoupons = coupons.filter(c => c.maxUses === null || c.uses < c.maxUses);
+    const availableCoupons = coupons
+      .filter(c => c.maxUses === null || c.uses < c.maxUses)
+      .map(c => ({
+        code: c.code,
+        discountPct: c.discountPct,
+        eligibleItems: c.eligibleItems
+      }));
 
     return NextResponse.json(availableCoupons);
   } catch (error) {
-    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
+    console.error("Erro na API coupons active:", error);
+    return NextResponse.json({ error: "Erro interno no servidor." }, { status: 500 });
   }
 }

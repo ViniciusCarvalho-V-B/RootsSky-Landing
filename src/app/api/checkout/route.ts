@@ -5,15 +5,27 @@ import { prisma } from "@/lib/prisma";
 import { CATALOG } from "@/lib/catalog";
 import { sendDiscordPurchaseNotification } from "@/lib/discord";
 
+import { checkoutRateLimiter } from "@/lib/rate-limit";
+
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
   try {
+    const ip = request.headers.get('x-forwarded-for') || 'unknown';
+    if (!checkoutRateLimiter.check(ip)) {
+      return NextResponse.json({ error: "Muitas requisições. Tente novamente mais tarde." }, { status: 429 });
+    }
+
     const body = await request.json();
     const { productId, playerNick, playerUuid, couponCode } = body;
 
     if (!productId || !playerNick || !playerUuid) {
       return NextResponse.json({ error: "Dados incompletos." }, { status: 400 });
+    }
+
+    const nickRegex = /^[a-zA-Z0-9_]{3,16}$/;
+    if (!nickRegex.test(playerNick)) {
+      return NextResponse.json({ error: "Nickname inválido." }, { status: 400 });
     }
 
     const item = CATALOG[productId];

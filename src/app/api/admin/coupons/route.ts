@@ -1,12 +1,19 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { isAdmin } from "@/lib/admin-auth";
 
-export async function GET() {
+export async function GET(request: Request) {
+  if (!isAdmin(request)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
   const coupons = await prisma.coupon.findMany({ orderBy: { createdAt: 'desc' } });
   return NextResponse.json(coupons);
 }
 
 export async function POST(request: Request) {
+  if (!isAdmin(request)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
   try {
     const body = await request.json();
     const { code, discountPct, eligibleItems, maxUses, expiresAt, isActive } = body;
@@ -28,7 +35,7 @@ export async function POST(request: Request) {
     });
     return NextResponse.json(newCoupon);
   } catch (error: unknown) {
-    const msg = error instanceof Error ? error.message : "Erro desconhecido";
-    return NextResponse.json({ error: msg }, { status: 400 });
+    console.error("Erro ao criar cupom:", error);
+    return NextResponse.json({ error: "Erro interno ao criar cupom" }, { status: 400 });
   }
 }

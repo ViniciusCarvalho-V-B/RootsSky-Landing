@@ -50,9 +50,11 @@ export function createAdminResponse(response: NextResponse): NextResponse {
   const maxAge = 60 * 60 * 24; // 24 hours
 
   // Set the cookie using Set-Cookie header
+  const isProd = process.env.NODE_ENV === 'production';
+  const secureFlag = isProd ? 'Secure; ' : '';
   response.headers.append(
     'Set-Cookie',
-    `${COOKIE_NAME}=${token}; Path=/; HttpOnly; SameSite=Strict; Max-Age=${maxAge}`
+    `${COOKIE_NAME}=${token}; Path=/; HttpOnly; ${secureFlag}SameSite=Strict; Max-Age=${maxAge}`
   );
 
   return response;

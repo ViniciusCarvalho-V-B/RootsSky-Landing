@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { isAdmin } from "@/lib/admin-auth";
 
 export async function PUT(request: Request, { params }: { params: { id: string } }) {
+  if (!isAdmin(request)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
   try {
     const body = await request.json();
     const { slug, title, content } = body;
@@ -11,17 +15,20 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     });
     return NextResponse.json(page);
   } catch (error: unknown) {
-    const msg = error instanceof Error ? error.message : "Erro desconhecido";
-    return NextResponse.json({ error: msg }, { status: 400 });
+    console.error("Erro ao atualizar página:", error);
+    return NextResponse.json({ error: "Erro interno ao atualizar página" }, { status: 400 });
   }
 }
 
 export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+  if (!isAdmin(request)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
   try {
     await prisma.page.delete({ where: { id: params.id } });
     return new NextResponse(null, { status: 204 });
   } catch (error: unknown) {
-    const msg = error instanceof Error ? error.message : "Erro desconhecido";
-    return NextResponse.json({ error: msg }, { status: 400 });
+    console.error("Erro ao deletar página:", error);
+    return NextResponse.json({ error: "Erro interno ao deletar página" }, { status: 400 });
   }
 }

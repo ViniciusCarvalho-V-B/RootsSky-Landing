@@ -20,7 +20,6 @@ export async function GET() {
       const productName = firstItem ? (CATALOG[firstItem.productId]?.name || "Produto") : "Produto";
       
       return {
-        id: order.id,
         playerNick: order.playerNick,
         productName: productName,
         timeAgo: order.createdAt, // o front formata
@@ -82,7 +81,7 @@ export async function GET() {
   } catch (error) {
     console.error("Erro na API store-stats:", error);
     return NextResponse.json(
-      { error: "Erro ao buscar estatísticas da loja", details: (error as Error).message },
+      { error: "Erro ao buscar estatísticas da loja" },
       { status: 500 }
     );
   }

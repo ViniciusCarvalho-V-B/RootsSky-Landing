@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import crypto from 'crypto';
 
 export const dynamic = "force-dynamic";
 
@@ -18,7 +19,12 @@ function isAuthorized(request: Request) {
   }
   
   const token = authHeader.split(" ")[1];
-  return token === secret;
+  
+  try {
+    return crypto.timingSafeEqual(Buffer.from(token), Buffer.from(secret));
+  } catch (err) {
+    return false; // Retorna falso se os tamanhos não baterem
+  }
 }
 
 // GET: Retorna a lista de comandos pendentes

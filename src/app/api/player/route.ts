@@ -26,6 +26,15 @@ export async function GET(request: Request) {
     );
   }
 
+  // Prevenção de Path/SSRF Injection: Validar formato do nick (apenas alfanumérico e underscores)
+  const nickRegex = /^[a-zA-Z0-9_]{3,16}$/;
+  if (!nickRegex.test(nick)) {
+    return NextResponse.json(
+      { error: "Nickname inválido." },
+      { status: 400 }
+    );
+  }
+
   const cached = getCachedPlayer(nick);
   if (cached) {
     return NextResponse.json(cached);

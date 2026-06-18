@@ -1,10 +1,16 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { voteRateLimiter } from '@/lib/rate-limit';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request, { params }: { params: { id: string } }) {
   try {
+    const ip = request.headers.get('x-forwarded-for') || 'unknown';
+    if (!voteRateLimiter.check(ip)) {
+      return NextResponse.json({ error: "Muitos votos computados. Tente novamente mais tarde." }, { status: 429 });
+    }
+
     const { id: suggestionId } = params;
     const body = await request.json();
     const { playerNick, playerUuid, voteType, optionId } = body;
@@ -74,6 +80,11 @@ export async function POST(request: Request, { params }: { params: { id: string 
 
 export async function DELETE(request: Request, { params }: { params: { id: string } }) {
   try {
+    const ip = request.headers.get('x-forwarded-for') || 'unknown';
+    if (!voteRateLimiter.check(ip)) {
+      return NextResponse.json({ error: "Muitas requisições. Tente novamente mais tarde." }, { status: 429 });
+    }
+
     const { id: suggestionId } = params;
     const body = await request.json();
     const { playerUuid } = body;

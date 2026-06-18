@@ -120,8 +120,8 @@ export default function StoreStats() {
         </h3>
         {stats.recentPurchases.length > 0 ? (
           <div className="space-y-3">
-            {stats.recentPurchases.slice(0, 3).map((purchase) => (
-              <div key={purchase.id} className="flex items-center gap-3">
+            {stats.recentPurchases.slice(0, 3).map((purchase, index) => (
+              <div key={index} className="flex items-center gap-3">
                 <Image
                   src={`https://minotar.net/helm/${purchase.playerNick}/32.png`}
                   alt={purchase.playerNick}
