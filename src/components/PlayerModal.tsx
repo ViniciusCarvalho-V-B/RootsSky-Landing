@@ -13,7 +13,6 @@ export default function PlayerModal({ isOpen, onClose, onSuccess }: PlayerModalP
   const [nick, setNick] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [termsAccepted, setTermsAccepted] = useState(false);
 
   if (!isOpen) return null;
 
@@ -21,11 +20,6 @@ export default function PlayerModal({ isOpen, onClose, onSuccess }: PlayerModalP
     e.preventDefault();
     if (!nick.trim()) {
       setError("Por favor, digite seu nick.");
-      return;
-    }
-    
-    if (!termsAccepted) {
-      setError("Você deve aceitar os termos de serviço e políticas de reembolso para continuar.");
       return;
     }
 
@@ -82,19 +76,6 @@ export default function PlayerModal({ isOpen, onClose, onSuccess }: PlayerModalP
               disabled={loading}
             />
             {error && <p className="text-red-400 text-xs mt-2 font-inter">{error}</p>}
-          </div>
-
-          <div className="flex items-start gap-3 py-2">
-            <input
-              type="checkbox"
-              id="terms"
-              checked={termsAccepted}
-              onChange={(e) => setTermsAccepted(e.target.checked)}
-              className="mt-1 bg-dark-wood border-gold/30 rounded text-gold focus:ring-gold/50 cursor-pointer"
-            />
-            <label htmlFor="terms" className="text-xs text-warm-dim font-inter leading-relaxed cursor-pointer select-none">
-              Eu li e aceito os <a href="/termos" target="_blank" className="text-gold hover:underline">Termos de Serviço</a> e concordo com a <a href="/privacy" target="_blank" className="text-gold hover:underline">Política de Privacidade</a> (incluindo o tratamento dos meus dados conforme a LGPD).
-            </label>
           </div>
 
           <Button

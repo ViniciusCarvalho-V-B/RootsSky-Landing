@@ -8,6 +8,7 @@ import StoreSidebar from "@/components/StoreSidebar";
 import { CardBadge } from "@/components/Card";
 import Button from "@/components/Button";
 import PlayerModal from "@/components/PlayerModal";
+import CheckoutConsentModal from "@/components/CheckoutConsentModal";
 import StoreStats from "@/components/StoreStats";
 
 import { Category, storeItems } from "@/lib/catalog";
@@ -34,6 +35,8 @@ function StorePageContent() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [pendingProductId, setPendingProductId] = useState<string | null>(null);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const [isConsentModalOpen, setIsConsentModalOpen] = useState(false);
+  const [consentProductId, setConsentProductId] = useState<string | null>(null);
 
   // Previews Modal
   const [previewModalOpen, setPreviewModalOpen] = useState(false);
@@ -85,9 +88,10 @@ function StorePageContent() {
     localStorage.setItem("rootssky_player_uuid", uuid);
     setIsModalOpen(false);
     
-    // Se logou para comprar, continua
     if (pendingProductId) {
-      proceedToCheckout(pendingProductId, nick, uuid);
+      setConsentProductId(pendingProductId);
+      setIsConsentModalOpen(true);
+      setPendingProductId(null);
     }
   };
 
@@ -96,7 +100,8 @@ function StorePageContent() {
       setPendingProductId(productId);
       setIsModalOpen(true);
     } else {
-      proceedToCheckout(productId, playerNick, playerUuid);
+      setConsentProductId(productId);
+      setIsConsentModalOpen(true);
     }
   };
 
@@ -618,6 +623,18 @@ function StorePageContent() {
           </div>
         </div>
       )}
+
+      {/* MODAL DE CONSENTIMENTO LGPD E TERMOS */}
+      <CheckoutConsentModal
+        isOpen={isConsentModalOpen}
+        onClose={() => setIsConsentModalOpen(false)}
+        loading={isCheckingOut}
+        onConfirm={() => {
+          if (consentProductId && playerNick && playerUuid) {
+            proceedToCheckout(consentProductId, playerNick, playerUuid);
+          }
+        }}
+      />
 
     </div>
   );
