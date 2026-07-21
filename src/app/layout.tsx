@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Cinzel, Inter, JetBrains_Mono, Outfit } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import "./globals.css";
 
@@ -78,6 +80,8 @@ export default function RootLayout({
             }
           }
         }} />
+        <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   );
