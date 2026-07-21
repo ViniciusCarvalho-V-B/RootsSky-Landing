@@ -44,9 +44,9 @@ function validateSignature(signatureHeader: string, requestId: string, dataId: s
 
 export async function POST(request: Request) {
   try {
-    // 1. Coletar headers e body
-    const xSignature = headers().get("x-signature");
-    const xRequestId = headers().get("x-request-id");
+    const hdrs = await headers();
+    const xSignature = hdrs.get("x-signature");
+    const xRequestId = hdrs.get("x-request-id");
     const body = await request.json();
 
     const webhookSecret = process.env.MP_WEBHOOK_SECRET;
