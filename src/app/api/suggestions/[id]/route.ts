@@ -3,13 +3,13 @@ import { prisma } from '@/lib/prisma';
 import { isAdmin } from '@/lib/admin-auth';
 
 // EDITAR SUGESTÃO
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   if (!isAdmin(request)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   try {
-    const { id } = params;
+    const { id } = await params;
     const body = await request.json();
     const { title, description } = body;
 
@@ -29,13 +29,13 @@ export async function PUT(request: Request, { params }: { params: { id: string }
 }
 
 // DELETAR SUGESTÃO
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
   if (!isAdmin(request)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   try {
-    const { id } = params;
+    const { id } = await params;
     await prisma.suggestion.delete({
       where: { id }
     });
