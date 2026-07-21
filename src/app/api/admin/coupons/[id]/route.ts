@@ -2,10 +2,11 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { isAdmin } from "@/lib/admin-auth";
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   if (!isAdmin(request)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+  const { id } = await params;
   try {
     const body = await request.json();
     const { code, discountPct, eligibleItems, maxUses, expiresAt, isActive } = body;
@@ -16,7 +17,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     }
     
     const coupon = await prisma.coupon.update({
-      where: { id: params.id },
+      where: { id },
       data: { 
         code: code.toUpperCase(), 
         discountPct: parseFloat(discountPct), 
@@ -33,12 +34,13 @@ export async function PUT(request: Request, { params }: { params: { id: string }
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
   if (!isAdmin(request)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+  const { id } = await params;
   try {
-    await prisma.coupon.delete({ where: { id: params.id } });
+    await prisma.coupon.delete({ where: { id } });
     return new NextResponse(null, { status: 204 });
   } catch (error: unknown) {
     console.error("Erro ao deletar cupom:", error);

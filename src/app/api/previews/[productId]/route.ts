@@ -3,10 +3,11 @@ import { prisma } from "@/lib/prisma";
 
 export const dynamic = 'force-dynamic';
 
-export async function GET(request: Request, { params }: { params: { productId: string } }) {
+export async function GET(request: Request, { params }: { params: Promise<{ productId: string }> }) {
+  const { productId } = await params;
   try {
     const preview = await prisma.productPreview.findUnique({
-      where: { productId: params.productId }
+      where: { productId }
     });
 
     if (!preview) {
