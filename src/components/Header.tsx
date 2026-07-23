@@ -20,7 +20,7 @@ export default function Header() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [copied, setCopied] = useState(false);
-  const { online, statusText, loading } = useServerStatus();
+  const { online, players, statusText, loading } = useServerStatus();
   const ip = "jogar.rootssky.app";
 
   const handleCopy = useCallback(async () => {
@@ -205,7 +205,7 @@ export default function Header() {
           >
             <span>{ip}</span>
             <span className="text-[10px] px-2 py-0.5 rounded bg-gold/20 text-gold">
-              {copied ? "COPIADO" : `${players} ONLINE`}
+              {copied ? "COPIADO" : loading ? "..." : (statusText || "REABERTURA EM DEZEMBRO")}
             </span>
           </button>
           <a
