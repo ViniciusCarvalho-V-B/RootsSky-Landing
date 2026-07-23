@@ -46,9 +46,9 @@ export const metadata: Metadata = {
     "Minecraft Brasil",
   ],
   icons: {
-    icon: "/svg/logo-rootssky.svg",
-    shortcut: "/svg/logo-rootssky.svg",
-    apple: "/svg/logo-rootssky.svg",
+    icon: "/svg/favicon-rootssky.svg",
+    shortcut: "/svg/favicon-rootssky.svg",
+    apple: "/svg/favicon-rootssky.svg",
   },
 };
 
