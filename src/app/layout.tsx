@@ -45,6 +45,11 @@ export const metadata: Metadata = {
     "Skyblock Premium",
     "Minecraft Brasil",
   ],
+  icons: {
+    icon: "/svg/logo-rootssky.svg",
+    shortcut: "/svg/logo-rootssky.svg",
+    apple: "/svg/logo-rootssky.svg",
+  },
 };
 
 import { Toaster } from 'react-hot-toast';
