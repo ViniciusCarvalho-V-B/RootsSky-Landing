@@ -14,7 +14,7 @@
     "@vercel/speed-insights": "^2.0.0",
     "lucide-react": "^1.17.0",
     "mercadopago": "^3.1.0",
-    "next": "15.5.18",
+    "next": "15.5.21",
     "react": "^18",
     "react-dom": "^18",
     "react-hot-toast": "^2.6.0",
