@@ -20,7 +20,7 @@ export default function Header() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [copied, setCopied] = useState(false);
-  const { statusText, loading } = useServerStatus();
+  const { online, statusText, loading } = useServerStatus();
   const ip = "jogar.rootssky.app";
 
   const handleCopy = useCallback(async () => {

@@ -10,7 +10,7 @@ import UpdatesCarousel from "./UpdatesCarousel";
 export default function HeroSection() {
   const [copied, setCopied] = useState(false);
   const ip = "jogar.rootssky.app";
-  const { statusText, loading } = useServerStatus();
+  const { online, players, statusText, loading } = useServerStatus();
 
   const handleCopy = useCallback(async () => {
     try {
