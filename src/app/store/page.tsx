@@ -96,13 +96,10 @@ function StorePageContent() {
   };
 
   const handlePurchaseClick = (productId: string) => {
-    if (!playerNick || !playerUuid) {
-      setPendingProductId(productId);
-      setIsModalOpen(true);
-    } else {
-      setConsentProductId(productId);
-      setIsConsentModalOpen(true);
-    }
+    toast.error("Vendas temporariamente pausadas! Reabertura da nova temporada em Dezembro de 2026.", {
+      duration: 5000,
+      icon: "🚧",
+    });
   };
 
   const proceedToCheckout = async (productId: string, nick: string, uuid: string, isAnonymous: boolean = false) => {
@@ -556,9 +553,8 @@ function StorePageContent() {
                     variant={item.popular ? "premium" : "primary"}
                     className="w-full text-center justify-center"
                     onClick={() => handlePurchaseClick(selectedOptionId)}
-                    disabled={isCheckingOut}
                   >
-                    {isCheckingOut && pendingProductId === selectedOptionId ? "Aguarde..." : "Comprar Agora"}
+                    🚧 Vendas Pausadas
                   </Button>
                 </div>
               </div>
