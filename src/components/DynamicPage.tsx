@@ -9,7 +9,12 @@ interface DynamicPageProps {
 }
 
 export default async function DynamicPage({ slug, defaultTitle, defaultContent }: DynamicPageProps) {
-  const page = await prisma.page.findUnique({ where: { slug } });
+  let page = null;
+  try {
+    page = await prisma.page.findUnique({ where: { slug } });
+  } catch (error) {
+    console.warn(`[DynamicPage] Failed to fetch page content for slug '${slug}'. Using default content.`);
+  }
 
   const title = page?.title || defaultTitle;
   const content = page?.content || defaultContent;
