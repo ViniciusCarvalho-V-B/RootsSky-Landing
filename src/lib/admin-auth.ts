@@ -13,10 +13,11 @@ function generateExpectedToken(): string {
     return "unconfigured";
   }
   
-  // We hash the password with a static string to create the token
-  // In a more complex system, we might use a secret key or daily rotating salt,
-  // but for a simple single-password system, this is sufficient to avoid sending the password itself in the cookie.
-  return crypto.createHash('sha256').update(password + '_admin_auth_salt').digest('hex');
+  // Use scrypt (a slow, memory-hard key derivation function) to hash the password.
+  // This is resistant to brute-force and rainbow table attacks, unlike fast hashes like SHA-256.
+  const salt = '_rootssky_admin_auth_salt_v2';
+  const derivedKey = crypto.scryptSync(password, salt, 32);
+  return derivedKey.toString('hex');
 }
 
 /**
